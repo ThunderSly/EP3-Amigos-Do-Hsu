@@ -29,12 +29,17 @@ while True:
 
 		try:
 			lista_arquivos=pickle.load(open("lista","rb"))
-			print(lista_arquivos)
+
 			if len(lista_arquivos)>0:
-				print("Os saves disponíveis são: {}".format(lista_arquivos))
-				time.sleep(1)
+				print("Os saves disponíveis são:")
+				time.sleep(0.5)
+
+				for i in lista_arquivos:
+					print("{}".format(i))
+					time.sleep(0.5)
+
 				arquivo=str(input("Qual save deseja carregar? "))
-				dado=pickle.load(open("jogo_salvo","rb"))  # Traz o jogo salvo com os dados guardados
+				dado=pickle.load(open(arquivo,"rb"))  # Traz o jogo salvo com os dados guardados
 				nome=dado["{}".format(arquivo)][0]
 				dinheiro=dado["{}".format(arquivo)][1]
 				xp=dado["{}".format(arquivo)][2]
@@ -86,3 +91,6 @@ while True:
 		else:
 			print("Digite um comando válido (Sim ou Não)")
 			continue
+			
+time.sleep(0.5)
+print("Até a próxima!")
