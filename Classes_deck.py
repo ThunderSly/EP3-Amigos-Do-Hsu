@@ -8,8 +8,17 @@ class Cartas:
 		self.naipe = naipe
 
 	def show(self):
+		if 1<self.valor<=10:
+			print("{} de {}".format(self.valor, self.naipe))
+		if self.valor==1:
+			print("{} de {}".format("A", self.naipe))
+		if self.valor==11:
+			print("{} de {}".format("J", self.naipe))
+		if self.valor==12:
+			print("{} de {}".format("Q", self.naipe))
+		if self.valor==13:
+			print("{} de {}".format("K", self.naipe))
 
-		print("{} de {}".format(self.valor, self.naipe))
 
 class Deck:
 
@@ -50,6 +59,7 @@ class Jogador:
 
 		self.nome = nome
 		self.mao = []
+		lista_jogadores.append(self)
 
 	def compra_carta(self, deck):
 
@@ -62,25 +72,19 @@ class Jogador:
 		for carta in self.mao:
 			carta.show()
 
+class Rodada:
+
+	def __init__(self,lista_jogadores):
+		lista_jogadores=[]
+		deck = Deck()
+		deck.shuffle()
+		for i in lista_jogadores:
+			i.compra_carta(deck).compra_carta(deck)
+			i.mostra_mao()
 
 
 
 
 
-
-deck = Deck()
-deck.build()
-deck.show()
-deck.shuffle()
-deck.show()
-
-Jogador1 = Jogador("Felippe")
-print(Jogador1.nome)
-Jogador1.compra_carta(deck).compra_carta(deck)
-Jogador1.mostra_mao()
-
-
-#carta = deck.compra()
-#carta.show()
 
 
