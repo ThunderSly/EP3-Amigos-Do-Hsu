@@ -1,93 +1,88 @@
 import time
 import pickle
-import random
+lista_arquivos=[]
 
-def save(arquivo):
+def salvar(nome, dinheiro,xp):
+	arquivo=input("Qual será o nome do arquivo salvo?\n")
+	lista_arquivos.append(arquivo)
+	saves=open("lista", "wb" )
+	pickle.dump(lista_arquivos, saves)
+	saves.close()
 	dados= open(arquivo,'wb') 
-	pickle.dump({"dados": [nome,dinheiro,xp]}, dados)
+	pickle.dump({"{}".format(nome) : [nome, dinheiro, xp ]}, dados)
 	dados.close()
+	time.sleep(0.5)
+	print("Jogo salvo com sucesso!")
 
 
-def load(arquivo):
-	dado=pickle.load(open(arquivo,"rb"))
-	return dado
-
-
-xp=1
-new=["new", "n", "new game"]
-load=["load","l","load game"]
+sim=["sim", "s"]
+nao=["nao","n","não"]
 
 print("Bem vindo ao Hsu Poker ")
 
+abrir_salvo=input("Deseja abrir um jogo salvo? \n")  #Verifica se o usário quer abrir um jogo salvo
+time.sleep(0.5)
 
 while True:
 
-	inicio=input("New Game(N) ou Load Game(L)? \n ").lower()  #Verifica se o usário quer abrir um jogo salvo
-	time.sleep(0.5)
-	
-	if inicio in load:
-					
+	if abrir_salvo in sim:
+
 		try:
-			lista_saves=pickle.load(open("lista","rb"))
-			if len(lista_saves)>0:
-				print("Os saves disponíveis são: {}".format(lista_saves))
+			lista_arquivos=pickle.load(open("lista","rb"))
+			print(lista_arquivos)
+			if len(lista_arquivos)>0:
+				print("Os saves disponíveis são: {}".format(lista_arquivos))
 				time.sleep(1)
-				file=str(input("Qual save deseja carregar? "))
-				dado=load(file)  # Traz o jogo salvo com os dados guardados
-				nome=dado["dados"][0]
-				dinheiro=dado["dados"][1]
-				xp=dado["dados"][2]
+				arquivo=str(input("Qual save deseja carregar? "))
+				dado=pickle.load(open("jogo_salvo","rb"))  # Traz o jogo salvo com os dados guardados
+				nome=dado["{}".format(arquivo)][0]
+				dinheiro=dado["{}".format(arquivo)][1]
+				xp=dado["{}".format(arquivo)][2]
+				carregado=sim
 				print("Carregando dados...")
 				time.sleep(2)
-				print("Sucesso!")
+				print("Você possui {} de dinheiro e {} de experiência" .format(dinheiro,xp))
 				break
-		except:
-			print("Não há saves ainda!")
 
-	if inicio in new:	# Caso o usuário não queira abrir o jogo salvo
-		nome=str(input("Qual vai ser o nome do seu personagem?\n"))
+
+		except:
+			print("Não existe nenhum jogo salvo")  # Aviso caso não exista jogo salvo
+			time.sleep(0.5)
+			carregado=nao
+			break
+
+	if abrir_salvo in nao:	# Caso o usuário não queira abrir o jogo salvo
+		carregado=nao	
+		break
+
+	else:
+		print("Digite um comando válido: sim ou não")
+		continue
+
+while True:
+	if carregado==sim: # Checa se houve o carregamento de dados para pular o processo de escolha de um inspermon
+			break
+		
+	if carregado==nao:  # Caso não tenha nenhum arquivo salvo aberto
+		nome=input("Qual vai ser o nome do seu personagem?\n")
 		dinheiro= 10000
+		xp=0
 		print(" Você tem 10 mil fichas para iniciar sua trajetória")
 		break
-		
-lista_saves=[]
+
 while True:
-	
-	acao=input("Jogar(J), Salvar(S), Load(L) ou Quitar(Q)")
-	lista_saves=pickle.load(open("lista","rb"))	
-	
-	if acao == "s" or acao == "salvar": # Caso o usuário queira salvar o jogo
-		print("Os saves disponíveis são: {}".format(lista_saves))
-		arquivo=str(input("Deseja salvar com que nome? "))
-		lista_saves.append(arquivo)
-		save(arquivo)
-		saves=open("lista", "wb" )
-		pickle.dump(lista_saves, saves)
-		saves.close()
-		print("Salvando....")
-		time.sleep(2)
-		print("Sucesso!")
+
 		time.sleep(0.5)
-	
-	if acao == "load" or acao == "l":
-		try:
-			lista_saves=pickle.load(open("lista","rb"))
-			if len(lista_saves)>0:
-				print("Os saves disponíveis são: {}".format(lista_saves))
-				time.sleep(1)
-				file=str(input("Qual save deseja carregar? "))
-				dado=load(file)
-				nome=dado["Personagem_Poker"][0]
-				dinheiro=dado["Personagem_Poker"][1]
-				xp=dado["Personagem_Poker"][2]
-				print("Carregando....")
-				time.sleep(2)
-				print("Sucesso!")
-				time.sleep(0.5)
-		except:
-			print("Não há saves ainda!")
+		salvar_jogo=input("Deseja salvar o jogo? \n") # Pergunta se deseja salvar o jogo
+		salvar_jogo=salvar_jogo.lower()
 
+		if salvar_jogo in sim: # Caso o usuário queira salvar o jogo
+			salvar(nome,dinheiro,xp)
+			break
 
-	if acao == "q" or acao == "quitar":
-		print("Até mais!")
-		break
+		if salvar_jogo in nao: # Caso não queira salvar o jogo
+			break
+
+		else:
+			print("Digite um comando válido (Sim ou Não)")
+			continue
