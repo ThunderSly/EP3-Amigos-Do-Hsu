@@ -2,14 +2,14 @@ import time
 import pickle
 lista_arquivos=[]
 
-def salvar(nome, dinheiro,xp):
-	arquivo=input("Qual será o nome do arquivo salvo?\n")
+def salvar(arquivo,nome, dinheiro,xp):
+
 	lista_arquivos.append(arquivo)
 	saves=open("lista", "wb" )
 	pickle.dump(lista_arquivos, saves)
 	saves.close()
 	dados= open(arquivo,'wb') 
-	pickle.dump({"{}".format(nome) : [nome, dinheiro, xp ]}, dados)
+	pickle.dump({"{}".format(arquivo) : [nome, dinheiro, xp ]}, dados)
 	dados.close()
 	time.sleep(0.5)
 	print("Jogo salvo com sucesso!")
@@ -82,7 +82,8 @@ while True:
 		salvar_jogo=salvar_jogo.lower()
 
 		if salvar_jogo in sim: # Caso o usuário queira salvar o jogo
-			salvar(nome,dinheiro,xp)
+			arquivo=input("Qual será o nome do arquivo salvo?\n")		
+			salvar(arquivo,nome,dinheiro,xp)
 			break
 
 		if salvar_jogo in nao: # Caso não queira salvar o jogo
