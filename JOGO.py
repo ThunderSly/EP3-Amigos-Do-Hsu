@@ -11,8 +11,8 @@ import pickle
 #   =====================================================   Funções   ============================================================
 
 def salvar(arquivo,nome, dinheiro,xp):  # Função de salva o jogo
-
-	lista_arquivos.append(arquivo)
+	if arquivo not in lista_arquivos:
+		lista_arquivos.append(arquivo)
 	saves=open("lista", "wb" )
 	pickle.dump(lista_arquivos, saves)
 	saves.close()
@@ -30,15 +30,14 @@ lista_arquivos=[]  # Lista de jogos salvos
 
 #   =====================================================   Início   ==============================================================
 
-print("Bem vindo ao Hsu Poker ") # Começo do jogo
+print("Bem vindo ao Hsu Poker! ") # Começo do jogo
 
 #   =============================================   Abertura de jogo salvo  =======================================================
 
-abrir_salvo=input("Deseja abrir um jogo salvo? \n")  # Verifica se o usário quer abrir um jogo salvo
-time.sleep(0.5)
-
 while True:
-	
+	time.sleep(0.5)
+	abrir_salvo=input("Deseja abrir um jogo salvo? \n")  # Verifica se o usário quer abrir um jogo salvo
+	time.sleep(0.5)
 	if abrir_salvo in sim: # Caso o usuário queira abri um jogo
 
 		try:
@@ -52,16 +51,23 @@ while True:
 					print("{}".format(i))
 					time.sleep(0.5)
 
-				arquivo=str(input("Qual save deseja carregar? "))  # Usuário escolhe um jogo pra abrir
-				dado=pickle.load(open(arquivo,"rb"))  # Traz o jogo salvo com os dados guardados
-				nome=dado["{}".format(arquivo)][0]
-				dinheiro=dado["{}".format(arquivo)][1]
-				xp=dado["{}".format(arquivo)][2]
-				carregado=sim
-				print("Carregando dados...")
-				time.sleep(2)
-				print("Você possui {} de dinheiro e {} de experiência" .format(dinheiro,xp)) # Caracterização dos dados para o usuário
-				break
+				arquivo=str(input("Qual save deseja carregar?\n"))  # Usuário escolhe um jogo pra abrir
+				if arquivo in lista_arquivos:
+					dado=pickle.load(open(arquivo,"rb"))  # Traz o jogo salvo com os dados guardados
+					nome=dado["{}".format(arquivo)][0]
+					dinheiro=dado["{}".format(arquivo)][1]
+					xp=dado["{}".format(arquivo)][2]
+					carregado=sim
+					print("Carregando dados...")
+					time.sleep(2)
+					print("O nome do seu personagem é {}, você possui {} de dinheiro e {} de experiência" .format(nome,dinheiro,xp)) # Caracterização dos dados para o usuário
+					break
+
+				else:
+					time.sleep(0.5)
+					print("Este save não existe")
+					continue
+				
 
 
 		except:
@@ -88,28 +94,28 @@ while True:
 		nome=input("Qual vai ser o nome do seu personagem?\n")
 		dinheiro= 10000
 		xp=0
-		print(" Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais
+		print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais
 		break
 
 #   =============================================   Salvamento do progresso  ======================================================
 
 while True:
 
-		time.sleep(0.5)
-		salvar_jogo=input("Deseja salvar o jogo? \n") # Pergunta se deseja salvar o jogo
-		salvar_jogo=salvar_jogo.lower()
+	time.sleep(0.5)
+	salvar_jogo=input("Deseja salvar o jogo? \n") # Pergunta se deseja salvar o jogo
+	salvar_jogo=salvar_jogo.lower()
 
-		if salvar_jogo in sim: # Caso o usuário queira salvar o jogo
-			arquivo=input("Qual será o nome do arquivo salvo?\n")		
-			salvar(arquivo,nome,dinheiro,xp)
-			break
+	if salvar_jogo in sim: # Caso o usuário queira salvar o jogo
+		arquivo=input("Qual será o nome do arquivo salvo?\n")		
+		salvar(arquivo,nome,dinheiro,xp)
+		break
 
-		if salvar_jogo in nao: # Caso não queira salvar o jogo
-			break
+	if salvar_jogo in nao: # Caso não queira salvar o jogo
+		break
 
-		else:
-			print("Digite um comando válido (Sim ou Não)")
-			continue
+	else:
+		print("Digite um comando válido (Sim ou Não)")
+		continue
 	
 #   ===================================================   Fim do jogo  =============================================================
 
