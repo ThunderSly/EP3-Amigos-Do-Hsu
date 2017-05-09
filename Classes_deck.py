@@ -124,7 +124,7 @@ class Rodada: # Rodada
 		lista_jogadores=[] # Atualiza os jogadores da rodada
 		pot=0 # Atualiza a soma das apostas na Rodada
 		deck = Deck() # Reestaura o baralho
-		deck.shuffle() # Emabaralha o deck
+		Ndeck.shuffle() # Emabaralha o deck
 		for i in lista_jogadores: # Define as mãos dos jogadores participantes
 			i.compra_carta(deck).compra_carta(deck)
 			i.mostra_mao()
@@ -209,8 +209,18 @@ class Rodada: # Rodada
 			
 			elif len(combinacoes) == 2: # Par
 				print("Par de {}".format(i))
- 
-class Carregamento:
+
+class Jogo:
+
+	def inicio():
+		print("Bem vindo ao Hsu Poker! ") # Começo do jo
+		Carregamento.load()
+
+
+	def fim():
+		carregamento=Carregamento.salvar()
+		time.sleep(0.5)
+		print("Até a próxima!") # Finalização do jogo # Inicio e fim do jogo
 
 	def salvar():  # Função de salvar o jogo
 
@@ -228,7 +238,7 @@ class Carregamento:
 			fichas=dado["{}".format(jogo)][1]
 			xp=dado["{}".format(jogo)][2]
 			carregado=sim
-			Jogador(nome, fichas,xp)
+			jogador=Jogador(nome, fichas,xp)
 			time.sleep(2)
 			print("O nome do seu personagem é {}, você possui {} de fichas e {} de experiência" .format(nome,fichas,xp)) # Caracterização dos dados para o usuário
 
@@ -239,22 +249,10 @@ class Carregamento:
 			nome=input("Qual vai ser o nome do seu personagem?\n")
 			fichas= 10000
 			xp=0
-			Jogador(nome, fichas,xp)
-			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais
-
-class Jogo:
-
-	def inicio():
-		print("Bem vindo ao Hsu Poker! ") # Começo do jo
-		Carregamento.load()
-
-	def fim():
-		Carregamento.salvar()
-		time.sleep(0.5)
-		print("Até a próxima!") # Finalização do jogo
+			jogador=Jogador(nome, fichas,xp)
+			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais# Load e save do jogo
 
 #   ========================================
-
 
 sim=["sim", "s"]  # Lista para inputs afirmativos
 nao=["nao","n","não"]  # Lista para inputs negativos

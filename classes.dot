@@ -1,0 +1,11 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{Carregamento|\l|load()\lsalvar()\l}", shape="record"];
+"1" [label="{Cartas|naipe\lvalor\l|show()\l}", shape="record"];
+"2" [label="{Deck|cartas : list\l|build()\lcompra()\lshow()\lshuffle()\l}", shape="record"];
+"3" [label="{Jogador|fichas\lmao : list\lnome\lxp\l|acao()\lcompra_carta()\lmostra_mao()\l}", shape="record"];
+"4" [label="{Jogo|\l|fim()\linicio()\l}", shape="record"];
+"5" [label="{Jogo2|coisa\l|coisa()\l}", shape="record"];
+"6" [label="{Rodada|\l|Melhor_mao()\lflop()\lriver()\lturn()\l}", shape="record"];
+}
