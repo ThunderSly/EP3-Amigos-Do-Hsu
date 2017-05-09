@@ -21,7 +21,6 @@ class Cartas: # Cartas do baralho
 		if self.valor==13:
 			print("{} de {}".format("K", self.naipe))
 
-
 class Deck: # Baralho
 
 	def __init__(self): # Define o que é o baralho
@@ -58,11 +57,12 @@ class Deck: # Baralho
 
 class Jogador: # Jogador
 
-	def __init__(self, nome,fichas): # Define o nome do jogador, suas cartas e a quantidade de fichas disponíveis
+	def __init__(self,nome,fichas,xp): # Define o nome do jogador, suas cartas e a quantidade de fichas disponíveis
 
 		self.nome = nome
 		self.mao = []
 		self.fichas = fichas
+		self.xp=xp
 		lista_jogadores.append(self)
 
 	def compra_carta(self, deck): # Atualiza a mão do jogador através da função de comprar cartas da classe baralho
@@ -118,7 +118,6 @@ class Jogador: # Jogador
 				lista_jogadores.remove(self)
 				print("{} sai da rodada!".format(self))
 
-
 class Rodada: # Rodada
 
 	def __init__(self,lista_jogadores): 
@@ -157,38 +156,38 @@ class Rodada: # Rodada
 
 	def Melhor_mao(self):	
 		
-		for i in lista_jogadores:
-			cartas_jog=mesa + i.mao
+		for i in lista_jogadores: # Ve o valor da mao de cada jogador
+			cartas_jogadores=mesa + i.mao
 			lista_valores=[]
 			lista_naipes=[]
 			combinacoes=[]
 
-			for i in cartas_jog:
+			for i in cartas_jogadores:
 				lista_valores.append(i.valor)
 				lista_naipes.append(i.naipe)
 				if i.valor==1:
-					lista_valores.append(14)
-					lista_naipes.append(i.naipe)
+					lista_valores.append(14) # valores das cartas
+					lista_naipes.append(i.naipe) #naipes das cartas
 			
-			for n in range(1,11):
+			for n in range(1,11): # Straight
 				
 				if n and n+1 and n+2 and n+3 and n+4 in lista_valores:
 					print("Straight de {} a {}".format(n,n+4))
 			
-			for i in naipes:
+			for i in naipes: # Flush
 				
 				if lista_naipes.count(i)>=5:
 					print("Flush de {}".format(i))
 
-			for n in range(1,11):
+			for n in range(1,11): # Straight Flush
 				
 				for c in lista_naipes:
-					if c and cartas_jog(n+1,c) and cartas_jog(n+2,c) and cartas_jog(n+3,c) and cartas_jog(n+4,c) in lista_valores:
+					if c and cartas_jogadores(n+1,c) and cartas_jogadores(n+2,c) and cartas_jogadores(n+3,c) and cartas_jogadores(n+4,c) in lista_valores:
 						print("Straight Flush")
 
-			for i in lista_valores:
+			for i in lista_valores: #para definir pares,trincas e quadras
 				
-				if lista_valores.count(i)==4:
+				if lista_valores.count(i)==4: # Quadra
 					print("Quadra de {}".format(i))
 				
 				elif lista_valores.count(i)==3:
@@ -199,20 +198,67 @@ class Rodada: # Rodada
 					combinacoes.append(i)
 					combinacoes.append(i) 
 			
-			if len(combinacoes) == 5:
+			if len(combinacoes) == 5: # Full House
 				print("Full House")
 			
-			elif len(combinacoes) == 4:
+			elif len(combinacoes) == 4: # Dois Pares
 				print("Dois pares de {} e de {}".format(combinacoes[0],combinacoes[2]))
 			
-			elif len(combinacoes) == 3:
+			elif len(combinacoes) == 3: # Trinca
 				print("Trinca de {}".format(i))
 			
-			elif len(combinacoes) == 2:
+			elif len(combinacoes) == 2: # Par
 				print("Par de {}".format(i))
  
+class Carregamento:
+
+	def salvar():  # Função de salvar o jogo
+
+		dados= open(jogo,'wb') 
+		pickle.dump({"{}".format(jogo) : [nome, fichas, xp ]}, dados)
+		dados.close()
+		time.sleep(0.5)
+		print("Jogo salvo com sucesso!")
+
+	def load():
+
+		try: # Traz o jogo salvo com os dados guardados
+			dado=pickle.load(open(jogo,"rb"))  
+			nome=dado["{}".format(jogo)][0]
+			fichas=dado["{}".format(jogo)][1]
+			xp=dado["{}".format(jogo)][2]
+			carregado=sim
+			Jogador(nome, fichas,xp)
+			time.sleep(2)
+			print("O nome do seu personagem é {}, você possui {} de fichas e {} de experiência" .format(nome,fichas,xp)) # Caracterização dos dados para o usuário
+
+		except: # Cria um novo personagem
+			dados= open(jogo,'wb')
+			time.sleep(0.5)
+			dados.close()
+			nome=input("Qual vai ser o nome do seu personagem?\n")
+			fichas= 10000
+			xp=0
+			Jogador(nome, fichas,xp)
+			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais
+
+class Jogo:
+
+	def inicio():
+		print("Bem vindo ao Hsu Poker! ") # Começo do jo
+		Carregamento.load()
+
+	def fim():
+		Carregamento.salvar()
+		time.sleep(0.5)
+		print("Até a próxima!") # Finalização do jogo
+
+#   ========================================
 
 
+sim=["sim", "s"]  # Lista para inputs afirmativos
+nao=["nao","n","não"]  # Lista para inputs negativos
+lista_arquivos=[]  # Lista de jogos salvos
 
 
 	
