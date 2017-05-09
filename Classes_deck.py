@@ -1,3 +1,4 @@
+import itertools
 import random
 
 class Cartas: # Cartas do baralho
@@ -29,8 +30,9 @@ class Deck: # Baralho
 		self.build()
 
 	def build(self): # Função que cria cada carta com seu naipe e valor
-
-		for i in ["Ouros","Paus","Copas","Espadas"]:
+		naipes=["Ouros","Paus","Copas","Espadas"]
+		
+		for i in naipes:
 
 			for c in range(1,14):
 
@@ -151,6 +153,69 @@ class Rodada: # Rodada
 		print(mesa[0] + " - " + mesa[1] + " - " + mesa[2] + " - " + mesa[3] + " - " + mesa[4]) # Mostra as cartas abertas
 		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
 			i.acao(deck)
+
+
+	def Melhor_mao(self):	
+		
+		for i in lista_jogadores:
+			cartas_jog=mesa + i.mao
+			lista_valores=[]
+			lista_naipes=[]
+			combinacoes=[]
+
+			for i in cartas_jog:
+				lista_valores.append(i.valor)
+				lista_naipes.append(i.naipe)
+				if i.valor==1:
+					lista_valores.append(14)
+					lista_naipes.append(i.naipe)
+			
+			for n in range(1,11):
+				
+				if n and n+1 and n+2 and n+3 and n+4 in lista_valores:
+					print("Straight de {} a {}".format(n,n+4))
+			
+			for i in naipes:
+				
+				if lista_naipes.count(i)>=5:
+					print("Flush de {}".format(i))
+
+			for n in range(1,11):
+				
+				for c in lista_naipes:
+					if c and cartas_jog(n+1,c) and cartas_jog(n+2,c) and cartas_jog(n+3,c) and cartas_jog(n+4,c) in lista_valores:
+						print("Straight Flush")
+
+			for i in lista_valores:
+				
+				if lista_valores.count(i)==4:
+					print("Quadra de {}".format(i))
+				
+				elif lista_valores.count(i)==3:
+					for x in range(3):
+						combinacoes.append(i)
+
+				elif lista_valores.count(i)==2:
+					combinacoes.append(i)
+					combinacoes.append(i) 
+			
+			if len(combinacoes) == 5:
+				print("Full House")
+			
+			elif len(combinacoes) == 4:
+				print("Dois pares de {} e de {}".format(combinacoes[0],combinacoes[2]))
+			
+			elif len(combinacoes) == 3:
+				print("Trinca de {}".format(i))
+			
+			elif len(combinacoes) == 2:
+				print("Par de {}".format(i))
+ 
+
+
+
+
+	
 
 
 
