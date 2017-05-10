@@ -154,62 +154,292 @@ class Rodada: # Rodada
 			i.acao(deck)
 
 
-	def Melhor_mao(self):	
+	def Melhor_mao(jogador):	
 		
-		for i in lista_jogadores: # Ve o valor da mao de cada jogador
-			cartas_jogadores=mesa + i.mao
-			lista_valores=[]
-			lista_naipes=[]
-			combinacoes=[]
+		
+		cartas_jogadores=mesa + jogador.mao
+		lista_valores=[]
+		lista_naipes=[]
+		combinacoes=[]
+		valor_mao=0
 
-			for i in cartas_jogadores:
-				lista_valores.append(i.valor)
-				lista_naipes.append(i.naipe)
-				if i.valor==1:
-					lista_valores.append(14) # valores das cartas
-					lista_naipes.append(i.naipe) #naipes das cartas
+		for i in cartas_jogadores:
+			lista_valores.append(i.valor)
+			lista_naipes.append(i.naipe)
+			if i.valor==1:
+				lista_valores.append(14) # valores das cartas
+				lista_naipes.append(i.naipe) #naipes das cartas
 			
-			for n in range(1,11): # Straight
-				
-				if n and n+1 and n+2 and n+3 and n+4 in lista_valores:
-					print("Straight de {} a {}".format(n,n+4))
-			
-			for i in naipes: # Flush
-				
-				if lista_naipes.count(i)>=5:
-					print("Flush de {}".format(i))
-
-			for n in range(1,11): # Straight Flush
-				
-				for c in lista_naipes:
-					if c and cartas_jogadores(n+1,c) and cartas_jogadores(n+2,c) and cartas_jogadores(n+3,c) and cartas_jogadores(n+4,c) in lista_valores:
-						print("Straight Flush")
-
-			for i in lista_valores: #para definir pares,trincas e quadras
-				
-				if lista_valores.count(i)==4: # Quadra
-					print("Quadra de {}".format(i))
-				
-				elif lista_valores.count(i)==3:
-					for x in range(3):
-						combinacoes.append(i)
-
-				elif lista_valores.count(i)==2:
+		for i in lista_valores: #para definir pares,trincas e quadras
+							
+			if lista_valores.count(i)==4: # Quadra
+				for x in range(8):
 					combinacoes.append(i)
-					combinacoes.append(i) 
+							
+			elif lista_valores.count(i)==3:
+				combinacoes.append(i)
+
+			elif lista_valores.count(i)==2:
+				combinacoes.append(i)
+
+		combinacoes.sort()
+
+		if combinacoes[0]==combinacoes[1] and combinacoes[2]==combinacoes[3] and combinacoes[4]==combinacoes[5]: #retirar o terceiro par
+			if combinacoes[0]!=combinacoes[2]:
+				del combinacoes[0]
+				del combinacoes[0]
+
+		if len(combinacoes) == 2: # Par
+			print("Par de {}".format(i))
+			valor_mao=2			
 			
-			if len(combinacoes) == 5: # Full House
-				print("Full House")
+		if len(combinacoes) == 4: # Dois Pares
+			print("Dois pares de {} e de {}".format(combinacoes[0],combinacoes[2]))
+			valor_mao=3
 			
-			elif len(combinacoes) == 4: # Dois Pares
-				print("Dois pares de {} e de {}".format(combinacoes[0],combinacoes[2]))
+		if len(combinacoes) == 3: # Trinca
+			print("Trinca de {}".format(i))
+			valor_mao=4
+
+		for n in range(1,11): 				
+			if n in lista_valores: #Straight
+				if n+1 in lista_valores:
+					if n+2 in lista_valores:
+						if n+3 in lista_valores:
+							if n+4 in lista_valores:
+								print("Straight de {} a {}".format(n,n+4))
+								valor_mao=5
+
+		for i in lista_naipes: 
+			if lista_naipes.count(i)>=5: #Flush
+				print("Flush de {}".format(i))
+				valor_mao=6
 			
-			elif len(combinacoes) == 3: # Trinca
-				print("Trinca de {}".format(i))
+		if len(combinacoes) == 5 or len(combinacoes) == 6: # Full House
+			print("Full House")
+			valor_mao=7
 			
-			elif len(combinacoes) == 2: # Par
-				print("Par de {}".format(i))
- 
+		elif len(combinacoes) >= 7: #Quadra
+			valor_mao=8
+
+		for n in range(1,11): # Straight Flush				
+			for c in lista_naipes:
+				if cartas_jogadores(n,c) and cartas_jogadores(n+1,c) and cartas_jogadores(n+2,c) and cartas_jogadores(n+3,c) and cartas_jogadores(n+4,c) in lista_valores:
+					print("Straight Flush")
+					valor_mao=9
+					if n==10: #Royal Straight Flush
+						valor_mao=10
+
+	def Maos_iguais(self,valor_mao):
+		valor_especifico=0
+		if valor_mao==0: #pega a melhor carta
+			valor_especifico=max(lista_valores)
+
+		elif valor_mao==2: #pega o valor do par
+			for i in lista_valores:
+				if lista_valores.count(i)==2:
+					valor_especifico=i
+
+		elif valor_mao==3: #pega o valor do maior par
+			maior=[]
+			for i in lista_valores:
+				if lista_valores.count(i)==2:
+					maior.append(i)
+			valor_especifico=max(maior)
+
+		elif valor_mao==4: #pega o valor da trinca
+			for i in lista_valores:
+				if lista_valores.count(i)==3:
+					valor_especifico=i
+
+		elif valor_mao==5: #pega o valor do primeiro membro do Straight (final)
+			for n in range(1,11):
+				if n in lista_valores:
+					if n+1 in lista_valores:
+						if n+2 in lista_valores:
+							if n+3 in lista_valores:
+								if n+4 in lista_valores:
+									valor_especifico=n+4
+
+		elif valor_mao==6: #pega o valor do maior membro do Flush
+			maior=[]
+			for x in lista_naipes:
+				if lista_naipes.count(x)>=5:
+					for i in cartas_jogadores:
+						if i.naipe == x:
+							maior.append(i.valor)
+					break
+			valor_especifico=max(maior)
+
+		elif valor_mao==7: #pega o valor da trinca do Full House
+			for i in lista_valores:
+				if lista_valores.count(i)==3:
+					valor_especifico=i
+					break
+
+		elif valor_mao==8: #pega o valor da quadra
+			for i in lista_valores:
+				if lista_valores.count(i)==4:
+					valor_especifico=i
+					break
+
+		elif valor_mao==9: #pega o valor do Straight Flush (final)
+			maior=[]
+			for x in lista_naipes:
+				if lista_naipes.count(x)>=5:
+					for i in cartas_jogadores:
+						if i.naipe == x:
+							maior.append(i.valor)
+					break
+			valor_especifico=max(maior)
+
+	def Carta_a_Carta_1(self,valor_mao):
+		if valor_mao==0: #pega o valor da segunda maior carta
+			maior=[]
+			for x in lista_valores:
+				maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[1]
+
+		elif valor_mao==2: #pega o valor da melhor carta fora o par
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=2:	
+					maior.append(x)
+			valor_especifico=max(maior)
+
+		elif valor_mao==3: #pega o valor do menor par
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)==2:
+					maior.append(x)
+			valor_especifico=min(maior)
+
+		elif valor_mao==4: #pega o valor da maior carta fora a trinca
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=3:
+					maior.append(x)
+			valor_especifico=max(maior)
+
+		elif valor_mao==6: #pega o valor da segunda maior carta do Flush
+			maior=[]
+			for x in lista_naipes:
+				if lista_naipes.count(x)>=5:
+					for i in cartas_jogadores:
+						if i.naipe == x:
+							maior.append(i.valor)
+					break
+			maior.sort(reverse=True)
+			valor_especifico=maior[1]
+
+		elif valor_mao==7: #pega o valor do par do Full House (final)
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)==2:
+					maior.append(x)
+			valor_especifico=max(maior)
+
+		elif valor_mao==8: #pega o valor da melhor carta fora a quadra (final)
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=4:
+					maior.append(x)
+			valor_especifico=max(maior)
+
+	def Carta_a_Carta_2(self,valor_mao):
+
+		if valor_mao==0: #pega o valor da terceira melhor carta
+			maior=[]
+			for x in lista_valores:
+				maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[2]
+
+		elif valor_mao==2: #pega o valor da segunda melhor carta fora o par
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=2:	
+					maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[1]
+
+		elif valor_mao==3: #pega a melhor carta fora os pares (final)
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=2:
+					maior.append(x)
+			valor_especifico=max(maior)
+
+		elif valor_mao==4: #pega o valor da segunda melhor carta fora a trinca (final)
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=3:
+					maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[1]
+
+		elif valor_mao==6: #pega o valor da terceira melhor carta do Flush
+			maior=[]
+			for x in lista_naipes:
+				if lista_naipes.count(x)>=5:
+					for i in cartas_jogadores:
+						if i.naipe == x:
+							maior.append(i.valor)
+					break
+			maior.sort(reverse=True)
+			valor_especifico=maior[2]
+
+	def Carta_a_Carta_3(self,valor_mao):
+
+		if valor_mao==0: #pega o valor da quarta melhor carta
+			maior=[]
+			for x in lista_valores:
+				maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[3]
+
+		elif valor_mao==2: #pega o valor da terceira melhor carta fora o par (final)
+			maior=[]
+			for x in lista_valores:
+				if lista_valores.count(x)!=2:	
+					maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[2]
+
+		elif valor_mao==6: #pega o valor da quarta melhor carta do Flush
+			maior=[]
+			for x in lista_naipes:
+				if lista_naipes.count(x)>=5:
+					for i in cartas_jogadores:
+						if i.naipe == x:
+							maior.append(i.valor)
+					break
+			maior.sort(reverse=True)
+			valor_especifico=maior[3]
+
+	def Carta_a_Carta_4(self,valor_mao):
+
+		if valor_mao==0: #pega o valor da quinta melhor carta (final)
+			maior=[]
+			for x in lista_valores:
+				maior.append(x)
+			maior.sort(reverse=True)
+			valor_especifico=maior[4]
+
+		elif valor_mao==6: #pega o valor da quinta melhor carta do Flush (final)
+			maior=[]
+			for x in lista_naipes:
+				if lista_naipes.count(x)>=5:
+					for i in cartas_jogadores:
+						if i.naipe == x:
+							maior.append(i.valor)
+					break
+			maior.sort(reverse=True)
+			valor_especifico=maior[4]
+
+
+
 class Carregamento:
 
 	def salvar():  # Função de salvar o jogo
