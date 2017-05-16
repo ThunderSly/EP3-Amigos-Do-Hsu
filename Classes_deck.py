@@ -245,12 +245,16 @@ class Rodada: # Rodada
 				lista_naipes.append(i.naipe)
 		
 		for n in range(1,11): # Straight Flush				
-			for c in lista_naipes:
-				if cartas_jogadores(n,c) and cartas_jogadores(n+1,c) and cartas_jogadores(n+2,c) and cartas_jogadores(n+3,c) and cartas_jogadores(n+4,c) in lista_valores:
-					print("Straight Flush")
-					valor_mao=9
-					if n==10: #Royal Straight Flush
-						valor_mao=10
+			for c in ["Ouros","Paus","Copas","Espadas"]:
+				for i in cartas_jogadores:
+					if i.n in lista_valores and i.c in lista_naipes:
+						if i.n + 1 in lista_valores and i.c in lista_naipes:
+							if i.n + 2 in lista_valores and i.c in lista_naipes:
+								if i.n + 3 in lista_valores and i.c in lista_naipes:
+									if i.n + 4 in lista_valores and i.c in lista_naipes:
+										valor_mao=9
+										if i.n==10: #Royal Straight Flush
+											valor_mao=10
 		
 		for i in lista_valores:
 			if i.valor==1:
