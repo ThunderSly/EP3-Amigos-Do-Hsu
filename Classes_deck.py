@@ -124,7 +124,7 @@ class Rodada: # Rodada
 		lista_jogadores=[] # Atualiza os jogadores da rodada
 		pot=0 # Atualiza a soma das apostas na Rodada
 		deck = Deck() # Reestaura o baralho
-		Ndeck.shuffle() # Emabaralha o deck
+		deck.shuffle() # Emabaralha o deck
 		for i in lista_jogadores: # Define as mãos dos jogadores participantes
 			i.compra_carta(deck).compra_carta(deck)
 			i.mostra_mao()
@@ -167,13 +167,12 @@ class Rodada: # Rodada
 			lista_valores.append(i.valor)
 			lista_naipes.append(i.naipe)
 			if i.valor==1:
-				lista_valores.append(14) # valores das cartas
-				lista_naipes.append(i.naipe) #naipes das cartas
+				lista_valores.replace(i.valor,14) # valores das cartas
 			
 		for i in lista_valores: #para definir pares,trincas e quadras
 							
 			if lista_valores.count(i)==4: # Quadra
-				for x in range(8):
+				for x in range(2):
 					combinacoes.append(i)
 							
 			elif lista_valores.count(i)==3:
@@ -189,6 +188,15 @@ class Rodada: # Rodada
 				del combinacoes[0]
 				del combinacoes[0]
 
+		if len(combinacoes) == 7:
+			maior=[]
+			for i in lista_valores:
+				if lista_valores.count(i)==2:
+					maior.append(i)
+			maior.sort()
+			combinacoes.remove(maior[0])
+			combinacoes.remove(maior[0])
+
 		if len(combinacoes) == 2: # Par
 			print("Par de {}".format(i))
 			valor_mao=2			
@@ -201,7 +209,12 @@ class Rodada: # Rodada
 			print("Trinca de {}".format(i))
 			valor_mao=4
 
-		for n in range(1,11): 				
+		for i in lista_valores:
+			if i.valor==14:
+				lista_valores.append(1)
+				lista_naipes.append(i.naipe)		
+		
+		for n in range(1,11):				
 			if n in lista_valores: #Straight
 				if n+1 in lista_valores:
 					if n+2 in lista_valores:
@@ -209,6 +222,10 @@ class Rodada: # Rodada
 							if n+4 in lista_valores:
 								print("Straight de {} a {}".format(n,n+4))
 								valor_mao=5
+		for i in lista_valores:
+			if i.valor==1:
+				lista_valores.remove(i.valor)
+				lista_naipes.remove(i.naipe)
 
 		for i in lista_naipes: 
 			if lista_naipes.count(i)>=5: #Flush
@@ -219,9 +236,14 @@ class Rodada: # Rodada
 			print("Full House")
 			valor_mao=7
 			
-		elif len(combinacoes) >= 7: #Quadra
+		if len(combinacoes) >= 7: #Quadra
 			valor_mao=8
 
+		for i in lista_valores:
+			if i.valor==14:
+				lista_valores.append(1)
+				lista_naipes.append(i.naipe)
+		
 		for n in range(1,11): # Straight Flush				
 			for c in lista_naipes:
 				if cartas_jogadores(n,c) and cartas_jogadores(n+1,c) and cartas_jogadores(n+2,c) and cartas_jogadores(n+3,c) and cartas_jogadores(n+4,c) in lista_valores:
@@ -229,6 +251,13 @@ class Rodada: # Rodada
 					valor_mao=9
 					if n==10: #Royal Straight Flush
 						valor_mao=10
+		
+		for i in lista_valores:
+			if i.valor==1:
+				lista_valores.remove(i.valor)
+				lista_naipes.remove(i.naipe)
+
+		return valor_mao
 
 	def Maos_iguais(self,valor_mao):
 		valor_especifico=0
@@ -254,6 +283,9 @@ class Rodada: # Rodada
 					valor_especifico=i
 
 		elif valor_mao==5: #pega o valor do primeiro membro do Straight (final)
+			for i in lista_valores:
+				if i.valor==14:
+					lista_valores.append(1)
 			for n in range(1,11):
 				if n in lista_valores:
 					if n+1 in lista_valores:
@@ -285,6 +317,7 @@ class Rodada: # Rodada
 					break
 
 		elif valor_mao==9: #pega o valor do Straight Flush (final)
+			
 			maior=[]
 			for x in lista_naipes:
 				if lista_naipes.count(x)>=5:
@@ -293,6 +326,8 @@ class Rodada: # Rodada
 							maior.append(i.valor)
 					break
 			valor_especifico=max(maior)
+
+		return valor_especifico
 
 	def Carta_a_Carta_1(self,valor_mao):
 		
@@ -349,6 +384,8 @@ class Rodada: # Rodada
 					maior.append(x)
 			valor_especifico=max(maior)
 
+		return valor_especifico
+
 	def Carta_a_Carta_2(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da terceira melhor carta
@@ -391,6 +428,8 @@ class Rodada: # Rodada
 					break
 			maior.sort(reverse=True)
 			valor_especifico=maior[2]
+
+		return valor_especifico
 
 	def Carta_a_Carta_3(self,valor_mao):
 
@@ -439,6 +478,8 @@ class Rodada: # Rodada
 					break
 			maior.sort(reverse=True)
 			valor_especifico=maior[4]
+
+		return valor_especifico
 
 
 class Jogo:
@@ -490,7 +531,8 @@ nao=["nao","n","não"]  # Lista para inputs negativos
 lista_arquivos=[]  # Lista de jogos salvos
 
 
-	
+rodada=Rodada("eu")
+print(rodada)
 
 
 
