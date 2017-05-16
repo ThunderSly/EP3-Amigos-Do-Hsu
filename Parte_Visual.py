@@ -10,7 +10,7 @@ grey = (200, 200, 200)
 
 running = True
 
-carta = pg.image.load("C:\\Users\\Felippe\\Desktop\\2 de Copas.png").convert_alpha()
+carta = pg.image.load("Sprites\\2 de Copas.png").convert_alpha()
 carta = pg.transform.scale(carta,(150,150))
 cartax = 300
 cartax2 = 300
@@ -19,7 +19,7 @@ cartay2 = -28
 
 music_on = True
 
-music = pg.mixer.music.load("C:\\Users\\Felippe\\Documents\\Insper\\Design de Software\\Python\\Exercicios Programa\\Ex.3\\EP3-Amigos-Do-Hsu\\Sounds\\Background Music.mp3")
+music = pg.mixer.music.load("Sounds\\Background Music.mp3")
 pg.mixer.music.set_volume(0.2)
 pg.mixer.music.play(loops = -1, start = 0.0)
 
@@ -50,10 +50,9 @@ while running:
 
 	if cartay < 485:
 		cartay=cartay+1.5
-		cartax=cartax+0.8
 	if cartay2 < 485:
 		cartay2=cartay2+1.5
-		cartax2=cartax2+0.65
+		cartax2 = cartax2+0.15
 
 	screen.fill(grey)
 	screen.blit(carta,(cartax,cartay))
