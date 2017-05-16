@@ -7,7 +7,7 @@
 
 import time
 import pickle
-
+print(oi)
 #   =====================================================   Funções   ============================================================
 
 def salvar(arquivo,nome, dinheiro,xp):  # Função de salva o jogo
