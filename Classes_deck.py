@@ -5,10 +5,11 @@ import pickle
 
 class Cartas: # Cartas do baralho
 
-	def __init__(self,valor,naipe): # Define valor e naipe da carta
+	def __init__(self,valor,naipe,sprite): # Define valor e naipe da carta
 
 		self.valor = valor
 		self.naipe = naipe
+		self.sprite = sprite
 
 	def show(self): # Altera as carta 1, 11, 12, 13 para Ás, J, Q, K, respectivamente
 
