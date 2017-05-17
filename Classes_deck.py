@@ -120,7 +120,7 @@ class Jogador: # Jogador
 					self.fichas -= maior_aposta
 					pot+=aposta
 
-					if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
+				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
 					if aposta<self.fichas:
 						self.fichas -=aposta
@@ -169,11 +169,11 @@ class Jogador: # Jogador
 				combinacoes.append(i)
 
 		combinacoes.sort()
-
-		if combinacoes[0] == combinacoes[1] and combinacoes[2] == combinacoes[3] and combinacoes[4] == combinacoes[5]: #retirar o terceiro par
-			if combinacoes[0] != combinacoes[2]:
-				del combinacoes[0]
-				del combinacoes[0]
+		if len(combinacoes) == 6:
+			if combinacoes[0] == combinacoes[1] and combinacoes[2] == combinacoes[3] and combinacoes[4] == combinacoes[5]: #retirar o terceiro par
+				if combinacoes[0] != combinacoes[2]:
+					del combinacoes[0]
+					del combinacoes[0]
 
 		if len(combinacoes) == 7:
 			maior = []
@@ -617,9 +617,6 @@ class Rodada: # Rodada
 
 		return valor_especifico
 
-	def peneira():
-		valor_mao
-
 class Jogo:	
 
 	def inicio():
@@ -693,6 +690,6 @@ mesa = rodada.river(deck, mesa)
 print(mesa)
 print("\n \n \n")
 for i in lista_jogadores:
-	Jogador.melhor_mao(i)
+	Jogador.melhor_mao(i, mesa)
 
 Jogo.fim() # Fim do jogo, salva automaticamente
