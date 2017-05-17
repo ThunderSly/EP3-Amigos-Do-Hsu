@@ -5,11 +5,11 @@ import pickle
 
 class Cartas: # Cartas do baralho
 
-	def __init__(self,valor,naipe,sprite): # Define valor e naipe da carta
+	def __init__(self,valor,naipe): # Define valor e naipe da carta
 
 		self.valor = valor
 		self.naipe = naipe
-		self.sprite = sprite
+		#self.sprite = sprite
 
 	def show(self): # Altera as carta 1, 11, 12, 13 para Ás, J, Q, K, respectivamente
 
@@ -88,6 +88,7 @@ class Jogador: # Jogador
 
 				if acao == "check" or acao == "c": # Check: continua a rodada sem apostar
 					print("{} checa!".format(self))
+					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
@@ -97,6 +98,7 @@ class Jogador: # Jogador
 					if aposta > maior_aposta:
 						maior_aposta = aposta
 					pot+=aposta
+					break
 
 				if acao == "fold" or acao == "f": # Fold: desiste da mão
 					lista_jogadores.remove(self)
@@ -236,14 +238,14 @@ class Rodada: # Rodada
 
 	def __init__(self, lista_jogadores, deck): 
 		pot = 0 # Atualiza a soma das apostas na Rodada
-		mesa=[]
+		self.mesa=[]
 		time.sleep(1)
 		for i in lista_jogadores: # Define as mãos dos jogadores participantes
 			i.compra_carta(deck).compra_carta(deck)
 
 			i.mostra_mao()
 
-	def flop(self, deck): # Vira as 3 primeiras cartas
+	def flop(self, deck, mesa): # Vira as 3 primeiras cartas
 		maior_aposta = 0 
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
@@ -377,7 +379,7 @@ class Rodada: # Rodada
 
 		return valor_mao
 
-	def Maos_iguais(self, valor_mao):
+	def maos_iguais(self, valor_mao):
 		valor_especifico = 0
 		
 		if valor_mao == 0: #pega a melhor carta
@@ -447,7 +449,7 @@ class Rodada: # Rodada
 
 		return valor_especifico
 
-	def Carta_a_Carta_1(self, valor_mao):
+	def carta_a_Carta_1(self, valor_mao):
 		
 		if valor_mao == 0: #pega o valor da segunda maior carta
 			maior = []
@@ -504,7 +506,7 @@ class Rodada: # Rodada
 
 		return valor_especifico
 
-	def Carta_a_Carta_2(self,valor_mao):
+	def carta_a_Carta_2(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da terceira melhor carta
 			maior=[]
@@ -549,7 +551,7 @@ class Rodada: # Rodada
 
 		return valor_especifico
 
-	def Carta_a_Carta_3(self,valor_mao):
+	def carta_a_Carta_3(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da quarta melhor carta
 			maior=[]
@@ -577,7 +579,7 @@ class Rodada: # Rodada
 			maior.sort(reverse=True)
 			valor_especifico=maior[3]
 
-	def Carta_a_Carta_4(self,valor_mao):
+	def carta_a_Carta_4(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da quinta melhor carta (final)
 			maior=[]
@@ -598,6 +600,9 @@ class Rodada: # Rodada
 			valor_especifico=maior[4]
 
 		return valor_especifico
+
+	def peneira():
+		valor_mao
 
 class Jogo:	
 
@@ -666,7 +671,7 @@ deck.shuffle()
 
 rodada = Rodada(lista_jogadores, deck)
 
-mesa = rodada.flop(deck)
+mesa = rodada.flop(deck, rodada.mesa)
 mesa = rodada.turn(deck, mesa)
 mesa = rodada.river(deck, mesa)
 print(mesa)
