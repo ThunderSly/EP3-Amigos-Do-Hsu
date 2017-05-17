@@ -92,13 +92,21 @@ class Jogador: # Jogador
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
-					self.fichas -=aposta
-					print("{} aposta {} fichas!".format(self,aposta))
 
-					if aposta > maior_aposta:
-						maior_aposta = aposta
-					pot+=aposta
-					break
+					if aposta<self.fichas:
+						self.fichas -=aposta
+						print("{} aposta {} fichas!".format(self,aposta))
+						if aposta > maior_aposta:
+							maior_aposta = aposta
+						pot+=aposta
+					if aposta == self.fichas:
+						self.fichas == 0
+						print("{} ESTA ALL IN!".format(self))
+						if aposta > maior_aposta:
+							maior_aposta = aposta
+						pot+=aposta
+					if aposta > self.fichas:
+						print("Você não tem essa quantidade de fichas!")
 
 				if acao == "fold" or acao == "f": # Fold: desiste da mão
 					lista_jogadores.remove(self)
@@ -112,14 +120,22 @@ class Jogador: # Jogador
 					self.fichas -= maior_aposta
 					pot+=aposta
 
-				if acao == "raise" or acao == "r": # Aumenta a aposta
+					if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
-					self.fichas -=aposta
-					print("{} aposta {} fichas!".format(self,aposta))
-
-					if aposta > maior_aposta:
-						maior_aposta = aposta
-					pot+=aposta
+					if aposta<self.fichas:
+						self.fichas -=aposta
+						print("{} aposta {} fichas!".format(self,aposta))
+						if aposta > maior_aposta:
+							maior_aposta = aposta
+						pot+=aposta
+					if aposta == self.fichas:
+						self.fichas == 0
+						print("{} ESTA ALL IN!".format(self))
+						if aposta > maior_aposta:
+							maior_aposta = aposta
+						pot+=aposta
+					if aposta > self.fichas:
+						print("Você não tem essa quantidade de fichas!")
 
 				if acao == "fold" or acao == "f": # Fold: desiste da rodada
 					lista_jogadores.remove(self)
