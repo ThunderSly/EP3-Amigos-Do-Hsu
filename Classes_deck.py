@@ -590,9 +590,6 @@ class Jogador: # Jogador
 			ganhador = valor1.index(maximo)
 			return lista_jogadores[ganhador]
 
-
-
-
 class Rodada: # Rodada
 
 	def __init__(self, lista_jogadores, deck): 
@@ -629,8 +626,6 @@ class Rodada: # Rodada
 		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
 			i.acao(deck)
 		return mesa
-
-	
 
 class Jogo:	
 
@@ -694,19 +689,21 @@ nome, fichas, xp = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe 
 
 deck = Deck()
 
-print("Inicio da rodada")
-deck.shuffle()
+while True:
+	print("Inicio da rodada")
 
-rodada = Rodada(lista_jogadores, deck)
+	deck.shuffle()
 
-mesa = rodada.flop(deck, rodada.mesa)
-mesa = rodada.turn(deck, mesa)
-mesa = rodada.river(deck, mesa)
-print(mesa)
-print("\n \n \n")
+	rodada = Rodada(lista_jogadores, deck)
 
-ganhador = Jogador.peneira(mesa, lista_jogadores)
-print(ganhador)
+	mesa = rodada.flop(deck, rodada.mesa)
+	mesa = rodada.turn(deck, mesa)
+	mesa = rodada.river(deck, mesa)
+	print(mesa)
+	print("\n \n \n")
+
+	ganhador = Jogador.peneira(mesa, lista_jogadores)
+	print(ganhador)
 
 
 Jogo.fim() # Fim do jogo, salva automaticamente
