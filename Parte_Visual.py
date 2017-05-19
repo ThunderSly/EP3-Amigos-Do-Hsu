@@ -22,7 +22,8 @@ for i in range (0, len(deck.cartas)-1):
 	x = pg.image.load(deck.cartas[i].sprite)
 	x = pg.transform.scale(x,(150,150))
 	grafica_cartas.append(x)
-			
+
+
 
 cartax = 513
 cartax2 = 513
@@ -87,10 +88,18 @@ while running:
 	screen.blit(mesa,(0,-500))
 
 	#  =====================================  Display de cartas  =============================================================
+	lista_jogadores = []
+
+	jogador = Cd.Jogador("hsu",10000)
 	
+	lista_jogadores= []
+	deck.build()
+	deck.shuffle()
+	rodada = Cd.Rodada(lista_jogadores, deck)
+	jogador.mao.append(deck.compra())
 	# Jogaodor:
-	screen.blit(grafica_cartas[13],(cartax,cartay))
-	screen.blit(grafica_cartas[1],(cartax2,cartay2))
+	screen.blit(jogador.mao[0],(cartax,cartay))
+	screen.blit(jogador.mao[1],(cartax2,cartay2))
 
 	# Oponente:
 	screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
