@@ -1,5 +1,5 @@
 import pygame as pg
-
+#danielsc1@insper.edu.br
 pg.init()
 
 clock = pg.time.Clock()

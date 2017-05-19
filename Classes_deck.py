@@ -60,12 +60,11 @@ class Deck: # Baralho
 
 class Jogador: # Jogador
 
-	def __init__(self,nome,fichas,xp): # Define o nome do jogador, suas cartas e a quantidade de fichas disponíveis
+	def __init__(self,nome,fichas): # Define o nome do jogador, suas cartas e a quantidade de fichas disponíveis
 
 		self.nome = nome
 		self.mao = []
 		self.fichas = fichas
-		self.xp=xp
 		lista_jogadores.append(self)
 
 	def compra_carta(self, deck): # Atualiza a mão do jogador através da função de comprar cartas da classe baralho
@@ -74,8 +73,15 @@ class Jogador: # Jogador
 
 		return self
 
+	def reseta_mao(self):
+
+		self.mao = []
+
+		return self
+
 	def mostra_mao(self): # Mostra as cartas que estão na mão do jogador
 
+		print("Sua mão:")
 		for carta in self.mao:
 			carta.show()
 
@@ -156,11 +162,13 @@ class Jogador: # Jogador
 				
 				if acao == "fold" or acao == "f": # Fold: desiste da rodada
 					lista_jogadores.remove(self)
+					self.mao = []
 					print("{} sai da rodada!".format(self))
 					break
 
 	def melhor_mao(self,mesa):	
 		
+		cartas_jogadores=[]
 		mesa=rodada.mesa
 		cartas_jogadores = mesa + self.mao
 		lista_valores = []
@@ -269,6 +277,7 @@ class Jogador: # Jogador
 				lista_naipes.remove(i.naipe)
 
 		print(valor_mao)
+		self.reseta_mao()
 		return valor_mao
 		
 	def maos_iguais(self, valor_mao):
@@ -606,6 +615,7 @@ class Rodada: # Rodada
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
+		print("Mesa")
 		mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
 		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
 			i.acao(deck)
@@ -614,6 +624,7 @@ class Rodada: # Rodada
 	def turn(self, deck, mesa):
 		maior_aposta = 0
 		mesa.append(deck.compra()) # Abre uma carta na mesa
+		print("Mesa")
 		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show() # Mostra as cartas abertas
 		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
 			i.acao(deck)
@@ -622,6 +633,7 @@ class Rodada: # Rodada
 	def river(self, deck, mesa):
 		maior_aposta = 0
 		mesa.append(deck.compra()) # Abre uma carta na mesa
+		print("Mesa")
 		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show(), mesa[4].show() # Mostra as cartas abertas
 		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
 			i.acao(deck)
@@ -634,9 +646,8 @@ class Jogo:
 		x =Jogo.load()
 		nome = x[0]
 		fichas = x[1]
-		xp = x[2]
 		time.sleep(1)
-		return nome, fichas, xp
+		return nome, fichas
 
 
 	def fim():
@@ -647,7 +658,7 @@ class Jogo:
 	def salvar():  # Função de salvar o jogo
 
 		dados = open("jogo",'wb') 
-		pickle.dump({"jogo" : [nome, fichas, xp ]}, dados)
+		pickle.dump({"jogo" : [nome, fichas]}, dados)
 		dados.close()
 		time.sleep(0.5)
 		print("Jogo salvo com sucesso!")
@@ -658,11 +669,10 @@ class Jogo:
 			dado = pickle.load(open("jogo",'rb'))  
 			nome = dado["jogo"][0]
 			fichas = dado["jogo"][1]
-			xp = dado["jogo"][2]
 			carregado = sim
-			jogador = Jogador(nome, fichas, xp)
+			jogador = Jogador(nome, fichas)
 			time.sleep(2)
-			print("O nome do seu personagem é {}, você possui {} de fichas e {} de experiência" .format(nome, fichas, xp)) # Caracterização dos dados para o usuário
+			print("O nome do seu personagem é {}, você possui {} de fichas" .format(nome, fichas)) # Caracterização dos dados para o usuário
 
 		except: # Cria um novo personagem
 			dados = open("jogo",'wb')
@@ -670,11 +680,10 @@ class Jogo:
 			dados.close()
 			nome = input("Qual vai ser o nome do seu personagem?\n")
 			fichas = 10000
-			xp = 0
-			jogador= Jogador(nome, fichas, xp)
+			jogador= Jogador(nome, fichas)
 			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais# Load e save do jogo
 
-		return (nome, fichas, xp)
+		return (nome, fichas)
 
 #   ========================================
 
@@ -685,26 +694,35 @@ jogo = "jogo"
 lista_jogadores = []
 maior_aposta = 0
 
-nome, fichas, xp = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
+nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
 
 deck = Deck()
 
 while True:
+
 	print("Inicio da rodada")
 
+	deck.build()
 	deck.shuffle()
 
 	rodada = Rodada(lista_jogadores, deck)
 
+	Jogador.mostra_mao()
 	mesa = rodada.flop(deck, rodada.mesa)
+	Jogador.mostra_mao()
 	mesa = rodada.turn(deck, mesa)
+	Jogador.mostra_mao()
 	mesa = rodada.river(deck, mesa)
+
 	print(mesa)
 	print("\n \n \n")
 
 	ganhador = Jogador.peneira(mesa, lista_jogadores)
+
 	print(ganhador)
 
+	for i in range(0,len(lista_jogadores)-1):
+		lista_jogadores[i].reseta_mao()
 
 Jogo.fim() # Fim do jogo, salva automaticamente
 
