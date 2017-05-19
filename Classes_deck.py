@@ -70,6 +70,7 @@ class Jogador: # Jogador
 		self.nome = nome
 		self.mao = []
 		self.fichas = fichas
+		self.maior_aposta=0
 		lista_jogadores.append(self)
 
 	def compra_carta(self, deck): # Atualiza a mão do jogador através da função de comprar cartas da classe baralho
@@ -94,27 +95,37 @@ class Jogador: # Jogador
 		maior_aposta = 0
 		pot = 0
 		while True:
-			if maior_aposta == 0: # Caso não exista uma aposta
+			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
+				break
+			if maior_aposta == 0:
 				acao=input("Check(C), Raise(R), Fold(F)\n").lower()
-
 				if acao == "check" or acao == "c": # Check: continua a rodada sem apostar
-					print("{} checa!".format(self))
+
+					print("{} checa!".format(self.nome))
+					maiores_apostas.append(0)
+
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
 					if aposta<self.fichas:
 						self.fichas -=aposta
-						print("{} aposta {} fichas!".format(self,aposta))
-						if aposta > maior_aposta:
-							maior_aposta = aposta
+
+						print("{} aposta {} fichas!".format(self.nome,aposta))
+						maior_aposta = aposta
+						maiores_apostas.append(aposta)
+
 						pot+=aposta
+						self.maior_aposta=aposta
 						break
+
+
 					if aposta == self.fichas:
-						self.fichas == 0
-						print("{} ESTA ALL IN!".format(self))
-						if aposta > maior_aposta:
-							maior_aposta = aposta
+						self.fichas -= self.fichas
+						print("{} ESTA ALL IN!".format(self.nome))
+						maior_aposta = aposta
+						maiores_apostas.append(aposta)
+
 						pot+=aposta
 						break
 					if aposta > self.fichas:
@@ -125,31 +136,39 @@ class Jogador: # Jogador
 					lista_jogadores.remove(self)
 					print("{} saiu da rodada!".format(self))
 					break
-			if maior_aposta > 0: # Caso exista uma aposta na mesa
+			if maior_aposta > 0:
 				acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 
 				if acao == "call" or acao == "c": # Call: iguala a aposta da mesa
 					
 					if maior_aposta<self.fichas:
-						self.fichas -=maior_aposta
-						print("{} paga pra ver!".format(self))
+
+						self.fichas -=(maior_aposta-self.maior_aposta)
+						print("{} paga pra ver!".format(self.nome))
+						maiores_apostas.append(maior_aposta)
+
 						pot+=maior_aposta
 					
 					if maior_aposta >= self.fichas:
+						pot+=self.fichas
 						self.fichas == 0
-						print("{} ESTA ALL IN!".format(self))
-						pot+=maior_aposta
-					
+
+						print("{} ESTA ALL IN!".format(self.nome))
+						maiores_apostas.append(maior_aposta)
+
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
-					
-					if aposta<self.fichas:
+
+
+					if aposta<self.fichas and aposta>maior_aposta:
 						self.fichas -=aposta
-						print("{} aposta {} fichas!".format(self,aposta))
-						if aposta > maior_aposta:
-							maior_aposta = aposta
+						print("{} aposta {} fichas!".format(self.nome,aposta))
+						maior_aposta = aposta
+						self.maior_aposta=aposta
+						maiores_apostas.append(aposta)
+
 						pot+=aposta
 						break
 					
@@ -158,9 +177,10 @@ class Jogador: # Jogador
 						print("{} ESTA ALL IN!".format(self))
 						if aposta > maior_aposta:
 							maior_aposta = aposta
+						maiores_apostas.append(aposta)
 						pot+=aposta
 						break
-					
+
 					if aposta > self.fichas:
 						print("Você não tem essa quantidade de fichas!")
 						continue
@@ -286,6 +306,7 @@ class Jogador: # Jogador
 		return valor_mao
 		
 	def maos_iguais(self, valor_mao):
+
 		valor_especifico = 0
 		
 		if valor_mao == 0: #pega a melhor carta
@@ -692,13 +713,17 @@ class Jogo:
 
 #   ========================================
 
+
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
 lista_arquivos = []  # Lista de jogos salvos
 jogo = "jogo"
 lista_jogadores = []
-maior_aposta = 0
+
 '''
+
+Joao=Jogador("joao",10000)
+>>>>>>> fc30d10ce5f10d2ba3f93e2304dd425560dd7766
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
 
 deck = Deck()
@@ -706,6 +731,99 @@ deck = Deck()
 while True:
 
 	print("Inicio da rodada")
+
+	deck.shuffle()
+	for i in lista_jogadores:
+		i.compra_carta(deck)
+		i.compra_carta(deck)
+		i.mostra_mao()
+	mesa = Mesa(deck)
+	pot=0
+	maiores_apostas=[-1]
+	maior_aposta=0
+	valores=[maior_aposta,pot]
+	while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+				for i in lista_jogadores:
+					valores=i.acao(valores[0],valores[1])
+					try:
+						maiores_apostas.remove(-1)
+						if len(lista_jogadores) == 1:
+							print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+							break
+					except:
+						if len(lista_jogadores) == 1:
+							print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+							break
+						continue
+
+	tudo = mesa.flop(mesa.deck, mesa.mesa)
+	maiores_apostas=[-1]
+	valores[0]=0
+	for i in lista_jogadores:
+		i.maior_aposta=0
+	for i in lista_jogadores:
+		print(i.fichas)
+	while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+	tudo = mesa.turn(tudo[0], tudo[1])
+	maiores_apostas=[-1]
+	valores[0]=0
+	for i in lista_jogadores:
+		i.maior_aposta=0
+	for i in lista_jogadores:
+		print(i.fichas)
+	while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+	tudo = mesa.river(tudo[0], tudo[1])
+	maiores_apostas=[-1]
+	valores[0]=0
+	for i in lista_jogadores:
+		i.maior_aposta=0
+	for i in lista_jogadores:
+		print(i.fichas)	
+	while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+
+
+	for i in range(0,len(lista_jogadores)-1):
+		lista_jogadores[i].reseta_mao()
+	for i in lista_jogadores:
+		i.maior_aposta=0
+Jogo.fim()
+
 
 	deck.build()
 	deck.shuffle()
