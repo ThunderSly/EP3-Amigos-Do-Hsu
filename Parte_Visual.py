@@ -1,23 +1,45 @@
 import pygame as pg
+import Classes_deck as Cd
+
 #danielsc1@insper.edu.br
 pg.init()
 
 clock = pg.time.Clock()
 pg.display.set_caption("Hsu Poker")
-screen = pg.display.set_mode((800,600))
+screen = pg.display.set_mode((1200,1000))
 
 grey = (200, 200, 200)
+deck = Cd.Deck()
 
 running = True
+naipes = ["Copas", "Ouros", "Espadas", "Paus"]
+cartas = ["A", "Dois", "Tres", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "J", "Q", "K"]
+grafica_cartas = []
 
-carta = pg.image.load("Sprites\\2 de Copas.png").convert_alpha()
-carta = pg.transform.scale(carta,(150,150))
-cartax = 300
-cartax2 = 300
-cartay= -28
+for i in range (0, len(deck.cartas)-1):
+
+	x = "{} de {}".format(deck.cartas[i].valor,deck.cartas[i].naipe)
+	x = pg.image.load(deck.cartas[i].sprite)
+	x = pg.transform.scale(x,(150,150))
+	grafica_cartas.append(x)
+			
+
+cartax = 513
+cartax2 = 513
+cartay = -28
 cartay2 = -28
 
+carta_oponente1x = 525
+carta_oponente2x = 525		
+carta_oponente1y = -10
+carta_oponente2y = -10
+
+carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
+carta_atras = pg.transform.scale(carta_atras,(150, 150))
 music_on = True
+
+mesa = pg.image.load("Sprites\\Mesa Insper Poker.png").convert_alpha()
+mesa = pg.transform.scale(mesa,(1200, 1000))
 
 music = pg.mixer.music.load("Sounds\\Background Music.mp3")
 pg.mixer.music.set_volume(0.2)
@@ -31,6 +53,7 @@ while running:
 			running = False
 
 		if event.type == pg.KEYDOWN:
+
 				
 			if event.key == pg.K_r:
 				cartax = 300
@@ -48,15 +71,24 @@ while running:
 				pg.mixer.music.unpause()
 				music_on = True
 
-	if cartay < 485:
-		cartay=cartay+1.5
-	if cartay2 < 485:
-		cartay2=cartay2+1.5
-		cartax2 = cartax2+0.15
+	if cartay < 525:
+		cartay=cartay+2.5
+		cartay2 = cartay2-0.2
+
+	if cartay2 < 526:
+		cartay2=cartay2+2.5
+		cartax2 = cartax2+0.2
 
 	screen.fill(grey)
-	screen.blit(carta,(cartax,cartay))
-	screen.blit(carta,(cartax2,cartay2))
+
+	screen.blit(mesa,(0,0))
+
+	screen.blit(grafica_cartas[13],(cartax,cartay))
+	screen.blit(grafica_cartas[1],(cartax2,cartay2))
+
+	screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
+	screen.blit(carta_atras,(carta_oponente2x,carta_oponente2y))
+
 
 	pg.display.update()
 

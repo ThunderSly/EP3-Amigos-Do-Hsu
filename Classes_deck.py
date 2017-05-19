@@ -5,10 +5,11 @@ import pickle
 
 class Cartas: # Cartas do baralho
 
-	def __init__(self,valor,naipe): # Define valor e naipe da carta
+	def __init__(self, valor, naipe, sprite): # Define valor e naipe da carta
 
 		self.valor = valor
 		self.naipe = naipe
+		self.sprite = sprite
 		#self.sprite = sprite
 
 	def show(self): # Altera as carta 1, 11, 12, 13 para Ás, J, Q, K, respectivamente
@@ -34,11 +35,14 @@ class Deck: # Baralho
 	def build(self): # Função que cria cada carta com seu naipe e valor
 		naipes=["Ouros","Paus","Copas","Espadas"]
 		
+		
 		for i in naipes:
 
 			for c in range(1,14):
 
-				self.cartas.append(Cartas(c,i))
+				z = "Sprites\\{} de {}.png" .format(c,i)
+
+				self.cartas.append(Cartas(c,i,z))
 
 	def show(self): # Função para mostrar as cartas do baralho
 
@@ -684,7 +688,7 @@ class Jogo:
 			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais# Load e save do jogo
 
 		return (nome, fichas)
-
+'''
 #   ========================================
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
@@ -725,9 +729,9 @@ while True:
 		lista_jogadores[i].reseta_mao()
 
 Jogo.fim() # Fim do jogo, salva automaticamente
+'''
 
-
-
+print("importado")
 
 
 
