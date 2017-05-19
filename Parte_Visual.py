@@ -26,20 +26,20 @@ for i in range (0, len(deck.cartas)-1):
 
 cartax = 513
 cartax2 = 513
-cartay = -28
-cartay2 = -28
+cartay = 0
+cartay2 = 0
 
 carta_oponente1x = 525
-carta_oponente2x = 525		
-carta_oponente1y = -10
-carta_oponente2y = -10
+carta_oponente2x = 545		
+carta_oponente1y = 100
+carta_oponente2y = 100
 
 carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
 carta_atras = pg.transform.scale(carta_atras,(150, 150))
 music_on = True
 
 mesa = pg.image.load("Sprites\\Mesa Insper Poker.png").convert_alpha()
-mesa = pg.transform.scale(mesa,(1200, 1000))
+mesa = pg.transform.scale(mesa,(1200, 2000))
 
 music = pg.mixer.music.load("Sounds\\Background Music.mp3")
 pg.mixer.music.set_volume(0.2)
@@ -71,23 +71,33 @@ while running:
 				pg.mixer.music.unpause()
 				music_on = True
 
-	if cartay < 525:
+	if cartay < 750:
 		cartay=cartay+2.5
-		cartay2 = cartay2-0.2
+		cartay2 = cartay2-0.15
 
-	if cartay2 < 526:
+	if cartay2 < 750:
 		cartay2=cartay2+2.5
-		cartax2 = cartax2+0.2
+		cartax2 = cartax2+0.15
 
+	#  =========================================================  Jogo  =======================================================================
+
+	#  =========================================  Fundo  =====================================================================
 	screen.fill(grey)
 
-	screen.blit(mesa,(0,0))
+	screen.blit(mesa,(0,-500))
 
+	#  =====================================  Display de cartas  =============================================================
+	
+	# Jogaodor:
 	screen.blit(grafica_cartas[13],(cartax,cartay))
 	screen.blit(grafica_cartas[1],(cartax2,cartay2))
 
+	# Oponente:
 	screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
 	screen.blit(carta_atras,(carta_oponente2x,carta_oponente2y))
+
+	# Mesa:
+
 
 
 	pg.display.update()
