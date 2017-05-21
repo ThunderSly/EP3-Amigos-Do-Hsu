@@ -38,12 +38,11 @@ class Deck: # Baralho
 		
 		for i in naipes:
 
-			for c in range(1, 14):
+			for c in range(1,14):
 
 				z = "Sprites\\{} de {}.png" .format(c,i)
 
 				self.cartas.append(Cartas(c,i,z))
-				
 
 	def show(self): # Função para mostrar as cartas do baralho
 
@@ -77,7 +76,7 @@ class Jogador: # Jogador
 
 		self.mao.append(deck.compra())
 
-		return self.mao
+		return self
 
 	def reseta_mao(self):
 
@@ -91,41 +90,33 @@ class Jogador: # Jogador
 		for carta in self.mao:
 			carta.show()
 
-	def acao(self,deck): # Possibilidade de dar call, fold, apostar ou check
-		maior_aposta = 0
-		pot = 0
+	def acao(self,maior_aposta,pot): # Possibilidade de dar call, fold, apostar ou check
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
 			if maior_aposta == 0:
 				acao=input("Check(C), Raise(R), Fold(F)\n").lower()
 				if acao == "check" or acao == "c": # Check: continua a rodada sem apostar
-
 					print("{} checa!".format(self.nome))
 					maiores_apostas.append(0)
-
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
-					if aposta<self.fichas:
+					if aposta<self.fichas and aposta>maior_aposta:
 						self.fichas -=aposta
-
 						print("{} aposta {} fichas!".format(self.nome,aposta))
 						maior_aposta = aposta
 						maiores_apostas.append(aposta)
-
 						pot+=aposta
 						self.maior_aposta=aposta
 						break
-
 
 					if aposta == self.fichas:
 						self.fichas -= self.fichas
 						print("{} ESTA ALL IN!".format(self.nome))
 						maior_aposta = aposta
 						maiores_apostas.append(aposta)
-
 						pot+=aposta
 						break
 					if aposta > self.fichas:
@@ -134,7 +125,7 @@ class Jogador: # Jogador
 
 				if acao == "fold" or acao == "f": # Fold: desiste da mão
 					lista_jogadores.remove(self)
-					print("{} saiu da rodada!".format(self))
+					print("{} saiu da rodada!".format(self.nome))
 					break
 			if maior_aposta > 0:
 				acao=input("Call(C), Raise(R), Fold(F)\n").lower()
@@ -142,39 +133,32 @@ class Jogador: # Jogador
 				if acao == "call" or acao == "c": # Call: iguala a aposta da mesa
 					
 					if maior_aposta<self.fichas:
-
 						self.fichas -=(maior_aposta-self.maior_aposta)
 						print("{} paga pra ver!".format(self.nome))
 						maiores_apostas.append(maior_aposta)
-
-						pot+=maior_aposta
-					
+						pot+=(maior_aposta-self.maior_aposta)
 					if maior_aposta >= self.fichas:
 						pot+=self.fichas
 						self.fichas == 0
-
 						print("{} ESTA ALL IN!".format(self.nome))
 						maiores_apostas.append(maior_aposta)
-
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
 					aposta=int(input("Quanto deseja apostar?\n"))
 
-
 					if aposta<self.fichas and aposta>maior_aposta:
-						self.fichas -=aposta
+						self.fichas -=(aposta-self.maior_aposta)
 						print("{} aposta {} fichas!".format(self.nome,aposta))
-						maior_aposta = aposta
+						pot+=(aposta-self.maior_aposta)
 						self.maior_aposta=aposta
 						maiores_apostas.append(aposta)
-
-						pot+=aposta
+						maior_aposta = aposta
 						break
 					
 					if aposta == self.fichas:
 						self.fichas == 0
-						print("{} ESTA ALL IN!".format(self))
+						print("{} ESTA ALL IN!".format(self.nome))
 						if aposta > maior_aposta:
 							maior_aposta = aposta
 						maiores_apostas.append(aposta)
@@ -188,13 +172,13 @@ class Jogador: # Jogador
 				if acao == "fold" or acao == "f": # Fold: desiste da rodada
 					lista_jogadores.remove(self)
 					self.mao = []
-					print("{} sai da rodada!".format(self))
+					print("{} sai da rodada!".format(self.nome))
 					break
-
+		valores=[maior_aposta,pot]
+		return valores
 	def melhor_mao(self,mesa):	
 		
 		cartas_jogadores=[]
-		mesa=rodada.mesa
 		cartas_jogadores = mesa + self.mao
 		lista_valores = []
 		lista_naipes = []
@@ -529,7 +513,10 @@ class Jogador: # Jogador
 
 		return valor_especifico
 
+class Compara_Maos:
+
 	def peneira(mesa, lista_jogadores):
+
 		jogadores1=[]
 		valor1=[]
 		jogadores2=[]
@@ -544,7 +531,7 @@ class Jogador: # Jogador
 		valor6=[]
 
 		for i in lista_jogadores:
-			x = Jogador.melhor_mao(i,mesa)
+			x = i.melhor_mao(mesa)
 			valor1.append(x)
 		maximo = max(valor1)
 
@@ -623,53 +610,48 @@ class Jogador: # Jogador
 		
 		else:
 			ganhador = valor1.index(maximo)
-			return lista_jogadores[ganhador]
+			return lista_jogadores[ganhador] #Compara Maos
 
-class Rodada: # Rodada
+class Mesa: # Mesa
 
-	def __init__(self, lista_jogadores, deck): 
+	def __init__(self, deck): 
 		pot = 0 # Atualiza a soma das apostas na Rodada
 		self.mesa=[]
-		time.sleep(1)
-		for i in lista_jogadores: # Define as mãos dos jogadores participantes
-			i.compra_carta(deck)
-			i.compra_carta(deck)
-			return i.mao
+		self.deck=deck
+		
 
-	def flop(self, deck, mesa): # Vira as 3 primeiras cartas
-		maior_aposta = 0 
+	def flop(self, deck, mesa): # Vira as 3 primeiras cartas 
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		print("Mesa")
 		mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
-		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
-			i.acao(deck)
-		return mesa
+		
+		tudo=[deck,mesa]
+
+		return tudo
 
 	def turn(self, deck, mesa):
-		maior_aposta = 0
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		print("Mesa")
 		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show() # Mostra as cartas abertas
-		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
-			i.acao(deck)
-		return mesa
+		tudo=[deck,mesa]
+
+		return tudo
 	
 	def river(self, deck, mesa):
-		maior_aposta = 0
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		print("Mesa")
 		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show(), mesa[4].show() # Mostra as cartas abertas
-		for i in lista_jogadores: # Confere a ação de cada jogador na rodada
-			i.acao(deck)
-		return mesa
+		tudo=[deck,mesa]
+
+		return tudo
 
 class Jogo:	
 
 	def inicio():
 		print("Bem vindo ao Hsu Poker! ") # Começo do jogo
-		x =Jogo.load()
+		x = Jogo.load()
 		nome = x[0]
 		fichas = x[1]
 		time.sleep(1)
@@ -690,7 +672,7 @@ class Jogo:
 		print("Jogo salvo com sucesso!")
 
 	def load():
-
+			
 		try: # Traz o jogo salvo com os dados guardados
 			dado = pickle.load(open("jogo",'rb'))  
 			nome = dado["jogo"][0]
@@ -711,19 +693,12 @@ class Jogo:
 
 		return (nome, fichas)
 
-#   ========================================
-
-
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
 lista_arquivos = []  # Lista de jogos salvos
 jogo = "jogo"
 lista_jogadores = []
-
-'''
-
 Joao=Jogador("joao",10000)
->>>>>>> fc30d10ce5f10d2ba3f93e2304dd425560dd7766
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
 
 deck = Deck()
@@ -731,7 +706,6 @@ deck = Deck()
 while True:
 
 	print("Inicio da rodada")
-
 	deck.shuffle()
 	for i in lista_jogadores:
 		i.compra_carta(deck)
@@ -817,7 +791,7 @@ while True:
 						break
 					continue
 
-
+	print(valores[1])
 	for i in range(0,len(lista_jogadores)-1):
 		lista_jogadores[i].reseta_mao()
 	for i in lista_jogadores:
@@ -825,27 +799,14 @@ while True:
 Jogo.fim()
 
 
-	deck.build()
-	deck.shuffle()
 
-	rodada = Rodada(lista_jogadores, deck)
 
-	Jogador.mostra_mao()
-	mesa = rodada.flop(deck, rodada.mesa)
-	Jogador.mostra_mao()
-	mesa = rodada.turn(deck, mesa)
-	Jogador.mostra_mao()
-	mesa = rodada.river(deck, mesa)
 
-	print(mesa)
-	print("\n \n \n")
 
-	ganhador = Jogador.peneira(mesa, lista_jogadores)
 
-	print(ganhador)
 
-	for i in range(0,len(lista_jogadores)-1):
-		lista_jogadores[i].reseta_mao()
 
-Jogo.fim() # Fim do jogo, salva automaticamente
-'''
+
+
+
+
