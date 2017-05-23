@@ -168,6 +168,7 @@ class Jogador: # Jogador
 					break
 		valores=[maior_aposta,pot]
 		return valores
+		
 	def melhor_mao(self,mesa):	
 		
 		cartas_jogadores=[]
@@ -410,6 +411,7 @@ class Jogador: # Jogador
 
 	def carta_a_carta_2(self,valor_mao):
 
+
 		if valor_mao==0: #pega o valor da terceira melhor carta
 			maior=[]
 			for x in lista_valores:
@@ -503,6 +505,31 @@ class Jogador: # Jogador
 			valor_especifico=maior[4]
 
 		return valor_especifico
+
+class Bot:
+
+	def __init__(self, nome, fichas):
+		self.nome = nome
+		self.mao = []
+		self.fichas = fichas
+		lista_jogadores.append(self)
+
+	def compra_carta(self, deck): # Atualiza a mão do jogador através da função de comprar cartas da classe baralho
+
+		self.mao.append(deck.compra())
+
+		return self
+
+	def reseta_mao(self):
+
+		self.mao = []
+
+		return self
+
+	"""def pre_flop(self):
+		if""" 
+
+
 
 class Compara_Maos:
 
@@ -683,7 +710,7 @@ class Jogo:
 			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais# Load e save do jogo
 
 		return (nome, fichas)
-'''
+
 #   ========================================
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
@@ -734,7 +761,7 @@ while True:
 		lista_jogadores[i].reseta_mao()
 
 Jogo.fim() # Fim do jogo, salva automaticamente
-'''
+
 
 print("importado")
 
