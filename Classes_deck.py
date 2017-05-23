@@ -1,3 +1,4 @@
+
 import itertools
 import random
 import time
@@ -868,3 +869,18 @@ print("importado")
 
 
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
