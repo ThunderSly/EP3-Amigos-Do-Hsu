@@ -1,11 +1,7 @@
-
 import itertools
 import random
 import time
 import pickle
-import urllib.request
-import json
-import time
 
 class Cartas: # Cartas do baralho
 
@@ -90,12 +86,11 @@ class Jogador: # Jogador
 
 	def mostra_mao(self): # Mostra as cartas que estão na mão do jogador
 
-		print("Mão do {}:".format(self.nome))
+		print("Sua mão:")
 		for carta in self.mao:
 			carta.show()
 
 	def acao(self,maior_aposta,pot): # Possibilidade de dar call, fold, apostar ou check
-
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
@@ -142,7 +137,7 @@ class Jogador: # Jogador
 						print("{} paga pra ver!".format(self.nome))
 						maiores_apostas.append(maior_aposta)
 						pot+=(maior_aposta-self.maior_aposta)
-					if maior_aposta >= self.fichas:
+					elif maior_aposta >= self.fichas:
 						pot+=self.fichas
 						self.fichas == 0
 						print("{} ESTA ALL IN!".format(self.nome))
@@ -294,21 +289,9 @@ class Jogador: # Jogador
 		self.reseta_mao()
 		return valor_mao
 		
-	def maos_iguais(self, valor_mao, mesa):
+	def maos_iguais(self, valor_mao):
 
 		valor_especifico = 0
-		lista_valores = []
-		lista_naipes = []
-		cartas_jogadores=[]
-		cartas_jogadores = mesa + self.mao
-		valor_especifico = 0
-
-		for i in cartas_jogadores:
-			lista_valores.append(i.valor)
-			lista_naipes.append(i.naipe)
-			if i.valor == 1:
-				lista_valores.remove(i.valor)
-				lista_valores.append(14) 
 		
 		if valor_mao == 0: #pega a melhor carta
 			valor_especifico=max(lista_valores)
@@ -377,20 +360,7 @@ class Jogador: # Jogador
 
 		return valor_especifico
 
-	def carta_a_carta_1(self, valor_mao, mesa):
-
-		lista_valores = []
-		lista_naipes = []
-		cartas_jogadores=[]
-		cartas_jogadores = mesa + self.mao
-		valor_especifico = 0
-
-		for i in cartas_jogadores:
-			lista_valores.append(i.valor)
-			lista_naipes.append(i.naipe)
-			if i.valor == 1:
-				lista_valores.remove(i.valor)
-				lista_valores.append(14) 
+	def carta_a_carta_1(self, valor_mao):
 		
 		if valor_mao == 0: #pega o valor da segunda maior carta
 			maior = []
@@ -447,20 +417,7 @@ class Jogador: # Jogador
 
 		return valor_especifico
 
-	def carta_a_carta_2(self,valor_mao, mesa):
-
-		lista_valores = []
-		lista_naipes = []
-		cartas_jogadores=[]
-		cartas_jogadores = mesa + self.mao
-		valor_especifico = 0
-
-		for i in cartas_jogadores:
-			lista_valores.append(i.valor)
-			lista_naipes.append(i.naipe)
-			if i.valor == 1:
-				lista_valores.remove(i.valor)
-				lista_valores.append(14) 
+	def carta_a_carta_2(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da terceira melhor carta
 			maior=[]
@@ -506,20 +463,7 @@ class Jogador: # Jogador
 		print(valor_especifico)
 		return valor_especifico
 
-	def carta_a_carta_3(self,valor_mao, mesa):
-
-		lista_valores = []
-		lista_naipes = []
-		cartas_jogadores=[]
-		cartas_jogadores = mesa + self.mao
-		valor_especifico = 0
-
-		for i in cartas_jogadores:
-			lista_valores.append(i.valor)
-			lista_naipes.append(i.naipe)
-			if i.valor == 1:
-				lista_valores.remove(i.valor)
-				lista_valores.append(14) 
+	def carta_a_carta_3(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da quarta melhor carta
 			maior=[]
@@ -547,22 +491,7 @@ class Jogador: # Jogador
 			maior.sort(reverse=True)
 			valor_especifico=maior[3]
 
-		return valor_especifico
-
-	def carta_a_carta_4(self,valor_mao, mesa):
-
-		lista_valores = []
-		lista_naipes = []
-		cartas_jogadores=[]
-		cartas_jogadores = mesa + self.mao
-		valor_especifico = 0
-
-		for i in cartas_jogadores:
-			lista_valores.append(i.valor)
-			lista_naipes.append(i.naipe)
-			if i.valor == 1:
-				lista_valores.remove(i.valor)
-				lista_valores.append(14) 
+	def carta_a_carta_4(self,valor_mao):
 
 		if valor_mao==0: #pega o valor da quinta melhor carta (final)
 			maior=[]
@@ -604,16 +533,16 @@ class Compara_Maos:
 		for i in lista_jogadores:
 			x = i.melhor_mao(mesa)
 			valor1.append(x)
-		maximo_mao = max(valor1)
+		maximo = max(valor1)
 
-		if valor1.count(maximo_mao) > 1:
+		if valor1.count(maximo) > 1:
 			for u in valor1:
-				if u == maximo_mao:
+				if u == maximo:
 					l = valor1.index(u)
 					jogadores1.append(lista_jogadores[l])
 			
 			for i in jogadores1:
-				x = Jogador.maos_iguais(i, maximo_mao, mesa)
+				x = Jogador.maos_iguais(i,maximo)
 				valor2.append(x)
 			maximo = max(valor2)
 			
@@ -624,7 +553,7 @@ class Compara_Maos:
 						jogadores2.append(jogadores1[l])
 
 				for i in jogadores2:
-					x = Jogador.carta_a_carta_1(i, maximo_mao, mesa)
+					x = Jogador.carta_a_carta_1(i,maximo)
 					valor3.append(x)
 				maximo = max(valor3)
 
@@ -635,7 +564,7 @@ class Compara_Maos:
 							jogadores3.append(jogadores2[l])
 			
 					for i in jogadores3:
-						x = Jogador.carta_a_carta_2(i, maximo_mao, mesa)
+						x = Jogador.carta_a_carta_2(i,maximo)
 						valor4.append(x)
 					maximo = max(valor4)
 
@@ -646,7 +575,7 @@ class Compara_Maos:
 								jogadores4.append(jogadores3[l])
 			
 						for i in jogadores4:
-							x = Jogador.carta_a_carta_3(i, maximo_mao, mesa)
+							x = Jogador.carta_a_carta_3(i,maximo)
 							valor5.append(x)
 						maximo = max(valor5)
 
@@ -657,44 +586,31 @@ class Compara_Maos:
 									jogadores5.append(jogadores4[l])
 			
 							for i in jogadores5:
-								x = Jogador.carta_a_carta_4(i, maximo_mao, mesa)
+								x = Jogador.carta_a_carta_4(i,maximo)
 								valor6.append(x)
 							maximo = max(valor6)
 
 							ganhador = valor6.index(maximo)
-							print ("O jogador {} ganhou!".format(jogadores5[ganhador].nome))
-							time.sleep(2)
 							return jogadores5[ganhador]
 
 						else:
 							ganhador = valor5.index(maximo)
-							print ("O jogador {} ganhou!".format(jogadores4[ganhador].nome))
-							time.sleep(2)
 							return jogadores4[ganhador]
 
 					else:
 						ganhador = valor4.index(maximo)
-						print ("O jogador {} ganhou!".format(jogadores3[ganhador].nome))
-						time.sleep(2)
 						return jogadores3[ganhador]
 				else:
 					ganhador = valor3.index(maximo)
-					print ("O jogador {} ganhou!".format(jogadores2[ganhador].nome))
-					time.sleep(2)
 					return jogadores2[ganhador]
 
 			else:
 				ganhador = valor2.index(maximo)
-				print ("O jogador {} ganhou!".format(jogadores1[ganhador].nome))
-				time.sleep(2)
 				return jogadores1[ganhador]
 		
 		else:
-			ganhador = valor1.index(maximo_mao)
-			print ("O jogador {} ganhou!".format(lista_jogadores[ganhador].nome))
-			time.sleep(2)
+			ganhador = valor1.index(maximo)
 			return lista_jogadores[ganhador] #Compara Maos
-			
 
 class Mesa: # Mesa
 
@@ -776,23 +692,6 @@ class Jogo:
 			print("Você tem 10 mil fichas para iniciar sua trajetória") # Definições iniciais# Load e save do jogo
 
 		return (nome, fichas)
-
-
-
-
-"""def puxa_cartas():
-	url = 'http://pokerinsper.pythonanywhere.com/receber'
-
-	res = urllib.request.urlopen(url)
-
-	data_dict = json.loads(res.read().decode('utf8'))
-
-	return data_dict
-
-
-c=puxa_cartas()
-print(c)"""
-
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
@@ -880,7 +779,7 @@ while True:
 		print(i.fichas)	
 	while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
 			for i in lista_jogadores:
-				valores = i.acao(valores[0],valores[1])
+				valores=i.acao(valores[0],valores[1])
 				try:
 					maiores_apostas.remove(-1)
 					if len(lista_jogadores) == 1:
@@ -892,11 +791,22 @@ while True:
 						break
 					continue
 
-	Compara_Maos.peneira(mesa.mesa, lista_jogadores)
-
 	print(valores[1])
 	for i in range(0,len(lista_jogadores)-1):
 		lista_jogadores[i].reseta_mao()
 	for i in lista_jogadores:
 		i.maior_aposta=0
 Jogo.fim()
+
+
+
+
+
+
+
+
+
+
+
+
+
