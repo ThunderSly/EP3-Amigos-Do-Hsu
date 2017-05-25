@@ -2,6 +2,7 @@ import itertools
 import random
 import time
 import pickle
+import pygame as pg
 
 class Cartas: # Cartas do baralho
 
@@ -38,9 +39,10 @@ class Deck: # Baralho
 		
 		for i in naipes:
 
-			for c in range(1,14):
+			for c in range(1, 14):
 
-				z = "Sprites\\{} de {}.png" .format(c,i)
+				z = pg.image.load("Sprites\\{} de {}.png" .format(c,i)).convert_alpha()
+				z = pg.transform.scale(z,(150, 150))
 
 				self.cartas.append(Cartas(c,i,z))
 
@@ -76,7 +78,7 @@ class Jogador: # Jogador
 
 		self.mao.append(deck.compra())
 
-		return self
+		return self.mao
 
 	def reseta_mao(self):
 
@@ -618,7 +620,12 @@ class Mesa: # Mesa
 		pot = 0 # Atualiza a soma das apostas na Rodada
 		self.mesa=[]
 		self.deck=deck
-		
+
+	def compra_carta(self, deck):
+		for i in lista_jogadores: # Define as mãos dos jogadores participantes
+			i.compra_carta(deck)
+			i.compra_carta(deck)
+			return i.mao
 
 	def flop(self, deck, mesa): # Vira as 3 primeiras cartas 
 		mesa.append(deck.compra()) # Abre uma carta na mesa
@@ -693,11 +700,15 @@ class Jogo:
 
 		return (nome, fichas)
 
+#   ========================================
+
+
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
 lista_arquivos = []  # Lista de jogos salvos
 jogo = "jogo"
 lista_jogadores = []
+'''
 Joao=Jogador("joao",10000)
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
 
@@ -797,16 +808,4 @@ while True:
 	for i in lista_jogadores:
 		i.maior_aposta=0
 Jogo.fim()
-
-
-
-
-
-
-
-
-
-
-
-
-
+'''
