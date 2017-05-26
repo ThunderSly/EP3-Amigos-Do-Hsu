@@ -72,7 +72,7 @@ class Jogador: # Jogador
 		self.nome = nome
 		self.mao = []
 		self.fichas = fichas
-		self.maior_aposta=0
+		self.maior_aposta =0
 		lista_jogadores.append(self)
 
 	def compra_carta(self, deck): # Atualiza a mão do jogador através da função de comprar cartas da classe baralho
@@ -95,6 +95,7 @@ class Jogador: # Jogador
 
 	def acao(self,maior_aposta,pot): # Possibilidade de dar call, fold, apostar ou check
 		while True:
+			maiores_apostas=[-1]
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
 			if maior_aposta == 0:
@@ -635,8 +636,6 @@ class Mesa: # Mesa
 		#print("Mesa")
 		#mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
 		
-		
-
 		return (deck, mesa)
 
 	def turn(self, deck, mesa):
@@ -710,8 +709,11 @@ lista_jogadores = []
 '''
 Joao=Jogador("joao",10000)
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
+
 deck = Deck()
+
 while True:
+
 	print("Inicio da rodada")
 	deck.shuffle()
 	for i in lista_jogadores:
@@ -736,6 +738,7 @@ while True:
 							print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 							break
 						continue
+
 	tudo = mesa.flop(mesa.deck, mesa.mesa)
 	maiores_apostas=[-1]
 	valores[0]=0
@@ -796,6 +799,7 @@ while True:
 						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 						break
 					continue
+
 	print(valores[1])
 	for i in range(0,len(lista_jogadores)-1):
 		lista_jogadores[i].reseta_mao()

@@ -96,6 +96,7 @@ while running:
 		turn = []
 		river = []
 		mesa = []
+		pot = 0
 
 
 		jogador = Cd.Jogador("hsu",10000)
@@ -112,6 +113,9 @@ while running:
 
 		
 			# Mesa:
+		maior_aposta=0
+		valores=[maior_aposta,pot]
+		jogador.acao(jogador.maior_aposta, pot)
 		flop = (mesajogo.flop(deck, mesa))
 		turn = (mesajogo.turn(deck, mesa))
 		river = (mesajogo.river(deck, mesa))
