@@ -4,6 +4,7 @@ import time
 import pickle
 import pygame as pg
 
+
 class Cartas: # Cartas do baralho
 
 	def __init__(self, valor, naipe, sprite): # Define valor e naipe da carta
@@ -631,28 +632,26 @@ class Mesa: # Mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
-		print("Mesa")
-		mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
+		#print("Mesa")
+		#mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
 		
-		tudo=[deck,mesa]
+		
 
-		return tudo
+		return (deck, mesa)
 
 	def turn(self, deck, mesa):
 		mesa.append(deck.compra()) # Abre uma carta na mesa
-		print("Mesa")
-		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show() # Mostra as cartas abertas
-		tudo=[deck,mesa]
+		#print("Mesa")
+		#mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show() # Mostra as cartas abertas
 
-		return tudo
+		return (deck, mesa)
 	
 	def river(self, deck, mesa):
 		mesa.append(deck.compra()) # Abre uma carta na mesa
-		print("Mesa")
-		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show(), mesa[4].show() # Mostra as cartas abertas
-		tudo=[deck,mesa]
+		#print("Mesa")
+		#mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show(), mesa[4].show() # Mostra as cartas abertas
 
-		return tudo
+		return (deck, mesa)
 
 class Jogo:	
 
