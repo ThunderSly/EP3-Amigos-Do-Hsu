@@ -1,11 +1,9 @@
-
 import itertools
 import random
 import time
 import pickle
-import urllib.request
-import json
-import time
+import pygame as pg
+
 
 class Cartas: # Cartas do baralho
 
@@ -42,9 +40,10 @@ class Deck: # Baralho
 		
 		for i in naipes:
 
-			for c in range(1,14):
+			for c in range(1, 14):
 
-				z = "Sprites\\{} de {}.png" .format(c,i)
+				z = pg.image.load("Sprites\\{} de {}.png" .format(c,i)).convert_alpha()
+				z = pg.transform.scale(z,(150, 150))
 
 				self.cartas.append(Cartas(c,i,z))
 
@@ -80,7 +79,7 @@ class Jogador: # Jogador
 
 		self.mao.append(deck.compra())
 
-		return self
+		return self.mao
 
 	def reseta_mao(self):
 
@@ -90,12 +89,11 @@ class Jogador: # Jogador
 
 	def mostra_mao(self): # Mostra as cartas que estão na mão do jogador
 
-		print("Mão do {}:".format(self.nome))
+		print("Sua mão:")
 		for carta in self.mao:
 			carta.show()
 
 	def acao(self,maior_aposta,pot): # Possibilidade de dar call, fold, apostar ou check
-
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
@@ -142,7 +140,7 @@ class Jogador: # Jogador
 						print("{} paga pra ver!".format(self.nome))
 						maiores_apostas.append(maior_aposta)
 						pot+=(maior_aposta-self.maior_aposta)
-					if maior_aposta >= self.fichas:
+					elif maior_aposta >= self.fichas:
 						pot+=self.fichas
 						self.fichas == 0
 						print("{} ESTA ALL IN!".format(self.nome))
@@ -181,7 +179,7 @@ class Jogador: # Jogador
 					break
 		valores=[maior_aposta,pot]
 		return valores
-
+	
 	def melhor_mao(self,mesa):	
 		
 		cartas_jogadores=[]
@@ -709,41 +707,45 @@ class Compara_Maos:
 			print ("O jogador {} ganhou!".format(lista_jogadores[ganhador].nome))
 			time.sleep(2)
 			return lista_jogadores[ganhador] #Compara Maos
-			
+
+
 class Mesa: # Mesa
 
 	def __init__(self, deck): 
 		pot = 0 # Atualiza a soma das apostas na Rodada
 		self.mesa=[]
 		self.deck=deck
-		
+
+	def compra_carta(self, deck):
+		for i in lista_jogadores: # Define as mãos dos jogadores participantes
+			i.compra_carta(deck)
+			i.compra_carta(deck)
+			return i.mao
 
 	def flop(self, deck, mesa): # Vira as 3 primeiras cartas 
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
 		mesa.append(deck.compra()) # Abre uma carta na mesa
-		print("Mesa")
-		mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
+		#print("Mesa")
+		#mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
 		
-		tudo=[deck,mesa]
+		
 
-		return tudo
+		return (deck, mesa)
 
 	def turn(self, deck, mesa):
 		mesa.append(deck.compra()) # Abre uma carta na mesa
-		print("Mesa")
-		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show() # Mostra as cartas abertas
-		tudo=[deck,mesa]
+		#print("Mesa")
+		#mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show() # Mostra as cartas abertas
 
-		return tudo
+		return (deck, mesa)
 	
 	def river(self, deck, mesa):
 		mesa.append(deck.compra()) # Abre uma carta na mesa
-		print("Mesa")
-		mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show(), mesa[4].show() # Mostra as cartas abertas
-		tudo=[deck,mesa]
+		#print("Mesa")
+		#mesa[0].show(), mesa[1].show(), mesa[2].show(), mesa[3].show(), mesa[4].show() # Mostra as cartas abertas
 
-		return tudo
+		return (deck, mesa)
 
 class Jogo:	
 
@@ -792,9 +794,7 @@ class Jogo:
 		return (nome, fichas)
 
 
-
-
-def puxa_mao():
+def puxa_mao(): #puxa mao do jogador do site
 	url = 'http://pokerinsper.pythonanywhere.com/'
 	res = urllib.request.urlopen(url)
 	data_dict = json.loads(res.read().decode('utf8'))
@@ -816,19 +816,19 @@ def puxa_mao():
 
 	return carta1,carta2
 
+#   ========================================
+
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
 lista_arquivos = []  # Lista de jogos salvos
 jogo = "jogo"
 lista_jogadores = []
+
 Joao=Jogador("joao",10000)
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
-
 deck = Deck()
-
 while True:
-
 	print("Inicio da rodada")
 	deck.shuffle()
 	for i in lista_jogadores:
@@ -853,7 +853,6 @@ while True:
 							print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 							break
 						continue
-
 	tudo = mesa.flop(mesa.deck, mesa.mesa)
 	maiores_apostas=[-1]
 	valores[0]=0
@@ -903,7 +902,7 @@ while True:
 		print(i.fichas)	
 	while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
 			for i in lista_jogadores:
-				valores = i.acao(valores[0],valores[1])
+				valores=i.acao(valores[0],valores[1])
 				try:
 					maiores_apostas.remove(-1)
 					if len(lista_jogadores) == 1:
@@ -914,17 +913,10 @@ while True:
 						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 						break
 					continue
-
-	Compara_Maos.peneira(mesa.mesa, lista_jogadores)
-
 	print(valores[1])
-	for i in range(0,len(lista_jogadores)):
+	for i in range(0,len(lista_jogadores)-1):
 		lista_jogadores[i].reseta_mao()
 	for i in lista_jogadores:
 		i.maior_aposta=0
 Jogo.fim()
-
-
-
-
 

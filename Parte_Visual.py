@@ -6,7 +6,7 @@ pg.init()
 
 clock = pg.time.Clock()
 pg.display.set_caption("Hsu Poker")
-screen = pg.display.set_mode((1200,1000))
+screen = pg.display.set_mode((1200, 800))
 
 grey = (200, 200, 200)
 deck = Cd.Deck()
@@ -14,15 +14,6 @@ running = True
 naipes = ["Copas", "Ouros", "Espadas", "Paus"]
 cartas = ["A", "Dois", "Tres", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "J", "Q", "K"]
 grafica_cartas = []
-
-for i in range (0, len(deck.cartas)-1):
-
-	x = "{} de {}".format(deck.cartas[i].valor,deck.cartas[i].naipe)
-	x = pg.image.load(deck.cartas[i].sprite)
-	x = pg.transform.scale(x,(300,300))
-	grafica_cartas.append(x)
-
-
 
 cartax = 513
 cartax2 = 513
@@ -71,11 +62,11 @@ while running:
 				pg.mixer.music.unpause()
 				music_on = True
 
-	if cartay < 750:
+	if cartay < 600:
 		cartay=cartay+2.5
 		cartay2 = cartay2-0.15
 
-	if cartay2 < 750:
+	if cartay2 < 600:
 		cartay2=cartay2+2.5
 		cartax2 = cartax2+0.15
 
@@ -84,7 +75,7 @@ while running:
 	#  =========================================  Fundo  =====================================================================
 	screen.fill(grey)
 
-	screen.blit(mesa,(0,-100))
+	screen.blit(mesa,(0,-200))
 
 	#  =====================================  Display de cartas  =============================================================
 	lista_jogadores = []
@@ -94,11 +85,16 @@ while running:
 	lista_jogadores= []
 	deck.build()
 	deck.shuffle()
-	rodada = Cd.Rodada(lista_jogadores, deck)
-	jogador.mao.append(deck.compra())
+
+	mesajogo = Cd.Mesa(deck)
+
+	jogador.mao = jogador.compra_carta(deck)
+	jogador.mao = jogador.compra_carta(deck)
+	mesajogo.compra_carta
+	
 	# Jogaodor:
-	screen.blit(jogador.mao[0],(cartax,cartay))
-	screen.blit(jogador.mao[1],(cartax2,cartay2))
+	screen.blit(jogador.mao[0].sprite,(cartax,cartay))
+	screen.blit(jogador.mao[1].sprite,(cartax2,cartay2))
 
 	# Oponente:
 	screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
