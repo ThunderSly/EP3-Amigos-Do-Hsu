@@ -181,6 +181,7 @@ class Jogador: # Jogador
 					break
 		valores=[maior_aposta,pot]
 		return valores
+
 	def melhor_mao(self,mesa):	
 		
 		cartas_jogadores=[]
@@ -291,7 +292,7 @@ class Jogador: # Jogador
 				lista_naipes.remove(i.naipe)
 
 		print(valor_mao)
-		self.reseta_mao()
+		
 		return valor_mao
 		
 	def maos_iguais(self, valor_mao, mesa):
@@ -598,7 +599,7 @@ class Compara_Maos:
 		valor4=[]
 		jogadores5=[]
 		valor5=[]
-		
+		jogadores6=[]
 		valor6=[]
 
 		for i in lista_jogadores:
@@ -661,10 +662,24 @@ class Compara_Maos:
 								valor6.append(x)
 							maximo = max(valor6)
 
-							ganhador = valor6.index(maximo)
-							print ("O jogador {} ganhou!".format(jogadores5[ganhador].nome))
-							time.sleep(2)
-							return jogadores5[ganhador]
+							if valor6.count(maximo) > 1:
+								for u in valor6:
+									if u == maximo:
+										l=valor6.index(u)
+										jogadores6.append(jogadores5[l])
+								
+								tamanho=len(jogadores6)
+								print("Houve um empate! Os ganhadores são:")
+								for i in jogadores6:
+									print(i.nome)
+								return jogadores6
+
+
+							else:	
+								ganhador = valor6.index(maximo)
+								print ("O jogador {} ganhou!".format(jogadores5[ganhador].nome))
+								time.sleep(2)
+								return jogadores5[ganhador]
 
 						else:
 							ganhador = valor5.index(maximo)
@@ -695,7 +710,6 @@ class Compara_Maos:
 			time.sleep(2)
 			return lista_jogadores[ganhador] #Compara Maos
 			
-
 class Mesa: # Mesa
 
 	def __init__(self, deck): 
@@ -780,18 +794,27 @@ class Jogo:
 
 
 
-"""def puxa_cartas():
-	url = 'http://pokerinsper.pythonanywhere.com/receber'
-
+def puxa_mao():
+	url = 'http://pokerinsper.pythonanywhere.com/'
 	res = urllib.request.urlopen(url)
-
 	data_dict = json.loads(res.read().decode('utf8'))
 
-	return data_dict
+	c=data_dict
+	cartas = c['cards']
+	v1=cartas[0]
+	n1=cartas[1]
 
+	v2=cartas[2]
+	n2=cartas[3]
 
-c=puxa_cartas()
-print(c)"""
+	z1 = "Sprites\\{} de {}.png" .format(v1,n1)
+	z2 = "Sprites\\{} de {}.png" .format(v2,n2)
+
+	carta1 = Cartas(v1,n1,z1)
+	carta2 = Cartas(v2,n2,z2)
+	print(carta1.valor)
+
+	return carta1,carta2
 
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
@@ -895,8 +918,13 @@ while True:
 	Compara_Maos.peneira(mesa.mesa, lista_jogadores)
 
 	print(valores[1])
-	for i in range(0,len(lista_jogadores)-1):
+	for i in range(0,len(lista_jogadores)):
 		lista_jogadores[i].reseta_mao()
 	for i in lista_jogadores:
 		i.maior_aposta=0
 Jogo.fim()
+
+
+
+
+
