@@ -72,7 +72,7 @@ class Jogador: # Jogador
 		self.nome = nome
 		self.mao = []
 		self.fichas = fichas
-		self.maior_aposta=0
+		self.maior_aposta =0
 		lista_jogadores.append(self)
 
 	def compra_carta(self, deck): # Atualiza a mão do jogador através da função de comprar cartas da classe baralho
@@ -95,6 +95,7 @@ class Jogador: # Jogador
 
 	def acao(self,maior_aposta,pot): # Possibilidade de dar call, fold, apostar ou check
 		while True:
+			maiores_apostas=[-1]
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
 			if maior_aposta == 0:
@@ -635,8 +636,6 @@ class Mesa: # Mesa
 		#print("Mesa")
 		#mesa[0].show(), mesa[1].show(), mesa[2].show() # Mostra as cartas abertas
 		
-		
-
 		return (deck, mesa)
 
 	def turn(self, deck, mesa):
