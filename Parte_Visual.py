@@ -1,12 +1,14 @@
 import pygame as pg
 import Classes_deck as Cd
 
+
 #danielsc1@insper.edu.br
 pg.init()
 
 clock = pg.time.Clock()
 pg.display.set_caption("Hsu Poker")
-screen = pg.display.set_mode((1200,800))
+screen = pg.display.set_mode((1200, 800))
+
 
 deck = Cd.Deck()
 running = True
@@ -32,6 +34,7 @@ turny = 320
 riverx = 740
 rivery = 320
 
+
 cartax = 513
 cartax2 = 513
 cartay = 0
@@ -39,17 +42,26 @@ cartay2 = 0
 
 carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
 carta_atras = pg.transform.scale(carta_atras,(150, 150))
-music_on = True
 
 mesavisual = pg.image.load("Sprites\\Mesa Insper Poker.png").convert_alpha()
 mesavisual = pg.transform.scale(mesavisual,(1200, 1200))
 
+# ========================================= Music_Setup ==============================================
+
 music = pg.mixer.music.load("Sounds\\Background Music.mp3")
 pg.mixer.music.set_volume(0.2)
 pg.mixer.music.play(loops = -1, start = 0.0)
+music_on = True
 
-botao_musica_on = Cd.Button(0, 0, 24, 16, "Sprites\\Music Button On.png", 72, 48)
-botao_musica_off = Cd.Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48)
+botao_musica_on = Cd.Button(0, 0, 24, 16, "Sprites\\Music Button On.png", 72, 48, "musica_on")
+botao_musica_off = Cd.Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48, "musica_off")
+
+# ======================================== Acao_Setup ================================================
+
+botao_call = Cd.Button(1000, 800, 32, 12, "Sprites\\Call Button.png", 96, 36, "call")
+botao_check = Cd.Button(800, 800, 38, 12, "Sprites\\Check Button.png", 114, 36, "call")
+botao_raise = Cd.Button(1200, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36, "call")
+botao_fold = Cd.Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "call")
 
 while running:
 
@@ -59,12 +71,6 @@ while running:
 			running = False
 
 		if event.type == pg.KEYDOWN:
-				
-			if event.key == pg.K_r:
-				cartax = 300
-				cartax2 = 300
-				cartay = -38
-				cartay2 = -38
 
 			if event.key == pg.K_m and music_on == True:
 
@@ -75,7 +81,7 @@ while running:
 
 				pg.mixer.music.unpause()
 				music_on = True
-
+		
 
 
 	#  =========================================================  Jogo  =======================================================================
@@ -85,13 +91,39 @@ while running:
 	screen.fill(grey)
 
 	screen.blit(mesavisual,(0,-200))
-	# ========================= Botoes =========================================================================
 
+	#   ======================================  BOTOES ========================================================================
 
-	#  =====================================  Display de cartas  =============================================================
-	lista_jogadores = []
+	#   ============ Musica ========
 
-	jogador = Cd.Jogador("hsu",10000)
+	#botao_musica_on.click()
+	#botao_musica_off.click()
+
+	
+	if music_on == True:
+
+		screen.blit(botao_musica_on.load(), (botao_musica_on.x, botao_musica_on.y))
+
+		'''
+	if botao_musica_on.click() == True:
+
+		pg.mixer.music.pause()
+		music_on = False
+		'''
+
+	if music_on == False:
+
+		screen.blit(botao_musica_off.load(), (botao_musica_off.x, botao_musica_off.y))
+
+		'''
+	if botao_musica_off.click() == True:
+
+		pg.mixer.music.unpause()
+		music_on = True
+	'''
+
+		#  =====================================  Display de cartas  =============================================================
+	
 
 	while rodada:
 		lista_jogadores = []
@@ -127,26 +159,15 @@ while running:
 
 	# Jogaodor:
 
-	'''screen.blit(jogador.mao[0],(cartax,cartay))
-	screen.blit(jogador.mao[1],(cartax2,cartay2))
-=======
-
 	screen.blit(jogador.mao[0].sprite, (cartax,cartay))
 	screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
->>>>>>> ad5da11b1aae6bf82784d090dec2bbdadd3d6806
 
 	# Oponente:
 	
 	screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
-<<<<<<< HEAD
-	screen.blit(carta_atras,(carta_oponente2x,carta_oponente2y))
-'''
-	# Mesa:
-
 	screen.blit(carta_atras,(carta_oponente2x, carta_oponente2y))
 
 	# Flop:
-
 
 
 	
@@ -166,5 +187,6 @@ while running:
 		cartax2 = cartax2+0.15
 
 	pg.display.update()
+	clock.tick(60)
 
 pg.quit()
