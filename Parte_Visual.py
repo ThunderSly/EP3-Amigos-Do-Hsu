@@ -1,7 +1,6 @@
 import pygame as pg
 import Classes_deck as Cd
 
-
 #danielsc1@insper.edu.br
 pg.init()
 
@@ -42,26 +41,15 @@ cartay2 = 0
 
 carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
 carta_atras = pg.transform.scale(carta_atras,(150, 150))
+music_on = True
 
 mesavisual = pg.image.load("Sprites\\Mesa Insper Poker.png").convert_alpha()
 mesavisual = pg.transform.scale(mesavisual,(1200, 1200))
 
-# ========================================= Music_Setup ==============================================
-
 music = pg.mixer.music.load("Sounds\\Background Music.mp3")
 pg.mixer.music.set_volume(0.2)
 pg.mixer.music.play(loops = -1, start = 0.0)
-music_on = True
 
-botao_musica_on = Cd.Button(0, 0, 24, 16, "Sprites\\Music Button On.png", 72, 48, "musica_on")
-botao_musica_off = Cd.Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48, "musica_off")
-
-# ======================================== Acao_Setup ================================================
-
-botao_call = Cd.Button(1000, 800, 32, 12, "Sprites\\Call Button.png", 96, 36, "call")
-botao_check = Cd.Button(800, 800, 38, 12, "Sprites\\Check Button.png", 114, 36, "call")
-botao_raise = Cd.Button(1200, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36, "call")
-botao_fold = Cd.Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "call")
 
 while running:
 
@@ -72,6 +60,13 @@ while running:
 
 		if event.type == pg.KEYDOWN:
 
+				
+			if event.key == pg.K_r:
+				cartax = 300
+				cartax2 = 300
+				cartay = -38
+				cartay2 = -38
+
 			if event.key == pg.K_m and music_on == True:
 
 				pg.mixer.music.pause()
@@ -81,7 +76,7 @@ while running:
 
 				pg.mixer.music.unpause()
 				music_on = True
-		
+
 
 
 	#  =========================================================  Jogo  =======================================================================
@@ -92,36 +87,6 @@ while running:
 
 	screen.blit(mesavisual,(0,-200))
 
-	#   ======================================  BOTOES ========================================================================
-
-	#   ============ Musica ========
-
-	#botao_musica_on.click()
-	#botao_musica_off.click()
-
-	
-	if music_on == True:
-
-		screen.blit(botao_musica_on.load(), (botao_musica_on.x, botao_musica_on.y))
-
-		'''
-	if botao_musica_on.click() == True:
-
-		pg.mixer.music.pause()
-		music_on = False
-		'''
-
-	if music_on == False:
-
-		screen.blit(botao_musica_off.load(), (botao_musica_off.x, botao_musica_off.y))
-
-		'''
-	if botao_musica_off.click() == True:
-
-		pg.mixer.music.unpause()
-		music_on = True
-	'''
-
 		#  =====================================  Display de cartas  =============================================================
 	
 
@@ -131,62 +96,140 @@ while running:
 		turn = []
 		river = []
 		mesa = []
-		pot = 0
 
 
 		jogador = Cd.Jogador("hsu",10000)
-			
-		lista_jogadores= []
+		jogador1 = Cd.Jogador("brunao",10000)
+
 		deck.build()
 		deck.shuffle()
 
 		mesajogo = Cd.Mesa(deck)
-
 		jogador.mao = jogador.compra_carta(deck)
 		jogador.mao = jogador.compra_carta(deck)
-		mesajogo.compra_carta(deck)
+		screen.blit(jogador.mao[0].sprite, (cartax,cartay))
+		screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
+		screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
+		screen.blit(carta_atras,(carta_oponente2x, carta_oponente2y))
+		pg.display.update()
+		if cartay < 600:
+			cartay=cartay+2.5
+			cartay2 = cartay2-0.15
 
-		
+		if cartay2 < 600:
+			cartay2=cartay2+2.5
+			cartax2 = cartax2+0.15
 			# Mesa:
+		pot=0
+		maiores_apostas=[-1]
 		maior_aposta=0
 		valores=[maior_aposta,pot]
-		jogador.acao(jogador.maior_aposta, pot)
-		flop = (mesajogo.flop(deck, mesa))
-		turn = (mesajogo.turn(deck, mesa))
-		river = (mesajogo.river(deck, mesa))
+		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+		
+		flop = mesajogo.flop(mesajogo.deck, mesajogo.mesa)
+		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
+		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
+		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
+		pg.display.update()
+		maiores_apostas=[-1]
+		valores[0]=0
+		for i in lista_jogadores:
+			i.maior_aposta=0
+		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+		
+		turn = mesajogo.turn(flop[0], flop[1])
+		screen.blit(turn[1][3].sprite, (turnx, turny))
+		pg.display.update()
+		maiores_apostas=[-1]
+		valores[0]=0
+		for i in lista_jogadores:
+			i.maior_aposta=0
+		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+		
+		river = mesajogo.river(turn[0], turn[1])
+		screen.blit(river[1][4].sprite, (riverx, rivery))
+		pg.display.update()
+		maiores_apostas=[-1]
+		valores[0]=0
+		for i in lista_jogadores:
+			i.maior_aposta=0
+		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				valores=i.acao(valores[0],valores[1])
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						#print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+		
+		for i in range(0,len(lista_jogadores)-1):
+			lista_jogadores[i].reseta_mao()
+		for i in lista_jogadores:
+			i.maior_aposta=0
+
 
 		rodada = False
 
 	# Jogaodor:
 
-	screen.blit(jogador.mao[0].sprite, (cartax,cartay))
-	screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
+
 
 	# Oponente:
 	
-	screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
-	screen.blit(carta_atras,(carta_oponente2x, carta_oponente2y))
+
 
 	# Flop:
 
 
 	
 
-	screen.blit(flop[1][0].sprite, (flop1x, flop1y))
-	screen.blit(flop[1][1].sprite, (flop2x, flop2y))
-	screen.blit(flop[1][2].sprite, (flop3x, flop3y))
-	screen.blit(turn[1][3].sprite, (turnx, turny))
-	screen.blit(turn[1][4].sprite, (riverx, rivery))
 
-	if cartay < 600:
-		cartay=cartay+2.5
-		cartay2 = cartay2-0.15
 
-	if cartay2 < 600:
-		cartay2=cartay2+2.5
-		cartax2 = cartax2+0.15
 
-	pg.display.update()
-	clock.tick(60)
+
+
+
+
 
 pg.quit()
