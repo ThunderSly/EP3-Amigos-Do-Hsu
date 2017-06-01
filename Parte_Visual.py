@@ -38,7 +38,15 @@ class Sprites(pg.sprite.Sprite):
 		self.imagem = pg.transform.scale(self.imagem,(x, y))
 		self.retangulo = self.imagem.get_rect()
 
+def counter(count):
+
+	font = pg.font.SysFont(None, 25)
+	text = font.render("Fichas: " + str(count), True, black)
+	screen.blit(text, (0, 750))
+
 #danielsc1@insper.edu.br
+
+black = (0, 0, 0)
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
@@ -261,6 +269,7 @@ while running:
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
+		counter(jogador.fichas)
 		flop = (mesajogo.flop(deck, mesa))
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
@@ -269,12 +278,14 @@ while running:
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
+		counter(jogador.fichas)
 		turn = (mesajogo.turn(deck, mesa))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
 		pg.display.flip()
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
+		counter(jogador.fichas)
 		river = (mesajogo.river(deck, mesa))
 		screen.blit(river[1][4].sprite, (riverx, rivery))
 		pg.display.flip()
