@@ -291,7 +291,7 @@ class Jogador: # Jogador
 				lista_naipes.remove(i.naipe)
 
 		print(valor_mao)
-		self.reseta_mao()
+		
 		return valor_mao
 		
 	def maos_iguais(self, valor_mao,mesa):
@@ -602,13 +602,14 @@ class Compara_Maos:
 		valor4=[]
 		jogadores5=[]
 		valor5=[]
-		
+		jogadores6=[]
 		valor6=[]
 
 
 		for i in lista_jogadores:
 			x = i.melhor_mao(mesa)
 			valor1.append(x)
+		print(valor1)
 		maximo = max(valor1)
 
 		if valor1.count(maximo) > 1:
