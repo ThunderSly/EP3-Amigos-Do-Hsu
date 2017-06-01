@@ -23,10 +23,11 @@ class Button:
 		return botao
 
 	def chamar_botao(self):
+
 		mouse = pg.mouse.get_pos()
 		click = pg.mouse.get_pressed()
 
-		if self.x+self.w > mouse[0] > self.x and self.y+self.h > mouse[1] > self.y :
+		if self.xs > mouse[0] > self.x and self.ys > mouse[1] > self.y :
 
 			if click[0] == 1 :
 				print("clicked")
