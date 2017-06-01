@@ -2,6 +2,7 @@ import itertools
 import random
 import time
 import pickle
+import pygame as pg
 
 class Cartas: # Cartas do baralho
 
@@ -40,7 +41,8 @@ class Deck: # Baralho
 
 			for c in range(1,14):
 
-				z = "Sprites\\{} de {}.png" .format(c,i)
+				z = pg.image.load("Sprites\\{} de {}.png" .format(c,i)).convert_alpha()
+				z = pg.transform.scale(z,(150, 150))
 
 				self.cartas.append(Cartas(c,i,z))
 
@@ -76,7 +78,7 @@ class Jogador: # Jogador
 
 		self.mao.append(deck.compra())
 
-		return self
+		return self.mao
 
 	def reseta_mao(self):
 
@@ -684,7 +686,15 @@ class Compara_Maos:
 			ganhador = valor1.index(maximo)
 			return lista_jogadores[ganhador] #Compara Maos
 
+		return maximo
+
 class Mesa: # Mesa
+
+	def compra_carta(self, deck):
+		for i in lista_jogadores: # Define as mãos dos jogadores participantes
+			i.compra_carta(deck)
+			i.compra_carta(deck)
+			return i.mao
 
 	def __init__(self, deck): 
 		pot = 0 # Atualiza a soma das apostas na Rodada
@@ -1723,17 +1733,20 @@ class Bot: # Jogador
 		return valor_especifico
 
 
+
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
 lista_arquivos = []  # Lista de jogos salvos
 jogo = "jogo"
 lista_jogadores = []
 Matilde=Bot("Matilde",10000)
+maiores_apostas=[-1]
+'''
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
 
-deck = Deck()
+deck = Deck()'''
 
-while len(lista_jogadores)>1:
+'''while len(lista_jogadores)>1:
 
 	print("Inicio da rodada")
 	deck.shuffle()
@@ -1863,3 +1876,4 @@ while len(lista_jogadores)>1:
 	break
 
 Jogo.fim()
+'''
