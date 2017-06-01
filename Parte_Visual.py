@@ -3,7 +3,7 @@ import Classes_deck as Cd
 
 class Button:
 
-	def __init__(self, x, y, w, h, sprite, xs, ys):
+	def __init__(self, x, y, w, h, sprite, xs, ys, tipo):
 
 		self.x = x
 		self.y = y
@@ -12,6 +12,7 @@ class Button:
 		self.xs = xs
 		self.ys = ys
 		self.sprite = sprite
+		self.tipo = tipo
 
 	def load(self):
 
@@ -30,6 +31,14 @@ class Button:
 			if click[0] == 1 :
 				print("clicked")
 				return True
+
+def Detecta_botao(listaB):
+
+	for i in listaB:
+
+		if i.chamar_botao == True:
+
+			return i.tipo
 
 class Sprites(pg.sprite.Sprite):
 	def __init__(self, imagem, x, y):
@@ -101,15 +110,15 @@ pg.mixer.music.set_volume(0.2)
 pg.mixer.music.play(loops = -1, start = 0.0)
 music_on = True
 
-botao_musica_on = Button(0, 0, 24, 16, "Sprites\\Music Button On.png", 72, 48)
-botao_musica_off = Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48)
+botao_musica_on = Button(0, 0, 24, 16, "Sprites\\Music Button On.png", 72, 48, "musica_on")
+botao_musica_off = Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48, "musica_off")
 
 # ======================================== Acao_Setup ================================================
 
-botao_call = Button(1000, 800, 32, 12, "Sprites\\Call Button.png", 96, 36)
-botao_check = Button(800, 800, 38, 12, "Sprites\\Check Button.png", 114, 36)
-botao_raise = Button(1200, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36)
-botao_fold = Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36)
+botao_call = Button(1000, 800, 32, 12, "Sprites\\Call Button.png", 96, 36, "call")
+botao_check = Button(800, 800, 38, 12, "Sprites\\Check Button.png", 114, 36, "check")
+botao_raise = Button(1200, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36, "raise")
+botao_fold = Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "fold")
 
 lista_jogadores =[]
 
@@ -213,14 +222,12 @@ while running:
 		mesajogo = []
 
 			
-		deck.build()
 		deck.shuffle()
 
 		mesajogo = Cd.Mesa(deck)
 		jogador.mao = jogador.compra_carta(deck)
 		jogador.mao = jogador.compra_carta(deck)
-
-		mesajogo.compra_carta(deck)		
+	
 
 
 		while cartay < 600 and cartay2 < 600:
