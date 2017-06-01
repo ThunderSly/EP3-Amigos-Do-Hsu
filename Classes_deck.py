@@ -92,7 +92,8 @@ class Jogador: # Jogador
 		for carta in self.mao:
 			carta.show()
 
-	def acao(self,maior_aposta,pot, acao, maiores_apostas,lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
+	def acao(self,maior_aposta,pot, acao, maiores_apostas, lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
+
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
@@ -178,8 +179,8 @@ class Jogador: # Jogador
 					self.mao = []
 					print("{} sai da rodada!".format(self.nome))
 					break
-		valores=[maior_aposta,pot,maiores_apostas]
-		return valores, lista_jogadores
+		valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
+		return valores
 
 	def melhor_mao(self,mesa):	
 		
@@ -1435,8 +1436,8 @@ class Bot: # Jogador
 
 
 
-			valores=[maior_aposta,pot,maiores_apostas]
-			return valores, lista_jogadores
+			valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
+			return valores
 		
 	def maos_iguais(self, valor_mao, mesa):
 

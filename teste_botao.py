@@ -56,6 +56,11 @@ while running:
 
 		print(event)
 
+	image = pg.Surface((50, 50))
+	image.fill((0, 255, 0))
+	rect = image.get_rect()
+	rect.center = (200 / 2, 200 / 2)
+
 	screen.blit(botao_teste.load(), (0,0))
 
 	a = botao_teste.chamar_botao()
@@ -65,6 +70,8 @@ while running:
 		b = True
 
 		screen.fill(white)
+		
+		screen.blit(image, rect)
 
 	elif a == True and b == True:
 
@@ -74,3 +81,6 @@ while running:
 
 	pg.display.update()
 	clock.tick(15)
+
+
+
