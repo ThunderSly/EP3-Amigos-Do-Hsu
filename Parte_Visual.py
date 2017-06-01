@@ -38,7 +38,15 @@ class Sprites(pg.sprite.Sprite):
 		self.imagem = pg.transform.scale(self.imagem,(x, y))
 		self.retangulo = self.imagem.get_rect()
 
+def counter(count):
+
+	font = pg.font.SysFont(None, 25)
+	text = font.render("Fichas: " + str(count), True, black)
+	screen.blit(text, (0, 750))
+
 #danielsc1@insper.edu.br
+
+black = (0, 0, 0)
 
 sim = ["sim", "s"]  # Lista para inputs afirmativos
 nao = ["nao","n","não"]  # Lista para inputs negativos
@@ -176,7 +184,7 @@ while running:
 	
 
 	while rodada:
-		for event in pg.event.get():
+		'''for event in pg.event.get():
 
 			if event.type == pg.QUIT:
 				running = False
@@ -191,7 +199,7 @@ while running:
 				elif event.key == pg.K_m and music_on == False:
 
 					pg.mixer.music.unpause()
-					music_on = True
+					music_on = True'''
 
 		cartax = 513
 		cartax2 = 513
@@ -208,14 +216,15 @@ while running:
 		mesajogo = []
 
 			
-		deck.build()
+
 		deck.shuffle()
 
 		mesajogo = Cd.Mesa(deck)
 		jogador.mao = jogador.compra_carta(deck)
 		jogador.mao = jogador.compra_carta(deck)
-
-		mesajogo.compra_carta(deck)		
+	
+		Matilde.mao = Matilde.compra_carta(deck)
+		Matilde.mao = Matilde.compra_carta(deck)
 
 
 		while cartay < 600 and cartay2 < 600:
@@ -223,6 +232,7 @@ while running:
 
 				if event.type == pg.QUIT:
 					running = False
+					break
 
 				if event.type == pg.KEYDOWN:
 
@@ -230,11 +240,41 @@ while running:
 
 						pg.mixer.music.pause()
 						music_on = False
+						break
 
 					elif event.key == pg.K_m and music_on == False:
 
 						pg.mixer.music.unpause()
 						music_on = True
+
+						break
+
+
+			botao_musica_on.chamar_botao()
+			botao_musica_off.chamar_botao()
+
+	
+			if music_on == True:
+
+				screen.blit(botao_musica_on.load(), (botao_musica_on.x, botao_musica_on.y))
+				pg.display.flip()
+				
+			if botao_musica_on.chamar_botao() == True:
+
+				pg.mixer.music.pause()
+				music_on = False
+				
+
+			if music_on == False:
+
+				screen.blit(botao_musica_off.load(), (botao_musica_off.x, botao_musica_off.y))
+				pg.display.flip()
+				
+			if botao_musica_off.chamar_botao() == True:
+
+				pg.mixer.music.unpause()
+				music_on = True
+			
 
 			screen.fill(grey)
 
@@ -267,6 +307,8 @@ while running:
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
+		counter(jogador.fichas)
+
 		flop = (mesajogo.flop(deck, mesa))
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
@@ -277,6 +319,7 @@ while running:
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
+		counter(jogador.fichas)
 		turn = (mesajogo.turn(deck, mesa))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
 		pg.display.flip()
@@ -285,6 +328,7 @@ while running:
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
+		counter(jogador.fichas)
 		river = (mesajogo.river(deck, mesa))
 		screen.blit(river[1][4].sprite, (riverx, rivery))
 		pg.display.flip()
@@ -299,6 +343,7 @@ while running:
 			i.maior_aposta=0
 			print(i.fichas)
 
+		acao=0
 		rodada = False
 
 
