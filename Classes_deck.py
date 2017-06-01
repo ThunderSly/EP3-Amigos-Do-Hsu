@@ -92,7 +92,7 @@ class Jogador: # Jogador
 		for carta in self.mao:
 			carta.show()
 
-	def acao(self,maior_aposta,pot, acao): # Possibilidade de dar call, fold, apostar ou check
+	def acao(self,maior_aposta,pot, acao, maiores_apostas,lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
@@ -178,8 +178,8 @@ class Jogador: # Jogador
 					self.mao = []
 					print("{} sai da rodada!".format(self.nome))
 					break
-		valores=[maior_aposta,pot]
-		return valores
+		valores=[maior_aposta,pot,maiores_apostas]
+		return valores, lista_jogadores
 
 	def melhor_mao(self,mesa):	
 		
@@ -919,431 +919,386 @@ class Bot: # Jogador
 		
 		return valor_mao
 
-	def acaox(self,maior_aposta,pot, mesa): # Possibilidade de dar call, fold, apostar ou check
+	def acaox(self,maior_aposta,pot, mesa, maiores_apostas,lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
+		if maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
 
-		a = self.melhor_mao(mesa)
-		listav=[]
-		listan=[]
-		for i in self.mao:
-			listav.append(i.valor)
-			listan.append(i.naipe)
-		maximo = max(listav)
-		aposta = 0
-		while True:
+			a = self.melhor_mao(mesa)
+			listav=[]
+			listan=[]
+			for i in self.mao:
+				listav.append(i.valor)
+				listan.append(i.naipe)
+			maximo = max(listav)
+			aposta = 0
+			while True:
 
-			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
-				break
 
-			if maior_aposta == 0:
-				
 
-				if len(mesa) == 0: # Se estiver no pre-flop e ninguem apostou...
-					print("{} checa!".format(self.nome))
-					maiores_apostas.append(0)
-					break
-						
+				if maior_aposta == 0:
+					
 
-				if len(mesa) == 3:	#Se estiver no flop e for o primeiro a jogar...
-
-					# ...Se tiver 8+ ou Par, checa
-					if a == 2:
+					if len(mesa) == 0: # Se estiver no pre-flop e ninguem apostou...
 						print("{} checa!".format(self.nome))
 						maiores_apostas.append(0)
 						break
-
-					elif a == 0 and maximo >= 8:	
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-						
-					elif a >= 3:
-						#raise 500
-						aposta = 500
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=aposta
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							self.maior_aposta=aposta
-							break
-
-						if aposta == self.fichas:
-							self.fichas -= self.fichas
-							print("{} ESTA ALL IN!".format(self.nome))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-
-					elif a == 0 and maximo < 8:
-						#check  
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-						
-				if len(mesa) == 4:
-
-					if a == 0 and maximo >=10:
-						#check
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-
-					elif a == 2:
-						#check
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-
-					elif a == 3:
-						#raise 500
-						aposta = 500
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=aposta
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							self.maior_aposta=aposta
-							break
-
-						if aposta == self.fichas:
-							self.fichas -= self.fichas
-							print("{} ESTA ALL IN!".format(self.nome))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-						
-
-					elif a >= 4:
-						#raise 1000
-						aposta = 1000
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=aposta
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							self.maior_aposta=aposta
-							break
-
-						if aposta == self.fichas:
-							self.fichas -= self.fichas
-							print("{} ESTA ALL IN!".format(self.nome))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-						
-
-					else:
-						#check
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-
-				if len(mesa) == 5:
-
-					if a == 0 and maximo >=13:
-						#check
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-
-					elif a == 2:
-						#check
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
-
-					elif a == 3:
-						#raise 250
-						aposta = 250
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=aposta
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							self.maior_aposta=aposta
-							break
-
-						if aposta == self.fichas:
-							self.fichas -= self.fichas
-							print("{} ESTA ALL IN!".format(self.nome))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-						
-					elif a >=4:
-						#raise 1000
-						aposta = 1000
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=aposta
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							self.maior_aposta=aposta
-							break
-
-						if aposta == self.fichas:
-							self.fichas -= self.fichas
-							print("{} ESTA ALL IN!".format(self.nome))
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-						if aposta > self.fichas:
-							aposta = self.fichas
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
 							
 
-					else:
-						#check
-						print("{} checa!".format(self.nome))
-						maiores_apostas.append(0)
-						break
+					if len(mesa) == 3:	#Se estiver no flop e for o primeiro a jogar...
 
-
-			if maior_aposta > 0:
-				
-
-				if len(mesa) == 0: # Se estiver no pre-flop e apostaram...
-					#call
-					if maior_aposta < self.fichas:
-						self.fichas -= (maior_aposta-self.maior_aposta)
-						print("{} paga pra ver!".format(self.nome))
-						maiores_apostas.append(maior_aposta)
-						pot+=(maior_aposta-self.maior_aposta)
-
-					elif maior_aposta >= self.fichas:
-						pot+=self.fichas
-						self.fichas == 0
-						print("{} ESTA ALL IN!".format(self.nome))
-						maiores_apostas.append(maior_aposta)
-					break	
-
-				if len(mesa) == 3:	#Se estiver no flop e apostaram...
-
-					# ...Se tiver 8+ ou Par, checa
-					if a == 0 and maximo >= 8:
-
-						if maior_aposta <= 500:
-							#call
-							if maior_aposta<self.fichas:
-								self.fichas -= (maior_aposta-self.maior_aposta)
-								print("{} paga pra ver!".format(self.nome))
-								maiores_apostas.append(maior_aposta)
-								pot+=(maior_aposta-self.maior_aposta)
-							elif maior_aposta >= self.fichas:
-								pot+=self.fichas
-								self.fichas == 0
-								print("{} ESTA ALL IN!".format(self.nome))
-								maiores_apostas.append(maior_aposta)
-							break	
-
-						else:
-							#fold
-							self.mao = []
-							print("{} sai da rodada!".format(self.nome))
-							lista_jogadores.remove(self)
+						# ...Se tiver 8+ ou Par, checa
+						if a == 2:
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
 							break
 
-
-					if a == 2:
-						if maior_aposta <= 1000:
-							#call
-							if maior_aposta<self.fichas:
-								self.fichas -= (maior_aposta-self.maior_aposta)
-								print("{} paga pra ver!".format(self.nome))
-								maiores_apostas.append(maior_aposta)
-								pot+=(maior_aposta-self.maior_aposta)
-							elif maior_aposta >= self.fichas:
-								pot+=self.fichas
-								self.fichas == 0
-								print("{} ESTA ALL IN!".format(self.nome))
-								maiores_apostas.append(maior_aposta)
-							break	
-
-						else:
-							#fold
-							lista_jogadores.remove(self)
-							self.mao = []
-							print("{} sai da rodada!".format(self.nome))
+						elif a == 0 and maximo >= 8:	
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
 							break
 							
-
-					if a >= 3:
-						#raise maior_aposta*0.05
-						aposta = maior_aposta*0.05
-
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=(aposta-self.maior_aposta)
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							pot+=(aposta-self.maior_aposta)
-							self.maior_aposta=aposta
-							maiores_apostas.append(aposta)
-							maior_aposta = aposta
-							break
-						
-						if aposta == self.fichas:
-							self.fichas == 0
-							print("{} ESTA ALL IN!".format(self.nome))
-							if aposta > maior_aposta:
+						elif a >= 3:
+							#raise 500
+							aposta = 500
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=aposta
+								print("{} aposta {} fichas!".format(self.nome,aposta))
 								maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								self.maior_aposta=aposta
+								break
 
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-
-					if a == 0 and maximo < 8:
-						#fold  
-						lista_jogadores.remove(self)
-						self.mao = []
-						print("{} sai da rodada!".format(self.nome))
-						break
-						
-				if len(mesa) == 4:
-
-					if a == 0 and maximo >=10:
-						#fold
-						lista_jogadores.remove(self)
-						self.mao = []
-						print("{} sai da rodada!".format(self.nome))
-						break
-
-					if a == 2:
-						if maior_aposta <= 1000:
-							#call
-							if maior_aposta<self.fichas:
-								self.fichas -= (maior_aposta-self.maior_aposta)
-								print("{} paga pra ver!".format(self.nome))
-								maiores_apostas.append(maior_aposta)
-								pot+=(maior_aposta-self.maior_aposta)
-							if maior_aposta >= self.fichas:
-								pot+=self.fichas
-								self.fichas == 0
+							if aposta == self.fichas:
+								self.fichas -= self.fichas
 								print("{} ESTA ALL IN!".format(self.nome))
-								maiores_apostas.append(maior_aposta)
-							break	
-
-						else:
-							#fold
-							lista_jogadores.remove(self)
-							self.mao = []
-							print("{} sai da rodada!".format(self.nome))
-							break
-
-					if a == 3:
-						#raise 5%
-						aposta == maior_aposta*0.05
-
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=(aposta-self.maior_aposta)
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							pot+=(aposta-self.maior_aposta)
-							self.maior_aposta=aposta
-							maiores_apostas.append(aposta)
-							maior_aposta = aposta
-							break
-						
-						if aposta == self.fichas:
-							self.fichas == 0
-							print("{} ESTA ALL IN!".format(self.nome))
-							if aposta > maior_aposta:
 								maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
 
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-
-					if a >= 4:
-						#raise 50%
-						aposta == maior_aposta*0.5
-
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=(aposta-self.maior_aposta)
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							pot+=(aposta-self.maior_aposta)
-							self.maior_aposta=aposta
-							maiores_apostas.append(aposta)
-							maior_aposta = aposta
-							break
-						
-						if aposta == self.fichas:
-							self.fichas == 0
-							print("{} ESTA ALL IN!".format(self.nome))
-							if aposta > maior_aposta:
+							if aposta > self.fichas:
 								maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+
+						elif a == 0 and maximo < 8:
+							#check  
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
+							break
+							
+					if len(mesa) == 4:
+
+						if a == 0 and maximo >=10:
+							#check
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
 							break
 
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
+						elif a == 2:
+							#check
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
 							break
 
-					else:
-						#fold
-						lista_jogadores.remove(self)
-						self.mao = []
-						print("{} sai da rodada!".format(self.nome))
-						break
+						elif a == 3:
+							#raise 500
+							aposta = 500
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=aposta
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								self.maior_aposta=aposta
+								break
 
-				if len(mesa) == 5:
+							if aposta == self.fichas:
+								self.fichas -= self.fichas
+								print("{} ESTA ALL IN!".format(self.nome))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
 
-					if a == 0 and maximo >=13:
-						#fold
-						lista_jogadores.remove(self)
-						self.mao = []
-						print("{} sai da rodada!".format(self.nome))
-						break
+							if aposta > self.fichas:
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+							
 
-					if a == 2:
-						if maior_aposta <= 100:
+						elif a >= 4:
 							#raise 1000
-							aposta == 1000
+							aposta = 1000
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=aposta
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								self.maior_aposta=aposta
+								break
+
+							if aposta == self.fichas:
+								self.fichas -= self.fichas
+								print("{} ESTA ALL IN!".format(self.nome))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+							if aposta > self.fichas:
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+							
+
+						else:
+							#check
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
+							break
+
+					if len(mesa) == 5:
+
+						if a == 0 and maximo >=13:
+							#check
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
+							break
+
+						elif a == 2:
+							#check
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
+							break
+
+						elif a == 3:
+							#raise 250
+							aposta = 250
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=aposta
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								self.maior_aposta=aposta
+								break
+
+							if aposta == self.fichas:
+								self.fichas -= self.fichas
+								print("{} ESTA ALL IN!".format(self.nome))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+							if aposta > self.fichas:
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+							
+						elif a >=4:
+							#raise 1000
+							aposta = 1000
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=aposta
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								self.maior_aposta=aposta
+								break
+
+							if aposta == self.fichas:
+								self.fichas -= self.fichas
+								print("{} ESTA ALL IN!".format(self.nome))
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+							if aposta > self.fichas:
+								aposta = self.fichas
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+								
+
+						else:
+							#check
+							print("{} checa!".format(self.nome))
+							maiores_apostas.append(0)
+							break
+
+
+				if maior_aposta > 0:
+					
+
+					if len(mesa) == 0: # Se estiver no pre-flop e apostaram...
+						#call
+						if maior_aposta < self.fichas:
+							self.fichas -= (maior_aposta-self.maior_aposta)
+							print("{} paga pra ver!".format(self.nome))
+							maiores_apostas.append(maior_aposta)
+							pot+=(maior_aposta-self.maior_aposta)
+
+						elif maior_aposta >= self.fichas:
+							pot+=self.fichas
+							self.fichas == 0
+							print("{} ESTA ALL IN!".format(self.nome))
+							maiores_apostas.append(maior_aposta)
+						break	
+
+					if len(mesa) == 3:	#Se estiver no flop e apostaram...
+
+						# ...Se tiver 8+ ou Par, checa
+						if a == 0 and maximo >= 8:
+
+							if maior_aposta <= 500:
+								#call
+								if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
+								elif maior_aposta >= self.fichas:
+									pot+=self.fichas
+									self.fichas == 0
+									print("{} ESTA ALL IN!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+								break	
+
+							else:
+								#fold
+								self.mao = []
+								print("{} sai da rodada!".format(self.nome))
+								lista_jogadores.remove(self)
+								break
+
+
+						if a == 2:
+							if maior_aposta <= 1000:
+								#call
+								if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
+								elif maior_aposta >= self.fichas:
+									pot+=self.fichas
+									self.fichas == 0
+									print("{} ESTA ALL IN!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+								break	
+
+							else:
+								#fold
+								lista_jogadores.remove(self)
+								self.mao = []
+								print("{} sai da rodada!".format(self.nome))
+								break
+								
+
+						if a >= 3:
+							#raise maior_aposta*0.05
+							aposta = maior_aposta*0.05
+
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=(aposta-self.maior_aposta)
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								pot+=(aposta-self.maior_aposta)
+								self.maior_aposta=aposta
+								maiores_apostas.append(aposta)
+								maior_aposta = aposta
+								break
+							
+							if aposta == self.fichas:
+								self.fichas == 0
+								print("{} ESTA ALL IN!".format(self.nome))
+								if aposta > maior_aposta:
+									maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+
+							if aposta > self.fichas:
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+
+						if a == 0 and maximo < 8:
+							#fold  
+							lista_jogadores.remove(self)
+							self.mao = []
+							print("{} sai da rodada!".format(self.nome))
+							break
+							
+					if len(mesa) == 4:
+
+						if a == 0 and maximo >=10:
+							#fold
+							lista_jogadores.remove(self)
+							self.mao = []
+							print("{} sai da rodada!".format(self.nome))
+							break
+
+						if a == 2:
+							if maior_aposta <= 1000:
+								#call
+								if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
+								if maior_aposta >= self.fichas:
+									pot+=self.fichas
+									self.fichas == 0
+									print("{} ESTA ALL IN!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+								break	
+
+							else:
+								#fold
+								lista_jogadores.remove(self)
+								self.mao = []
+								print("{} sai da rodada!".format(self.nome))
+								break
+
+						if a == 3:
+							#raise 5%
+							aposta == maior_aposta*0.05
+
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=(aposta-self.maior_aposta)
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								pot+=(aposta-self.maior_aposta)
+								self.maior_aposta=aposta
+								maiores_apostas.append(aposta)
+								maior_aposta = aposta
+								break
+							
+							if aposta == self.fichas:
+								self.fichas == 0
+								print("{} ESTA ALL IN!".format(self.nome))
+								if aposta > maior_aposta:
+									maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+
+							if aposta > self.fichas:
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+
+						if a >= 4:
+							#raise 50%
+							aposta == maior_aposta*0.5
 
 							if aposta<self.fichas and aposta>maior_aposta:
 								self.fichas -=(aposta-self.maior_aposta)
@@ -1376,74 +1331,112 @@ class Bot: # Jogador
 							print("{} sai da rodada!".format(self.nome))
 							break
 
-					if a == 3:
-						#raise maior_aposta*0.05
-						aposta == maior_aposta*0.05
+					if len(mesa) == 5:
 
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=(aposta-self.maior_aposta)
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							pot+=(aposta-self.maior_aposta)
-							self.maior_aposta=aposta
-							maiores_apostas.append(aposta)
-							maior_aposta = aposta
+						if a == 0:
+							#fold
+							lista_jogadores.remove(self)
+							self.mao = []
+							print("{} sai da rodada!".format(self.nome))
 							break
-						
-						if aposta == self.fichas:
-							self.fichas == 0
-							print("{} ESTA ALL IN!".format(self.nome))
-							if aposta > maior_aposta:
+
+						if a == 2:
+							if maior_aposta <= 100:
+								#raise 1000
+								aposta == 1000
+
+								if aposta<self.fichas and aposta>maior_aposta:
+									self.fichas -=(aposta-self.maior_aposta)
+									print("{} aposta {} fichas!".format(self.nome,aposta))
+									pot+=(aposta-self.maior_aposta)
+									self.maior_aposta=aposta
+									maiores_apostas.append(aposta)
+									maior_aposta = aposta
+									break
+								
+								if aposta == self.fichas:
+									self.fichas == 0
+									print("{} ESTA ALL IN!".format(self.nome))
+									if aposta > maior_aposta:
+										maior_aposta = aposta
+									maiores_apostas.append(aposta)
+									pot+=aposta
+									break
+
+								if aposta > self.fichas:
+									maior_aposta = aposta
+									maiores_apostas.append(aposta)
+									pot+=aposta
+									break
+
+							else:
+								#fold
+								lista_jogadores.remove(self)
+								self.mao = []
+								print("{} sai da rodada!".format(self.nome))
+								break
+
+						if a == 3:
+							#raise maior_aposta*0.05
+							aposta == maior_aposta*0.05
+
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=(aposta-self.maior_aposta)
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								pot+=(aposta-self.maior_aposta)
+								self.maior_aposta=aposta
+								maiores_apostas.append(aposta)
 								maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
+								break
+							
+							if aposta == self.fichas:
+								self.fichas == 0
+								print("{} ESTA ALL IN!".format(self.nome))
+								if aposta > maior_aposta:
+									maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
 
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
-
-					if a >=4:
-						#raise maior_aposta*0.2
-						aposta == maior_aposta*0.2
-
-						if aposta<self.fichas and aposta>maior_aposta:
-							self.fichas -=(aposta-self.maior_aposta)
-							print("{} aposta {} fichas!".format(self.nome,aposta))
-							pot+=(aposta-self.maior_aposta)
-							self.maior_aposta=aposta
-							maiores_apostas.append(aposta)
-							maior_aposta = aposta
-							break
-						
-						if aposta == self.fichas:
-							self.fichas == 0
-							print("{} ESTA ALL IN!".format(self.nome))
-							if aposta > maior_aposta:
+							if aposta > self.fichas:
 								maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
 
-						if aposta > self.fichas:
-							maior_aposta = aposta
-							maiores_apostas.append(aposta)
-							pot+=aposta
-							break
+						if a >=4:
+							#raise maior_aposta*0.2
+							aposta == maior_aposta*0.2
 
-					else:
-						#fold
-						lista_jogadores.remove(self)
-						self.mao = []
-						print("{} sai da rodada!".format(self.nome))
-						break
+							if aposta<self.fichas and aposta>maior_aposta:
+								self.fichas -=(aposta-self.maior_aposta)
+								print("{} aposta {} fichas!".format(self.nome,aposta))
+								pot+=(aposta-self.maior_aposta)
+								self.maior_aposta=aposta
+								maiores_apostas.append(aposta)
+								maior_aposta = aposta
+								break
+							
+							if aposta == self.fichas:
+								self.fichas == 0
+								print("{} ESTA ALL IN!".format(self.nome))
+								if aposta > maior_aposta:
+									maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
+
+							if aposta > self.fichas:
+								maior_aposta = aposta
+								maiores_apostas.append(aposta)
+								pot+=aposta
+								break
 
 
 
 
-		valores=[maior_aposta,pot]
-		return valores
+			valores=[maior_aposta,pot,maiores_apostas]
+			return valores, lista_jogadores
 		
 	def maos_iguais(self, valor_mao, mesa):
 
