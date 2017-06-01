@@ -92,12 +92,12 @@ class Jogador: # Jogador
 		for carta in self.mao:
 			carta.show()
 
-	def acao(self,maior_aposta,pot): # Possibilidade de dar call, fold, apostar ou check
+	def acao(self,maior_aposta,pot, acao): # Possibilidade de dar call, fold, apostar ou check
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
 			if maior_aposta == 0:
-				acao=input("Check(C), Raise(R), Fold(F)\n").lower()
+				#acao=input("Check(C), Raise(R), Fold(F)\n").lower()
 				if acao == "check" or acao == "c": # Check: continua a rodada sem apostar
 					print("{} checa!".format(self.nome))
 					maiores_apostas.append(0)
@@ -129,8 +129,10 @@ class Jogador: # Jogador
 					lista_jogadores.remove(self)
 					print("{} saiu da rodada!".format(self.nome))
 					break
+					
 			if maior_aposta > 0:
-				acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+
+				#acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 
 				if acao == "call" or acao == "c": # Call: iguala a aposta da mesa
 					

@@ -39,6 +39,10 @@ class Sprites(pg.sprite.Sprite):
 		self.retangulo = self.imagem.get_rect()
 
 #danielsc1@insper.edu.br
+
+sim = ["sim", "s"]  # Lista para inputs afirmativos
+nao = ["nao","n","não"]  # Lista para inputs negativos
+
 pg.init()
 
 clock = pg.time.Clock()
@@ -48,7 +52,7 @@ screen = pg.display.set_mode((1200, 800))
 
 deck = Cd.Deck()
 running = True
-rodada = True
+
 
 naipes = ["Copas", "Ouros", "Espadas", "Paus"]
 cartas = ["A", "Dois", "Tres", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez", "J", "Q", "K"]
@@ -73,10 +77,7 @@ riverx = 740
 rivery = 320
 
 
-cartax = 513
-cartax2 = 513
-cartay = 0
-cartay2 = 0
+
 
 carta_atras = Sprites("CardBack", 150, 150)
 #carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
@@ -102,7 +103,13 @@ botao_check = Button(800, 800, 38, 12, "Sprites\\Check Button.png", 114, 36)
 botao_raise = Button(1200, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36)
 botao_fold = Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36)
 
+lista_jogadores =[]
+
+jogador = Cd.Jogador("hsu",10000)
+Matilde = Cd.Bot("Matilde",10000)
+
 while running:
+	rodada = True
 
 	for event in pg.event.get():
 
@@ -166,20 +173,38 @@ while running:
 	
 
 	while rodada:
+		for event in pg.event.get():
 
+			if event.type == pg.QUIT:
+				running = False
 
-		lista_jogadores = []
+			if event.type == pg.KEYDOWN:
+
+				if event.key == pg.K_m and music_on == True:
+
+					pg.mixer.music.pause()
+					music_on = False
+
+				elif event.key == pg.K_m and music_on == False:
+
+					pg.mixer.music.unpause()
+					music_on = True
+
+		cartax = 513
+		cartax2 = 513
+		cartay = 0
+		cartay2 = 0
+		valores = []
+
 		flop = []
 		turn = []
 		river = []
 		mesa = []
 		pot = 0
+		jogador.mao = []
+		mesajogo = []
 
-
-		jogador = Cd.Jogador("hsu",10000)
-		Matilde=Cd.Bot("Matilde",10000)
 			
-		lista_jogadores= []
 		deck.build()
 		deck.shuffle()
 
@@ -191,6 +216,22 @@ while running:
 
 
 		while cartay < 600 and cartay2 < 600:
+			for event in pg.event.get():
+
+				if event.type == pg.QUIT:
+					running = False
+
+				if event.type == pg.KEYDOWN:
+
+					if event.key == pg.K_m and music_on == True:
+
+						pg.mixer.music.pause()
+						music_on = False
+
+					elif event.key == pg.K_m and music_on == False:
+
+						pg.mixer.music.unpause()
+						music_on = True
 
 			screen.fill(grey)
 
@@ -211,37 +252,47 @@ while running:
 				
 
 
-			pg.display.flip()
+			pg.display.update()
+
 
 			# Mesa:
 		maior_aposta=0
 		valores=[maior_aposta,pot]
 
-		jogador.acao(jogador.maior_aposta, pot)
+		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+		jogador.acao(jogador.maior_aposta, pot, acao)
 		flop = (mesajogo.flop(deck, mesa))
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
 		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
 		pg.display.flip()
 
-		jogador.acao(jogador.maior_aposta, pot)
+		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+		jogador.acao(jogador.maior_aposta, pot, acao)
 		turn = (mesajogo.turn(deck, mesa))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
 		pg.display.flip()
 
-		jogador.acao(jogador.maior_aposta, pot)
+		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+		jogador.acao(jogador.maior_aposta, pot, acao)
 		river = (mesajogo.river(deck, mesa))
 		screen.blit(river[1][4].sprite, (riverx, rivery))
 		pg.display.flip()
 
-		comp = Cd.Compara_Maos.peneira(flop[1],lista_jogadores)
+		'''comp = Cd.Compara_Maos.peneira(flop[1],lista_jogadores)
 		comp.fichas += valores[1]
-		print("{} ganhou!".format(comp))
+		print("{} ganhou!".format(comp))'''
+
+		for i in range(0,len(lista_jogadores)):
+			lista_jogadores[i].reseta_mao()
+		for i in lista_jogadores:
+			i.maior_aposta=0
+			print(i.fichas)
 
 		rodada = False
 
 	# Jogaodor:
-
+	'''
 	screen.blit(jogador.mao[0].sprite, (cartax,cartay))
 	screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
 
@@ -261,9 +312,15 @@ while running:
 	screen.blit(turn[1][3].sprite, (turnx, turny))
 	screen.blit(turn[1][4].sprite, (riverx, rivery))
 
-
+	'''
 
 	pg.display.update()
 	clock.tick(60)
+
+	novarodada = input("Deseja começar uma nova rodada?")
+	if novarodada in sim:
+		continue
+	if novarodada in nao:
+		break
 
 pg.quit()
