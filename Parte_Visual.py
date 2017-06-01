@@ -107,6 +107,9 @@ lista_jogadores =[]
 
 jogador = Cd.Jogador("hsu",10000)
 Matilde = Cd.Bot("Matilde",10000)
+lista_jogadores.append(jogador)
+lista_jogadores.append(Matilde)
+
 
 while running:
 	rodada = True
@@ -258,6 +261,9 @@ while running:
 			# Mesa:
 		maior_aposta=0
 		valores=[maior_aposta,pot]
+		
+
+		Matilde.acaox(Matilde.maior_aposta,pot,mesa)
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
@@ -267,11 +273,15 @@ while running:
 		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
 		pg.display.flip()
 
+		Matilde.acaox(Matilde.maior_aposta,pot,flop[1])
+
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
 		turn = (mesajogo.turn(deck, mesa))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
 		pg.display.flip()
+
+		Matilde.acaox(Matilde.maior_aposta,pot,turn[1])
 
 		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
 		jogador.acao(jogador.maior_aposta, pot, acao)
@@ -279,9 +289,9 @@ while running:
 		screen.blit(river[1][4].sprite, (riverx, rivery))
 		pg.display.flip()
 
-		'''comp = Cd.Compara_Maos.peneira(flop[1],lista_jogadores)
+		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores)
 		comp.fichas += valores[1]
-		print("{} ganhou!".format(comp))'''
+		print("{} ganhou!".format(comp.nome))
 
 		for i in range(0,len(lista_jogadores)):
 			lista_jogadores[i].reseta_mao()
@@ -291,28 +301,9 @@ while running:
 
 		rodada = False
 
-	# Jogaodor:
-	'''
-	screen.blit(jogador.mao[0].sprite, (cartax,cartay))
-	screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
-
-	# Oponente:
-	
-	screen.blit(carta_atras.imagem,(carta_oponente1x, carta_oponente1y))
-	screen.blit(carta_atras.imagem,(carta_oponente2x, carta_oponente2y))
-
-	# Flop:
 
 
 	
-
-	screen.blit(flop[1][0].sprite, (flop1x, flop1y))
-	screen.blit(flop[1][1].sprite, (flop2x, flop2y))
-	screen.blit(flop[1][2].sprite, (flop3x, flop3y))
-	screen.blit(turn[1][3].sprite, (turnx, turny))
-	screen.blit(turn[1][4].sprite, (riverx, rivery))
-
-	'''
 
 	pg.display.update()
 	clock.tick(60)
