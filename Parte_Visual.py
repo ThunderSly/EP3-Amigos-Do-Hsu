@@ -123,8 +123,9 @@ botao_fold = Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "fold"
 
 lista_jogadores =[]
 
-jogador = Cd.Jogador("hsu",10000)
 Matilde = Cd.Bot("Matilde",10000)
+jogador = Cd.Jogador("hsu",10000)
+
 lista_jogadores.append(jogador)
 lista_jogadores.append(Matilde)
 
@@ -310,39 +311,158 @@ while running:
 
 			# Mesa:
 		maior_aposta=0
-		valores=[maior_aposta,pot]
+		maiores_apostas=[-1]
+		valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
 		
+		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			for i in lista_jogadores:
+				print(maiores_apostas)
+				if i != Matilde:
+					acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+					valores, lista_jogadores = i.acao(valores[0], valores[1], acao, valores[2],lista_jogadores)
+					print(maiores_apostas)
+					print(lista_jogadores)
+					
+				elif i == Matilde:
+					valores, lista_jogadores = i.acaox(valores[0],valores[1],mesa,valores[2],lista_jogadores)
+					print(maiores_apostas)
+					print(lista_jogadores)
+					
+				try:
+					maiores_apostas.remove(-1)
+					if len(lista_jogadores) == 1:
+						print(lista_jogadores)
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+				except:
+					if len(lista_jogadores) == 1:
+						print(lista_jogadores)
+						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+						break
+					continue
+				counter(jogador.fichas)
 
-		Matilde.acaox(Matilde.maior_aposta,pot,mesa)
+		print(lista_jogadores)
 
-		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-		jogador.acao(jogador.maior_aposta, pot, acao)
-		counter(jogador.fichas)
-
+		if len(lista_jogadores) == 1:
+			break
+		maiores_apostas1=[-1]
+		valores[0]=0
+		valores[2]=maiores_apostas1
+		for i in lista_jogadores:
+			i.maior_aposta=0		
+		print(maiores_apostas1)
 		flop = (mesajogo.flop(deck, mesa))
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
 		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
 		pg.display.flip()
+		while maiores_apostas1.count(max(maiores_apostas1)) != len(lista_jogadores):
+				for i in lista_jogadores:
+						print(maiores_apostas1)
+						if i != Matilde:
+							acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+							valores,lista_jogadores = i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)
+							print(maiores_apostas1)							
+							print(lista_jogadores)
+						
 
-		Matilde.acaox(Matilde.maior_aposta,pot,flop[1])
+						elif i == Matilde:
+							valores, lista_jogadores = i.acaox(valores[0],valores[1], flop[1], valores[2],lista_jogadores)
+						
+							print(maiores_apostas1)
+							print(lista_jogadores)
+						try:
+							maiores_apostas1.remove(-1)
+							if len(lista_jogadores) == 1:
+								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+								break
+						except:
+							if len(lista_jogadores) == 1:
+								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+								break
+							continue
 
-		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-		jogador.acao(jogador.maior_aposta, pot, acao)
-		counter(jogador.fichas)
-		turn = (mesajogo.turn(deck, mesa))
+						counter(jogador.fichas)
+
+		print(lista_jogadores)
+
+		if len(lista_jogadores) == 1:
+			break
+		maiores_apostas2=[-1]
+		valores[0]=0
+		valores[2]=maiores_apostas2
+		for i in lista_jogadores:
+			i.maior_aposta=0		
+		turn = (mesajogo.turn(flop[0], flop[1]))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
 		pg.display.flip()
+		while maiores_apostas2.count(max(maiores_apostas2)) != len(lista_jogadores):
+				for i in lista_jogadores:
+						print(maiores_apostas2)
+						if i != Matilde:
+							acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+							valores, lista_jogadores=i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)
+							
+							print(maiores_apostas2)
+							print(lista_jogadores)
+						elif i == Matilde:
+							valores, lista_jogadores=i.acaox(valores[0],valores[1], turn[1], valores[2],lista_jogadores)
+							
+							print(maiores_apostas2)
+							print(lista_jogadores)
+						try:
+							maiores_apostas2.remove(-1)
+							if len(lista_jogadores) == 1:
+								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+								break
+						except:
+							if len(lista_jogadores) == 1:
+								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+								break
+							continue
 
-		Matilde.acaox(Matilde.maior_aposta,pot,turn[1])
+						counter(jogador.fichas)
 
-		acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-		jogador.acao(jogador.maior_aposta, pot, acao)
-		counter(jogador.fichas)
-		river = (mesajogo.river(deck, mesa))
+		print(lista_jogadores)
+
+		if len(lista_jogadores) == 1:
+			break
+		maiores_apostas3=[-1]
+		valores[2]=maiores_apostas3
+		valores[0]=0
+		for i in lista_jogadores:
+			i.maior_aposta=0		
+		river = (mesajogo.river(turn[0], turn[1]))
 		screen.blit(river[1][4].sprite, (riverx, rivery))
 		pg.display.flip()
+		while maiores_apostas3.count(max(maiores_apostas3)) != len(lista_jogadores):
+				for i in lista_jogadores:
+						print(maiores_apostas3)
+						if i != Matilde:
+							acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+							valores, lista_jogadores = i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)						
+							print(maiores_apostas3)
+							print(lista_jogadores)
+						elif i == Matilde:
+							valores, lista_jogadores = i.acaox(valores[0],valores[1], river[1], valores[2],lista_jogadores)
+						
+							print(maiores_apostas3)
+							print(lista_jogadores)
+						try:
+							maiores_apostas3.remove(-1)
+							if len(lista_jogadores) == 1:
+								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+								break
+						except:
+							if len(lista_jogadores) == 1:
+								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
+								break
+							continue
 
+						counter(jogador.fichas)
+
+		print(lista_jogadores)
 		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores)
 		comp.fichas += valores[1]
 		print("{} ganhou!".format(comp.nome))
