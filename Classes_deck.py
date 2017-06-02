@@ -1878,11 +1878,9 @@ Matilde=Bot("Matilde",10000)
 maiores_apostas=[-1]
 '''
 nome, fichas = 	Jogo.inicio() # Inicio do jogo com teste para ver se existe jogo salvo, caso contrario cria um
-
 deck = Deck()'''
 
 '''while len(lista_jogadores)>1:
-
 	print("Inicio da rodada")
 	deck.shuffle()
 	for i in lista_jogadores:
@@ -1913,7 +1911,6 @@ deck = Deck()'''
 							print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 							break
 						continue
-
 	if len(lista_jogadores) == 1:
 		break
 	tudo = mesa.flop(mesa.deck, mesa.mesa)
@@ -2001,14 +1998,11 @@ deck = Deck()'''
 	comp=Compara_Maos.peneira(tudo[1],lista_jogadores)
 	comp.fichas += valores[1]
 	print("{} ganhou!".format(comp))
-
 	for i in range(0,len(lista_jogadores)):
 		lista_jogadores[i].reseta_mao()
 	for i in lista_jogadores:
 		i.maior_aposta=0
 		print(i.fichas)
-
 	break
-
 Jogo.fim()
 '''
