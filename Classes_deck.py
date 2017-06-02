@@ -1280,35 +1280,23 @@ class Bot: # Jogador
 							#raise maior_aposta*0.05
 							aposta = maior_aposta+100
 
-							if aposta<self.fichas and aposta>maior_aposta:
-								self.fichas -=(aposta-self.maior_aposta)
-								print("{} aposta {} fichas!".format(self.nome,aposta))
-								pot+=(aposta-self.maior_aposta)
-								self.maior_aposta=aposta
-								maiores_apostas.append(aposta)
-								maior_aposta = aposta
+							if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
 
-								message_display("Bot deu raise", 400, 30, 20)
-								break
-							
-							if aposta == self.fichas:
+									message_display("Bot deu call", 400, 30, 20)
+							if maior_aposta >= self.fichas:
+								pot+=self.fichas
 								self.fichas == 0
 								print("{} ESTA ALL IN!".format(self.nome))
-								if aposta > maior_aposta:
-									maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
+								maiores_apostas.append(maior_aposta)
 
 								message_display("Bot esta ALL IN", 400, 30, 20)
-								break
+							break	
 
-							if aposta > self.fichas:
-								maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
 
-								message_display("Bot deu raise", 400, 30, 20)
-								break
 
 						if a == 0 and maximo < 8:
 							#fold  
@@ -1360,71 +1348,43 @@ class Bot: # Jogador
 
 						if a == 3:
 							#raise 5%
-							aposta == maior_aposta+100
+							if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
 
-							if aposta<self.fichas and aposta>maior_aposta:
-								self.fichas -=(aposta-self.maior_aposta)
-								print("{} aposta {} fichas!".format(self.nome,aposta))
-								pot+=(aposta-self.maior_aposta)
-								self.maior_aposta=aposta
-								maiores_apostas.append(aposta)
-								maior_aposta = aposta
-
-								message_display("Bot deu raise", 400, 30, 20)
-								break
-							
-							if aposta == self.fichas:
+									message_display("Bot deu call", 400, 30, 20)
+							if maior_aposta >= self.fichas:
+								pot+=self.fichas
 								self.fichas == 0
 								print("{} ESTA ALL IN!".format(self.nome))
-								if aposta > maior_aposta:
-									maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
+								maiores_apostas.append(maior_aposta)
 
 								message_display("Bot esta ALL IN", 400, 30, 20)
-								break
+							break	
 
-							if aposta > self.fichas:
-								maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
 
-								message_display("Bot deu raise", 400, 30, 20)
-								break
 
 						if a >= 4:
 							#raise 50%
-							aposta == maior_aposta+500
+							if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
 
-							if aposta<self.fichas and aposta>maior_aposta:
-								self.fichas -=(aposta-self.maior_aposta)
-								print("{} aposta {} fichas!".format(self.nome,aposta))
-								pot+=(aposta-self.maior_aposta)
-								self.maior_aposta=aposta
-								maiores_apostas.append(aposta)
-								maior_aposta = aposta
-
-								message_display("Bot deu raise", 400, 30, 20)
-								break
-							
-							if aposta == self.fichas:
+									message_display("Bot deu call", 400, 30, 20)
+							if maior_aposta >= self.fichas:
+								pot+=self.fichas
 								self.fichas == 0
 								print("{} ESTA ALL IN!".format(self.nome))
-								if aposta > maior_aposta:
-									maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
+								maiores_apostas.append(maior_aposta)
 
 								message_display("Bot esta ALL IN", 400, 30, 20)
-								break
+							break	
 
-							if aposta > self.fichas:
-								maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
 
-								message_display("Bot deu raise", 400, 30, 20)
-								break
 
 						else:
 							#fold
@@ -1449,37 +1409,24 @@ class Bot: # Jogador
 						if a == 2:
 							if maior_aposta <= 100:
 								#raise 1000
-								aposta == 1000
 
-								if aposta<self.fichas and aposta>maior_aposta:
-									self.fichas -=(aposta-self.maior_aposta)
-									print("{} aposta {} fichas!".format(self.nome,aposta))
-									pot+=(aposta-self.maior_aposta)
-									self.maior_aposta=aposta
-									maiores_apostas.append(aposta)
-									maior_aposta = aposta
+								if maior_aposta<self.fichas:
+										self.fichas -= (maior_aposta-self.maior_aposta)
+										print("{} paga pra ver!".format(self.nome))
+										maiores_apostas.append(maior_aposta)
+										pot+=(maior_aposta-self.maior_aposta)
 
-									message_display("Bot deu raise", 400, 30, 20)
-									break
-								
-								if aposta == self.fichas:
+										message_display("Bot deu call", 400, 30, 20)
+								if maior_aposta >= self.fichas:
+									pot+=self.fichas
 									self.fichas == 0
 									print("{} ESTA ALL IN!".format(self.nome))
-									if aposta > maior_aposta:
-										maior_aposta = aposta
-									maiores_apostas.append(aposta)
-									pot+=aposta
+									maiores_apostas.append(maior_aposta)
 
 									message_display("Bot esta ALL IN", 400, 30, 20)
-									break
+								break	
 
-								if aposta > self.fichas:
-									maior_aposta = aposta
-									maiores_apostas.append(aposta)
-									pot+=aposta
 
-									message_display("Bot deu raise", 400, 30, 20)
-									break
 
 							else:
 								#fold
@@ -1492,67 +1439,41 @@ class Bot: # Jogador
 
 						if a == 3:
 							#raise maior_aposta*0.05
-							aposta == maior_aposta+100
+							if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
 
-							if aposta<self.fichas and aposta>maior_aposta:
-								self.fichas -=(aposta-self.maior_aposta)
-								print("{} aposta {} fichas!".format(self.nome,aposta))
-								pot+=(aposta-self.maior_aposta)
-								self.maior_aposta=aposta
-								maiores_apostas.append(aposta)
-								maior_aposta = aposta
-
-								message_display("Bot deu raise", 400, 30, 20)
-								break
-							
-							if aposta == self.fichas:
+									message_display("Bot deu call", 400, 30, 20)
+							if maior_aposta >= self.fichas:
+								pot+=self.fichas
 								self.fichas == 0
 								print("{} ESTA ALL IN!".format(self.nome))
-								if aposta > maior_aposta:
-									maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
+								maiores_apostas.append(maior_aposta)
 
 								message_display("Bot esta ALL IN", 400, 30, 20)
-								break
+							break	
 
-							if aposta > self.fichas:
-								maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
-								message_display("Bot deu raise", 400, 30, 20)
-								break
+
 
 						if a >=4:
 							#raise maior_aposta*0.2
-							aposta == maior_aposta+200
+							if maior_aposta<self.fichas:
+									self.fichas -= (maior_aposta-self.maior_aposta)
+									print("{} paga pra ver!".format(self.nome))
+									maiores_apostas.append(maior_aposta)
+									pot+=(maior_aposta-self.maior_aposta)
 
-							if aposta<self.fichas and aposta>maior_aposta:
-								self.fichas -=(aposta-self.maior_aposta)
-								print("{} aposta {} fichas!".format(self.nome,aposta))
-								pot+=(aposta-self.maior_aposta)
-								self.maior_aposta=aposta
-								maiores_apostas.append(aposta)
-								maior_aposta = aposta
-								message_display("Bot deu raise", 400, 30, 20)
-								break
-							
-							if aposta == self.fichas:
+									message_display("Bot deu call", 400, 30, 20)
+							if maior_aposta >= self.fichas:
+								pot+=self.fichas
 								self.fichas == 0
 								print("{} ESTA ALL IN!".format(self.nome))
-								if aposta > maior_aposta:
-									maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
-								message_display("Bot esta ALL IN", 400, 30, 20)
-								break
+								maiores_apostas.append(maior_aposta)
 
-							if aposta > self.fichas:
-								maior_aposta = aposta
-								maiores_apostas.append(aposta)
-								pot+=aposta
-								message_display("Bot deu raise", 400, 30, 20)
-								break
+								message_display("Bot esta ALL IN", 400, 30, 20)
+							break	
 
 
 
