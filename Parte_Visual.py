@@ -34,7 +34,6 @@ class Button: # Classe de botões
 				print("clicked")
 				return True
 
-
 def Detecta_botao(listaB): # Checa o uso do botão
 
 	for i in listaB:
@@ -126,8 +125,7 @@ rivery = 320
 
 
 carta_atras = Sprites("CardBack", 150, 150)  # Parte de tras da carta
-#carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
-#carta_atras = pg.transform.scale(carta_atras,(150, 150))
+
 
 mesavisual = pg.image.load("Sprites\\Mesa Insper Poker.png").convert_alpha()
 mesavisual = pg.transform.scale(mesavisual,(1200, 1200))
@@ -155,7 +153,7 @@ lista_jogadores =[]
 
 # Criação dos jogadores
 Matilde = Cd.Bot("Matilde",10000)
-jogador = Cd.Jogador("Eu",10000)
+jogador = Cd.Jogador("Você",10000)
 
 lista_jogadores.append(jogador)
 lista_jogadores.append(Matilde)
@@ -165,14 +163,15 @@ waiting = True
 LEFT = 1
 
 
-def tela_update(flop1,turn1,river1):
+def tela_update(flop1,turn1,river1): # Update de display
 	grey = (200, 200, 200)
 	screen.fill(grey)
 	screen.blit(mesavisual,(0,-200))
 	screen.blit(jogador.mao[0].sprite, (cartax,cartay)) # Display das próprias cartas
 	screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
-	#screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
-	#screen.blit(carta_atras,(carta_oponente2x, carta_oponente2y))
+	screen.blit(carta_atras.imagem,(carta_oponente1x, carta_oponente1y))
+	screen.blit(carta_atras.imagem,(carta_oponente2x, carta_oponente2y))
+
 	screen.blit(botao_check.load(), (400, 700))   # Display dos botões
 	screen.blit(botao_call.load(), (600, 700))
 	screen.blit(botao_raise.load(), (800, 700))
@@ -180,29 +179,34 @@ def tela_update(flop1,turn1,river1):
 	screen.blit(botao_musica_on.load(), (botao_musica_on.x, botao_musica_on.y))
 	counter(jogador.fichas)
 	potcounter(valores[1])
+
 	if river1 == True:
 		screen.blit(river[1][0].sprite, (flop1x, flop1y))
 		screen.blit(river[1][1].sprite, (flop2x, flop2y))
 		screen.blit(river[1][2].sprite, (flop3x, flop3y))
 		screen.blit(river[1][3].sprite, (turnx, turny))
 		screen.blit(river[1][4].sprite, (riverx, rivery))
+
 	elif turn1 == True:
 		screen.blit(turn[1][0].sprite, (flop1x, flop1y))
 		screen.blit(turn[1][1].sprite, (flop2x, flop2y))
 		screen.blit(turn[1][2].sprite, (flop3x, flop3y))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
+
 	elif flop1 == True:
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
 		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
 	pg.display.update()
-flop1=False
-turn1=False
-river1=False
+
+
 
 
 while running: # Caracterização do fechamento de janelas e da tecla que liga e desliga a musica
 	rodada = True
+	flop1=False
+	turn1=False
+	river1=False
 	for event in pg.event.get():
 
 		if event.type == pg.QUIT:
@@ -220,7 +224,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 				pg.mixer.music.unpause()
 				music_on = True
 		
-	print("eventos 1")
+
 
 
 	#  =========================================================  Jogo  =======================================================================
@@ -272,7 +276,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 	
 	pg.display.update()
 
-	print("musica 1")
+
 
 		#  =====================================  Display de cartas  =============================================================
 	
@@ -283,7 +287,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 			lista_jogadores.append(Matilde)
 		if jogador not in lista_jogadores:
 			lista_jogadores.append(jogador)
-		print("rodada")
+
 
 		for event in pg.event.get(): # Checa a utilização dos botões
 
@@ -303,8 +307,6 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 					music_on = True
 
 
-
-		print("eventos 2")
 
 		#Posição das cartas
 		cartax = 513
@@ -342,8 +344,8 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 
 			screen.blit(jogador.mao[0].sprite, (cartax,cartay)) # Display das próprias cartas
 			screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
-			#screen.blit(carta_atras,(carta_oponente1x, carta_oponente1y))
-			#screen.blit(carta_atras,(carta_oponente2x, carta_oponente2y))
+			screen.blit(carta_atras.imagem,(carta_oponente1x, carta_oponente1y))
+			screen.blit(carta_atras.imagem,(carta_oponente2x, carta_oponente2y))
 			# Muda as cartas de lugar
 			cartay=cartay+2.5
 			cartay2 = cartay2-0.15
@@ -371,20 +373,10 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores): 
 			potcounter(valores[1])
 			counter(jogador.fichas)
-			print("while maiores 1")
 
 			for i in lista_jogadores:
-
-				print("for lista jog 1")
-
-				#if event.type == MOUSEBUTTONDOWN(1,)
-
+				
 				if i != Matilde:
-
-					print("if != matilde")
-					
-					#acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-
 					while True:
 
 						event = pg.event.wait() # Aguarda um comando do jogador
@@ -423,13 +415,11 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 								acao = "fold"
 								print("click")# Clique de fold
 								break
-								
-
-					print("pos botoes")
+				
 
 
 					valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3]) # Realiza a ação pedida
-					print("pos ,,")
+
 					tela_update(flop1,turn1,river1)
 					print(maiores_apostas)
 					print(valores[3])
@@ -438,7 +428,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 					valores= i.acaox(valores[0],valores[1],mesa,valores[2],valores[3]) # Ação do bot
 					print(maiores_apostas)
 					print(valores[3])
-					time.sleep(3)
+					time.sleep(1.5)
 					tela_update(flop1,turn1,river1)
 				try:
 					maiores_apostas.remove(-1) # Checa apostas
@@ -479,7 +469,6 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 
 		while maiores_apostas1.count(max(maiores_apostas1)) != len(lista_jogadores):
 
-				print("while maiores 2")
 
 				for i in lista_jogadores: # Realiza novamente o aguardo de uma ação
 						print(maiores_apostas1)
@@ -522,7 +511,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 
 						elif i == Matilde:
 							valores = i.acaox(valores[0],valores[1], flop[1], valores[2],valores[3]) # Ação do Bot
-							time.sleep(3)
+							time.sleep(1.5)
 							tela_update(flop1,turn1,river1)
 							print(maiores_apostas1)
 							print(valores[3])
@@ -600,7 +589,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 
 						elif i == Matilde:
 							valores=i.acaox(valores[0],valores[1], turn[1], valores[2],lista_jogadores)
-							time.sleep(3)
+							time.sleep(1.5)
 							tela_update(flop1,turn1,river1)
 							print(maiores_apostas2)
 							print(lista_jogadores)
@@ -671,7 +660,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 							print(lista_jogadores)
 						elif i == Matilde:
 							valores = i.acaox(valores[0],valores[1], river[1], valores[2],lista_jogadores)
-							time.sleep(3)
+							time.sleep(1.5)
 							tela_update(flop1,turn1,river1)
 							print(maiores_apostas3)
 							print(lista_jogadores)
@@ -694,7 +683,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		print(lista_jogadores)
 		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores) # Realiza a peneira e checa quem ganhou
 		comp.fichas += valores[1]
-		print("{} ganhou!".format(comp.nome))
+		message_display("{} ganhou! Deseja começar uma nova rodada?".format(comp.nome), 400, 50, 20)
 
 		for i in range(0,len(lista_jogadores)):
 			lista_jogadores[i].reseta_mao() # Limpa a mão dos jogadores
