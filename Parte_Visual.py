@@ -90,7 +90,7 @@ pg.display.set_caption("Hsu Poker")
 screen = pg.display.set_mode((1200, 800))
 
 
-deck = Cd.Deck()
+
 running = True
 
 
@@ -325,7 +325,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		jogador.mao = []
 		mesajogo = []
 
-			
+		deck = Cd.Deck()
 		deck.shuffle()  # Embaralha as cartas
 
 		mesajogo = Cd.Mesa(deck)
@@ -687,6 +687,10 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		print(lista_jogadores)
 		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores) # Realiza a peneira e checa quem ganhou
 		comp.fichas += valores[1]
+
+		screen.blit(Matilde.mao[0].sprite, (carta_oponente1x,carta_oponente1y)) # Display das próprias cartas
+		screen.blit(Matilde.mao[1].sprite, (carta_oponente2x+30,carta_oponente2y))
+
 		message_display("{} ganhou!".format(comp.nome), 600, 50, 20)
 		for i in range(0,len(lista_jogadores)):
 			lista_jogadores[i].reseta_mao() # Limpa a mão dos jogadores
