@@ -367,7 +367,9 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		maior_aposta=0
 		maiores_apostas=[-1]
 		valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
-
+		flop1=False
+		turn1=False
+		river1=False
 		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores): 
 			potcounter(valores[1])
 			counter(jogador.fichas)
@@ -404,12 +406,12 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 
 						if event.type == pg.KEYDOWN:
 
-							if event.key == pg.K_c and i.maior_aposta==0:
+							if event.key == pg.K_c and maior_aposta==0:
 								acao = "check"
 								print("click")# Clique de check
 								break
 								
-							if event.key == pg.K_j and i.maior_aposta==0:
+							if event.key == pg.K_j and maior_aposta==0:
 								acao = "call"
 								print("click")# Clique de call
 								break
@@ -494,12 +496,12 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 									pg.quit()
 								if event.type == pg.KEYDOWN:
 
-									if event.key == pg.K_c and i.maior_aposta==0:
+									if event.key == pg.K_c and maior_aposta==0:
 										acao = "check"
 										print("click")
 										break
 										
-									if event.key == pg.K_j and i.maior_aposta==0:
+									if event.key == pg.K_j and maior_aposta==0:
 										acao = "call"
 										print("click")
 										break
@@ -571,12 +573,12 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 									pg.quit()
 								if event.type == pg.KEYDOWN:
 
-									if event.key == pg.K_c and i.maior_aposta==0:
+									if event.key == pg.K_c and maior_aposta==0:
 										acao = "check"
 										print("click")
 										break
 										
-									if event.key == pg.K_j and i.maior_aposta==0:
+									if event.key == pg.K_j and maior_aposta==0:
 										acao = "call"
 										print("click")
 										break
@@ -646,12 +648,12 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 									pg.quit()
 								if event.type == pg.KEYDOWN:
 
-									if event.key == pg.K_c and i.maior_aposta==0:
+									if event.key == pg.K_c and maior_aposta==0:
 										acao = "check"
 										print("click")
 										break
 										
-									if event.key == pg.K_j and i.maior_aposta==0:
+									if event.key == pg.K_j and maior_aposta==0:
 										acao = "call"
 										print("click")
 										break
@@ -712,7 +714,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 	pg.display.update()
 	clock.tick(15)
 	novarodada=False
-	print("Deseja começar uma nova rodada?")  # Pergunta se deseja uma nova rodada
+	message_display("Deseja começar uma nova rodada?", 400, 30, 20)  # Pergunta se deseja uma nova rodada
 	while True:
 		event = pg.event.wait()
 		if event.type == pg.KEYDOWN:
