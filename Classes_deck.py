@@ -114,15 +114,15 @@ class Jogador: # Jogador
 						self.maior_aposta=aposta
 						break
 
-					if aposta == self.fichas:
+					if aposta == self.fichas: # Caso a aposta uuse todas as fichas
 						self.fichas -= self.fichas
 						print("{} ESTA ALL IN!".format(self.nome))
 						maior_aposta = aposta
 						maiores_apostas.append(aposta)
-						pot+=aposta
+						pot+=aposta  # Acrescenta a aposta na mesa
 						break
 					if aposta > self.fichas:
-						print("Você não tem essa quantidade de fichas!")
+						print("Você não tem essa quantidade de fichas!")  # Caso o jogador não tenha a quantidade de fichas necessária
 						continue
 
 				if acao == "fold" or acao == "f": # Fold: desiste da mão
@@ -136,40 +136,42 @@ class Jogador: # Jogador
 
 				if acao == "call" or acao == "c": # Call: iguala a aposta da mesa
 					
-					if maior_aposta<self.fichas:
+					if maior_aposta < self.fichas:
 						self.fichas -=(maior_aposta-self.maior_aposta)
 						print("{} paga pra ver!".format(self.nome))
 						maiores_apostas.append(maior_aposta)
 						pot+=(maior_aposta-self.maior_aposta)
-					elif maior_aposta >= self.fichas:
+
+					elif maior_aposta >= self.fichas: # Caso o jogador aposte todas as fichas
 						pot+=self.fichas
 						self.fichas == 0
 						print("{} ESTA ALL IN!".format(self.nome))
 						maiores_apostas.append(maior_aposta)
+
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
-					aposta=int(input("Quanto deseja apostar?\n"))
+					aposta = int(input("Quanto deseja apostar?\n"))
 
-					if aposta<self.fichas and aposta>maior_aposta:
-						self.fichas -=(aposta-self.maior_aposta)
+					if aposta < self.fichas and aposta > maior_aposta: # Aposta de um jogador 
+						self.fichas -= (aposta-self.maior_aposta)
 						print("{} aposta {} fichas!".format(self.nome,aposta))
 						pot+=(aposta-self.maior_aposta)
-						self.maior_aposta=aposta
+						self.maior_aposta = aposta
 						maiores_apostas.append(aposta)
 						maior_aposta = aposta
 						break
 					
-					if aposta == self.fichas:
+					if aposta == self.fichas: # Caso a aposta use todas as fichas do jogador
 						self.fichas == 0
 						print("{} ESTA ALL IN!".format(self.nome))
 						if aposta > maior_aposta:
 							maior_aposta = aposta
 						maiores_apostas.append(aposta)
-						pot+=aposta
+						pot+=aposta # Acrescenta a aposta na mesa
 						break
 
-					if aposta > self.fichas:
+					if aposta > self.fichas: # Caso o jogador não tenha a quantidade de fichas necessárias para a aposta
 						print("Você não tem essa quantidade de fichas!")
 						continue
 				
@@ -178,10 +180,11 @@ class Jogador: # Jogador
 					self.mao = []
 					print("{} sai da rodada!".format(self.nome))
 					break
+
 		valores=[maior_aposta,pot,maiores_apostas]
 		return valores, lista_jogadores
 
-	def melhor_mao(self,mesa):	
+	def melhor_mao(self,mesa):	# Definição e verificação da melhor mão da rodada
 		
 		cartas_jogadores=[]
 		cartas_jogadores = mesa + self.mao
@@ -190,33 +193,33 @@ class Jogador: # Jogador
 		combinacoes = []
 		valor_mao = 0
 
-		for i in cartas_jogadores:
+		for i in cartas_jogadores: # Acrescenta as cartaas dos jogadores em uma lista
 			lista_valores.append(i.valor)
 			lista_naipes.append(i.naipe)
 			if i.valor == 1:
 				lista_valores.remove(i.valor)
 				lista_valores.append(14) 
 			
-		for i in lista_valores: #para definir pares,trincas e quadras
+		for i in lista_valores: # Cria lista para definir pares, trincas e quadras
 							
 			if lista_valores.count(i) == 4: # Quadra
 				for x in range(2):
 					combinacoes.append(i)
 							
-			elif lista_valores.count(i) == 3:
+			elif lista_valores.count(i) == 3: 
 				combinacoes.append(i)
 
 			elif lista_valores.count(i) == 2:
 				combinacoes.append(i)
 
-		combinacoes.sort()
+		combinacoes.sort() #organiza lista
 		if len(combinacoes) == 6:
 			if combinacoes[0] == combinacoes[1] and combinacoes[2] == combinacoes[3] and combinacoes[4] == combinacoes[5]: #retirar o terceiro par
 				if combinacoes[0] != combinacoes[2]:
 					del combinacoes[0]
 					del combinacoes[0]
 
-		if len(combinacoes) == 7:
+		if len(combinacoes) == 7:#retira menor par
 			maior = []
 			for i in lista_valores:
 				if lista_valores.count(i) == 2:
@@ -237,7 +240,7 @@ class Jogador: # Jogador
 			print("Trinca de {}".format(combinacoes[0]))
 			valor_mao = 4
 
-		for i in cartas_jogadores:
+		for i in cartas_jogadores:#adiciona o valor do as(1)
 			if i.valor == 14:
 				lista_valores.append(1)
 				lista_naipes.append(i.naipe)		
@@ -251,7 +254,7 @@ class Jogador: # Jogador
 								print("Straight de {} a {}".format(n,n+4))
 								valor_mao = 5
 
-		for i in cartas_jogadores:
+		for i in cartas_jogadores:#retira valor 1 do as
 			if i.valor == 14:
 				lista_valores.remove(1)
 				lista_naipes.remove(i.naipe)
@@ -303,7 +306,7 @@ class Jogador: # Jogador
 		lista_naipes = []
 		combinacoes = []
 
-		for i in cartas_jogadores:
+		for i in cartas_jogadores:#faz listas necessarias para o prosseguir
 			lista_valores.append(i.valor)
 			lista_naipes.append(i.naipe)
 			if i.valor == 1:
@@ -588,9 +591,9 @@ class Jogador: # Jogador
 
 		return valor_especifico
 
-class Compara_Maos:
+class Compara_Maos: # Definição da melhor mão e de quem ganha a rodada
 
-	def peneira(mesa, lista_jogadores):
+	def peneira(mesa, lista_jogadores):  # Atuação das peneiras
 
 		jogadores1=[]
 		valor1=[]
@@ -606,63 +609,63 @@ class Compara_Maos:
 		valor6=[]
 
 
-		for i in lista_jogadores:
+		for i in lista_jogadores: #percorre a lista_jogadores e pega o valor de cada
 			x = i.melhor_mao(mesa)
 			valor1.append(x)
 		print(valor1)
 		maximo = max(valor1)
 
-		if valor1.count(maximo) > 1:
+		if valor1.count(maximo) > 1: #se os jogadores tiverem o mesmo valor
 			for u in valor1:
 				if u == maximo:
 					l = valor1.index(u)
 					jogadores1.append(lista_jogadores[l])
 			
-			for i in jogadores1:
+			for i in jogadores1: #percorre a jogadores 1 e pega o valor de cada
 				x = Jogador.maos_iguais(i,maximo,mesa)
 				valor2.append(x)
 			maximo = max(valor2)
 			
-			if valor2.count(maximo) > 1:
+			if valor2.count(maximo) > 1: #se os jogadores tiverem o mesmo valor
 				for u in valor2:
 					if u == maximo:
 						l = valor2.index(u)
 						jogadores2.append(jogadores1[l])
 
-				for i in jogadores2:
+				for i in jogadores2: #percorre a jogadores 2 e pega o valor de cada
 					x = Jogador.carta_a_carta_1(i,maximo,mesa)
 					valor3.append(x)
 				maximo = max(valor3)
 
-				if valor3.count(maximo) > 1:
+				if valor3.count(maximo) > 1: #se os jogadores tiverem o mesmo valor
 					for u in valor3:
 						if u == maximo:
 							l = valor3.index(u)
 							jogadores3.append(jogadores2[l])
 			
-					for i in jogadores3:
+					for i in jogadores3: #percorre a jogadores 3 e pega o valor de cada
 						x = Jogador.carta_a_carta_2(i,maximo,mesa)
 						valor4.append(x)
 					maximo = max(valor4)
 
-					if valor4.count(maximo) > 1:
+					if valor4.count(maximo) > 1: #se os jogadores tiverem o mesmo valor
 						for u in valor4:
 							if u == maximo:
 								l = valor4.index(u)
 								jogadores4.append(jogadores3[l])
 			
-						for i in jogadores4:
+						for i in jogadores4: #percorre a jogadores 4 e pega o valor de cada
 							x = Jogador.carta_a_carta_3(i,maximo,mesa)
 							valor5.append(x)
 						maximo = max(valor5)
 
-						if valor5.count(maximo) > 1:
+						if valor5.count(maximo) > 1: #se os jogadores tiverem o mesmo valor
 							for u in valor5:
 								if u == maximo:
 									l = valor5.index(u)
 									jogadores5.append(jogadores4[l])
 			
-							for i in jogadores5:
+							for i in jogadores5: #percorre a jogadores 5 e pega o valor de cada
 								x = Jogador.carta_a_carta_4(i,maximo,mesa)
 								valor6.append(x)
 							maximo = max(valor6)
@@ -951,7 +954,7 @@ class Bot: # Jogador
 							maiores_apostas.append(0)
 							break
 
-						elif a == 0 and maximo >= 8:	
+						elif a == 0 and maximo >= 8:	#checa
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
 							break
@@ -988,7 +991,7 @@ class Bot: # Jogador
 							maiores_apostas.append(0)
 							break
 							
-					if len(mesa) == 4:
+					if len(mesa) == 4: #turn
 
 						if a == 0 and maximo >=10:
 							#check
@@ -1061,7 +1064,7 @@ class Bot: # Jogador
 							maiores_apostas.append(0)
 							break
 
-					if len(mesa) == 5:
+					if len(mesa) == 5: #river
 
 						if a == 0 and maximo >=13:
 							#check
@@ -1134,7 +1137,7 @@ class Bot: # Jogador
 							break
 
 
-				if maior_aposta > 0:
+				if maior_aposta > 0: #se alguem ja tiver apostado
 					
 
 					if len(mesa) == 0: # Se estiver no pre-flop e apostaram...
@@ -1237,7 +1240,7 @@ class Bot: # Jogador
 							print("{} sai da rodada!".format(self.nome))
 							break
 							
-					if len(mesa) == 4:
+					if len(mesa) == 4: #turn
 
 						if a == 0 and maximo >=10:
 							#fold
@@ -1331,7 +1334,7 @@ class Bot: # Jogador
 							print("{} sai da rodada!".format(self.nome))
 							break
 
-					if len(mesa) == 5:
+					if len(mesa) == 5: #river
 
 						if a == 0:
 							#fold
@@ -1438,7 +1441,7 @@ class Bot: # Jogador
 			valores=[maior_aposta,pot,maiores_apostas]
 			return valores, lista_jogadores
 		
-	def maos_iguais(self, valor_mao, mesa):
+	def maos_iguais(self, valor_mao, mesa): # Peneira 1
 
 		valor_especifico = 0
 		lista_valores = []
@@ -1521,7 +1524,7 @@ class Bot: # Jogador
 
 		return valor_especifico
 
-	def carta_a_carta_1(self, valor_mao, mesa):
+	def carta_a_carta_1(self, valor_mao, mesa): # Peneira 2 
 
 		lista_valores = []
 		lista_naipes = []
@@ -1589,9 +1592,9 @@ class Bot: # Jogador
 					maior.append(x)
 			valor_especifico = max(maior)
 
-		return valor_especifico
+		return valor_especifico #
 
-	def carta_a_carta_2(self,valor_mao, mesa):
+	def carta_a_carta_2(self,valor_mao, mesa): # Peneira 3
 
 		lista_valores = []
 		lista_naipes = []
@@ -1650,7 +1653,7 @@ class Bot: # Jogador
 		print(valor_especifico)
 		return valor_especifico
 
-	def carta_a_carta_3(self,valor_mao, mesa):
+	def carta_a_carta_3(self,valor_mao, mesa): # Peneira 4
 
 		lista_valores = []
 		lista_naipes = []
@@ -1693,7 +1696,7 @@ class Bot: # Jogador
 
 		return valor_especifico
 
-	def carta_a_carta_4(self,valor_mao, mesa):
+	def carta_a_carta_4(self,valor_mao, mesa): # Peneira 5
 
 		lista_valores = []
 		lista_naipes = []
