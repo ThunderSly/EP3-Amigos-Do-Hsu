@@ -1,7 +1,7 @@
 import pygame as pg
 import Classes_deck as Cd
 
-class Button:
+class Button: # Classe de botões
 
 	def __init__(self, x, y, w, h, sprite, xs, ys, tipo):
 
@@ -14,7 +14,7 @@ class Button:
 		self.sprite = sprite
 		self.tipo = tipo
 
-	def load(self):
+	def load(self): # Cartregamento da sprite do botaõ
 
 		botao = pg.image.load(self.sprite).convert_alpha()
 		botao = pg.transform.scale(botao, (self.xs, self.ys))
@@ -22,7 +22,7 @@ class Button:
 
 		return botao
 
-	def chamar_botao(self):
+	def chamar_botao(self): # Utilização do botão no jogo
 
 		mouse = pg.mouse.get_pos()
 		click = pg.mouse.get_pressed()
@@ -34,7 +34,7 @@ class Button:
 				return True
 
 
-def Detecta_botao(listaB):
+def Detecta_botao(listaB): # Checa o uso do botão
 
 	for i in listaB:
 
@@ -42,7 +42,7 @@ def Detecta_botao(listaB):
 
 			return i.tipo
 
-class Sprites(pg.sprite.Sprite):
+class Sprites(pg.sprite.Sprite): # Uso de sprites
 
 	def __init__(self, imagem, x, y):
 		pg.sprite.Sprite.__init__(self)
@@ -50,7 +50,7 @@ class Sprites(pg.sprite.Sprite):
 		self.imagem = pg.transform.scale(self.imagem,(x, y))
 		self.retangulo = self.imagem.get_rect()
 
-def counter(count):
+def counter(count): # Atualiza a quantidade de fichas e as mosstra na tela
 
 	font = pg.font.SysFont(None, 25)
 	text = font.render("Fichas: " + str(count), True, black)
@@ -96,12 +96,13 @@ cartas = ["A", "Dois", "Tres", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove"
 grafica_cartas = []
 
 #  ======================================== Definição das coordenadas das cartas  =====================================================
-
-carta_oponente1x = 525
+# Localização da carta do próprio jogador
+carta_oponente1x = 525 
 carta_oponente2x = 545
 carta_oponente1y = 100
 carta_oponente2y = 100
 
+# Localização das cartas viradas na mesa
 flop1x = 340
 flop1y = 320
 flop2x = 440
@@ -120,7 +121,7 @@ rivery = 320
 
 
 
-carta_atras = Sprites("CardBack", 150, 150)
+carta_atras = Sprites("CardBack", 150, 150)  # Parte de tras da carta
 #carta_atras = pg.image.load("Sprites\\CardBack.png").convert_alpha()
 #carta_atras = pg.transform.scale(carta_atras,(150, 150))
 
@@ -139,6 +140,8 @@ botao_musica_off = Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48,
 
 # ======================================== Acao_Setup ================================================
 
+# Caracterização do botões
+
 botao_call = Button(800, 800, 32, 12, "Sprites\\Call Button.png", 96, 36, "call")
 botao_check = Button(600, 800, 38, 12, "Sprites\\Check Button.png", 114, 36, "check")
 botao_raise = Button(1000, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36, "raise")
@@ -146,8 +149,9 @@ botao_fold = Button(1200, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "fold
 
 lista_jogadores =[]
 
+# Criação dos jogadores
 Matilde = Cd.Bot("Matilde",10000)
-jogador = Cd.Jogador("hsu",10000)
+jogador = Cd.Jogador("Eu",10000)
 
 lista_jogadores.append(jogador)
 lista_jogadores.append(Matilde)
@@ -156,7 +160,8 @@ acao = ""
 waiting = True
 LEFT = 1
 
-while running:
+
+while running: # Caracterização do fechamento de janelas e da tecla que liga e desliga a musica
 	rodada = True
 
 	for event in pg.event.get():
@@ -181,7 +186,7 @@ while running:
 
 	#  =========================================================  Jogo  =======================================================================
 
-	#  =========================================  Fundo  =====================================================================
+	#  =========================================  Fundo e mesa =====================================================================
 	grey = (200, 200, 200)
 	screen.fill(grey)
 
@@ -198,6 +203,8 @@ while running:
 
 
 	#   ============ Musica ========
+
+	# Funcionalidade do botão que controla a musica 
 
 	botao_musica_on.chamar_botao()
 	botao_musica_off.chamar_botao()
@@ -231,7 +238,7 @@ while running:
 		#  =====================================  Display de cartas  =============================================================
 	
 
-	while rodada:
+	while rodada: Início da rodada
 
 		if Matilde not in lista_jogadores:
 			lista_jogadores.append(Matilde)
@@ -239,7 +246,7 @@ while running:
 			lista_jogadores.append(jogador)
 		print("rodada")
 
-		for event in pg.event.get():
+		for event in pg.event.get(): # Checa a utilização dos botões
 
 			if event.type == pg.QUIT:
 				running = False
@@ -260,6 +267,7 @@ while running:
 
 		print("eventos 2")
 
+		#Posição das cartas
 		cartax = 513
 		cartax2 = 513
 		cartay = 0
@@ -275,30 +283,30 @@ while running:
 		mesajogo = []
 
 			
-		deck.shuffle()
+		deck.shuffle()  # Embaralha as cartas
 
 		mesajogo = Cd.Mesa(deck)
-		jogador.mao = jogador.compra_carta(deck)
+		jogador.mao = jogador.compra_carta(deck) # Jogador compra as cartas
 		jogador.mao = jogador.compra_carta(deck)
 	
+		Matilde.mao = Matilde.compra_carta(deck) # Bot compra as cartas
 		Matilde.mao = Matilde.compra_carta(deck)
-		Matilde.mao = Matilde.compra_carta(deck)
 
 
 
-		while cartay < 600 and cartay2 < 600:
+		while cartay < 600 and cartay2 < 600: # Alteração da posição das próprias cartas
 
 			print("while carta")
 
 
-			screen.fill(grey)
+			screen.fill(grey) # Atualização do fundo cinza
 
-			screen.blit(mesavisual,(0,-200))
+			screen.blit(mesavisual,(0,-200)) # Atualização do display da mesa
 
-			screen.blit(jogador.mao[0].sprite, (cartax,cartay))
+			screen.blit(jogador.mao[0].sprite, (cartax,cartay)) # Display das próprias cartas
 			screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
 
-			
+			# Muda as cartas de lugar
 			cartay=cartay+2.5
 			cartay2 = cartay2-0.15
 			
@@ -308,7 +316,7 @@ while running:
 
 			pg.display.update()
 
-		screen.blit(botao_check.load(), (400, 700))
+		screen.blit(botao_check.load(), (400, 700))   # Display dos botões
 		screen.blit(botao_call.load(), (600, 700))
 		screen.blit(botao_raise.load(), (800, 700))
 		screen.blit(botao_fold.load(), (1000, 700))
@@ -322,7 +330,7 @@ while running:
 		maiores_apostas=[-1]
 		valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
 
-		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores): 
 			counter(jogador.fichas)
 			print("while maiores 1")
 
@@ -340,7 +348,7 @@ while running:
 
 					while True:
 
-						event = pg.event.wait()
+						event = pg.event.wait() # Aguarda um comando do jogador
 
 
 						if event.type == pg.QUIT:
@@ -353,47 +361,47 @@ while running:
 
 							if 514 > mouse[0] > 400 and 736 > mouse[1] > 700 :
 
-									acao = "check"
+									acao = "check" # Clique de check
 
 						if event.type == pg.KEYDOWN:
 
 							if event.key == pg.K_c and i.maior_aposta==0:
 								acao = "check"
-								print("click")
+								print("click")# Clique de check
 								break
 								
 							if event.key == pg.K_j and i.maior_aposta==0:
 								acao = "call"
-								print("click")
+								print("click")# Clique de call
 								break
 
 							if event.key == pg.K_r:
 								acao = "raise"
-								print("click")
+								print("click")# Clique de raise
 								break
 
 							if event.key == pg.K_f:
 								acao = "fold"
-								print("click")
+								print("click")# Clique de fold
 								break
 								
 
 					print("pos botoes")
 
 
-					valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3])
+					valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3]) # Realiza a ação pedida
 					print("pos ,,")
 
 					print(maiores_apostas)
 					print(valores[3])
 					
 				elif i == Matilde:
-					valores= i.acaox(valores[0],valores[1],mesa,valores[2],valores[3])
+					valores= i.acaox(valores[0],valores[1],mesa,valores[2],valores[3]) # Ação do bot
 					print(maiores_apostas)
 					print(valores[3])
 					
 				try:
-					maiores_apostas.remove(-1)
+					maiores_apostas.remove(-1) # Checa apostas
 					if len(valores[3]) == 1:
 						print(valores[3])
 						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
@@ -404,9 +412,11 @@ while running:
 						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 						break
 					continue
+
 				counter(jogador.fichas)
 			if len(valores[3]) == 1:
 				break
+
 		print(valores[3])
 
 		if len(valores[3]) == 1:
@@ -417,16 +427,18 @@ while running:
 		for i in lista_jogadores:
 			i.maior_aposta=0		
 		print(maiores_apostas1)
-		flop = (mesajogo.flop(deck, mesa))
+
+		flop = (mesajogo.flop(deck, mesa)) # Realização do Flop
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
 		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
-		pg.display.update()
+		pg.display.update() # Atualização da tela
+
 		while maiores_apostas1.count(max(maiores_apostas1)) != len(lista_jogadores):
 
 				print("while maiores 2")
 
-				for i in lista_jogadores:
+				for i in lista_jogadores: # Realiza novamente o aguardo de uma ação
 						print(maiores_apostas1)
 						if i != Matilde:
 							while True:
@@ -459,21 +471,23 @@ while running:
 										print("click")
 										break
 
-							valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3])
+							valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3]) # Realiza a ação
 							print(maiores_apostas1)							
 							print(valores[3])
 						
 
 						elif i == Matilde:
-							valores = i.acaox(valores[0],valores[1], flop[1], valores[2],valores[3])
+							valores = i.acaox(valores[0],valores[1], flop[1], valores[2],valores[3]) # Ação do Bot
 						
 							print(maiores_apostas1)
 							print(valores[3])
+
 						try:
 							maiores_apostas1.remove(-1)
 							if len(valores[3]) == 1:
 								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 								break
+
 						except:
 							if len(valores[3]) == 1:
 								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
@@ -489,12 +503,14 @@ while running:
 		maiores_apostas2=[-1]
 		valores[0]=0
 		valores[2]=maiores_apostas2
+
 		for i in lista_jogadores:
 			i.maior_aposta=0		
 		turn = (mesajogo.turn(flop[0], flop[1]))
-		screen.blit(turn[1][3].sprite, (turnx, turny))
-		pg.display.update()
-		while maiores_apostas2.count(max(maiores_apostas2)) != len(lista_jogadores):
+		screen.blit(turn[1][3].sprite, (turnx, turny)) # Abre as carta do turn
+		pg.display.update() # Atualiza a tela
+
+		while maiores_apostas2.count(max(maiores_apostas2)) != len(lista_jogadores): # Aguarda ação do river
 
 
 				for i in lista_jogadores:
@@ -552,7 +568,7 @@ while running:
 								break
 							continue
 
-						counter(jogador.fichas)
+						counter(jogador.fichas) # Conta as fichas
 
 		print(lista_jogadores)
 
@@ -561,12 +577,14 @@ while running:
 		maiores_apostas3=[-1]
 		valores[2]=maiores_apostas3
 		valores[0]=0
+
 		for i in lista_jogadores:
 			i.maior_aposta=0		
 		river = (mesajogo.river(turn[0], turn[1]))
-		screen.blit(river[1][4].sprite, (riverx, rivery))
+		screen.blit(river[1][4].sprite, (riverx, rivery)) # Vira a carta do river
 		pg.display.update()
-		while maiores_apostas3.count(max(maiores_apostas3)) != len(lista_jogadores):
+
+		while maiores_apostas3.count(max(maiores_apostas3)) != len(lista_jogadores): # Verifica a ultima vez a ação do jogador
 				for i in lista_jogadores:
 						print(maiores_apostas3)
 						if i != Matilde:
@@ -620,15 +638,15 @@ while running:
 						counter(jogador.fichas)
 
 		print(lista_jogadores)
-		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores)
+		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores) # Realiza a peneira e checa quem ganhou
 		comp.fichas += valores[1]
 		print("{} ganhou!".format(comp.nome))
 
 		for i in range(0,len(lista_jogadores)):
-			lista_jogadores[i].reseta_mao()
+			lista_jogadores[i].reseta_mao() # Limpa a mão dos jogadores
 		for i in lista_jogadores:
 			i.maior_aposta=0
-			print(i.fichas)
+			print(i.fichas) #Fichas
 
 		acao=0
 		rodada = False
@@ -640,7 +658,7 @@ while running:
 	pg.display.update()
 	clock.tick(15)
 
-	print("Deseja começar uma nova rodada?")
+	print("Deseja começar uma nova rodada?")  # Pergunta se deseja uma nova rodada
 	event = pg.event.wait()
 	if event.type == pg.KEYDOWN:
 		if event.key == pg.K_s:
