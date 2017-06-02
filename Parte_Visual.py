@@ -685,7 +685,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		print(lista_jogadores)
 		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores) # Realiza a peneira e checa quem ganhou
 		comp.fichas += valores[1]
-		message_display("{} ganhou! Deseja começar uma nova rodada?".format(comp.nome), 400, 50, 20)
+		message_display("{} ganhou!".format(comp.nome), 400, 50, 20)
 
 		for i in range(0,len(lista_jogadores)):
 			lista_jogadores[i].reseta_mao() # Limpa a mão dos jogadores
