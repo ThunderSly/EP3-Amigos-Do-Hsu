@@ -92,19 +92,20 @@ class Jogador: # Jogador
 		for carta in self.mao:
 			carta.show()
 
-	def acao(self,maior_aposta,pot, acao, maiores_apostas,lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
+	def acao(self,maior_aposta,pot, acao, maiores_apostas, lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
+
 		while True:
 			if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
 				break
 			if maior_aposta == 0:
 				#acao=input("Check(C), Raise(R), Fold(F)\n").lower()
-				if acao == "check" or acao == "c": # Check: continua a rodada sem apostar
+				if acao == "check": # Check: continua a rodada sem apostar
 					print("{} checa!".format(self.nome))
 					maiores_apostas.append(0)
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
-					aposta=int(input("Quanto deseja apostar?\n"))
+					aposta=1000
 					if aposta<self.fichas and aposta>maior_aposta:
 						self.fichas -=aposta
 						print("{} aposta {} fichas!".format(self.nome,aposta))
@@ -151,7 +152,9 @@ class Jogador: # Jogador
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
-					aposta = int(input("Quanto deseja apostar?\n"))
+
+					aposta=1500
+
 
 					if aposta < self.fichas and aposta > maior_aposta: # Aposta de um jogador 
 						self.fichas -= (aposta-self.maior_aposta)
@@ -181,8 +184,9 @@ class Jogador: # Jogador
 					print("{} sai da rodada!".format(self.nome))
 					break
 
-		valores=[maior_aposta,pot,maiores_apostas]
-		return valores, lista_jogadores
+		valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
+		return valores
+
 
 	def melhor_mao(self,mesa):	# Definição e verificação da melhor mão da rodada
 		
@@ -1438,8 +1442,8 @@ class Bot: # Jogador
 
 
 
-			valores=[maior_aposta,pot,maiores_apostas]
-			return valores, lista_jogadores
+			valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
+			return valores
 		
 	def maos_iguais(self, valor_mao, mesa): # Peneira 1
 

@@ -23,14 +23,16 @@ class Button:
 		return botao
 
 	def chamar_botao(self):
+
 		mouse = pg.mouse.get_pos()
 		click = pg.mouse.get_pressed()
 
-		if self.x+self.w > mouse[0] > self.x and self.y+self.h > mouse[1] > self.y :
+		if self.xs > mouse[0] > self.x and self.ys > mouse[1] > self.y :
 
 			if click[0] == 1 :
 				print("clicked")
 				return True
+
 
 def Detecta_botao(listaB):
 
@@ -41,6 +43,7 @@ def Detecta_botao(listaB):
 			return i.tipo
 
 class Sprites(pg.sprite.Sprite):
+
 	def __init__(self, imagem, x, y):
 		pg.sprite.Sprite.__init__(self)
 		self.imagem = pg.image.load("Sprites\\{}.png".format(imagem)).convert_alpha()
@@ -93,6 +96,10 @@ turny = 320
 riverx = 740
 rivery = 320
 
+#for event in pg.event.get():
+	#if event.type == MOUSEBUTTONDOWN:
+        #None 
+
 
 
 
@@ -115,10 +122,10 @@ botao_musica_off = Button(0, 0, 24, 16, "Sprites\\Music Button Off.png", 72, 48,
 
 # ======================================== Acao_Setup ================================================
 
-botao_call = Button(1000, 800, 32, 12, "Sprites\\Call Button.png", 96, 36, "call")
-botao_check = Button(800, 800, 38, 12, "Sprites\\Check Button.png", 114, 36, "check")
-botao_raise = Button(1200, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36, "raise")
-botao_fold = Button(800, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "fold")
+botao_call = Button(800, 800, 32, 12, "Sprites\\Call Button.png", 96, 36, "call")
+botao_check = Button(600, 800, 38, 12, "Sprites\\Check Button.png", 114, 36, "check")
+botao_raise = Button(1000, 800, 36, 12, "Sprites\\Raise Button.png", 108, 36, "raise")
+botao_fold = Button(1200, 800, 32, 12, "Sprites\\Fold Button.png", 96, 36, "fold")
 
 lista_jogadores =[]
 
@@ -128,6 +135,9 @@ jogador = Cd.Jogador("hsu",10000)
 lista_jogadores.append(jogador)
 lista_jogadores.append(Matilde)
 
+acao = ""
+waiting = True
+LEFT = 1
 
 while running:
 	rodada = True
@@ -149,6 +159,7 @@ while running:
 				pg.mixer.music.unpause()
 				music_on = True
 		
+	print("eventos 1")
 
 
 	#  =========================================================  Jogo  =======================================================================
@@ -160,6 +171,14 @@ while running:
 	screen.blit(mesavisual,(0,-200))
 
 	#   ======================================  BOTOES ========================================================================
+
+
+
+	botao_check_click = botao_check.chamar_botao()
+	botao_call_click = botao_call.chamar_botao()
+	botao_raise_click = botao_raise.chamar_botao()
+	botao_fold_click = botao_fold.chamar_botao()
+
 
 	#   ============ Musica ========
 
@@ -188,13 +207,22 @@ while running:
 		pg.mixer.music.unpause()
 		music_on = True
 	
-	pg.display.flip()
+	pg.display.update()
+
+	print("musica 1")
 
 		#  =====================================  Display de cartas  =============================================================
 	
 
 	while rodada:
-		'''for event in pg.event.get():
+
+		if Matilde not in lista_jogadores:
+			lista_jogadores.append(Matilde)
+		if jogador not in lista_jogadores:
+			lista_jogadores.append(jogador)
+		print("rodada")
+
+		for event in pg.event.get():
 
 			if event.type == pg.QUIT:
 				running = False
@@ -209,7 +237,11 @@ while running:
 				elif event.key == pg.K_m and music_on == False:
 
 					pg.mixer.music.unpause()
-					music_on = True'''
+					music_on = True
+
+
+
+		print("eventos 2")
 
 		cartax = 513
 		cartax2 = 513
@@ -238,60 +270,14 @@ while running:
 
 
 		while cartay < 600 and cartay2 < 600:
-			for event in pg.event.get():
 
-				if event.type == pg.QUIT:
-					running = False
-					break
+			print("while carta")
 
-				if event.type == pg.KEYDOWN:
-
-					if event.key == pg.K_m and music_on == True:
-
-						pg.mixer.music.pause()
-						music_on = False
-						break
-
-					elif event.key == pg.K_m and music_on == False:
-
-						pg.mixer.music.unpause()
-						music_on = True
-
-						break
-
-
-			botao_musica_on.chamar_botao()
-			botao_musica_off.chamar_botao()
-
-	
-			if music_on == True:
-
-				screen.blit(botao_musica_on.load(), (botao_musica_on.x, botao_musica_on.y))
-				pg.display.flip()
-				
-			if botao_musica_on.chamar_botao() == True:
-
-				pg.mixer.music.pause()
-				music_on = False
-				
-
-			if music_on == False:
-
-				screen.blit(botao_musica_off.load(), (botao_musica_off.x, botao_musica_off.y))
-				pg.display.flip()
-				
-			if botao_musica_off.chamar_botao() == True:
-
-				pg.mixer.music.unpause()
-				music_on = True
-			
 
 			screen.fill(grey)
 
 			screen.blit(mesavisual,(0,-200))
 
-			screen.blit(carta_atras.imagem,(carta_oponente1x, carta_oponente1y))
-			screen.blit(carta_atras.imagem,(carta_oponente2x, carta_oponente2y))
 			screen.blit(jogador.mao[0].sprite, (cartax,cartay))
 			screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
 
@@ -302,48 +288,109 @@ while running:
 
 			cartay2=cartay2+2.65
 			cartax2 = cartax2+0.15
-				
-
 
 			pg.display.update()
 
+		screen.blit(botao_check.load(), (400, 700))
+		screen.blit(botao_call.load(), (600, 700))
+		screen.blit(botao_raise.load(), (800, 700))
+		screen.blit(botao_fold.load(), (1000, 700))
+
+		pg.display.update()
 
 			# Mesa:
 		maior_aposta=0
 		maiores_apostas=[-1]
 		valores=[maior_aposta,pot,maiores_apostas,lista_jogadores]
-		
+
 		while maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+			counter(jogador.fichas)
+			print("while maiores 1")
+
 			for i in lista_jogadores:
-				print(maiores_apostas)
+
+				print("for lista jog 1")
+
+				#if event.type == MOUSEBUTTONDOWN(1,)
+
 				if i != Matilde:
-					acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-					valores, lista_jogadores = i.acao(valores[0], valores[1], acao, valores[2],lista_jogadores)
+
+					print("if != matilde")
+					
+					#acao=input("Call(C), Raise(R), Fold(F)\n").lower()
+
+					while True:
+
+						event = pg.event.wait()
+
+
+						if event.type == pg.QUIT:
+							pg.quit()
+
+						if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT:
+
+							mouse = pg.mouse.get_pos()
+							click = pg.mouse.get_pressed()
+
+							if 514 > mouse[0] > 400 and 736 > mouse[1] > 700 :
+
+									acao = "check"
+
+						if event.type == pg.KEYDOWN:
+
+							if event.key == pg.K_c and i.maior_aposta==0:
+								acao = "check"
+								print("click")
+								break
+								
+							if event.key == pg.K_j and i.maior_aposta==0:
+								acao = "call"
+								print("click")
+								break
+
+							if event.key == pg.K_r:
+								acao = "raise"
+								print("click")
+								break
+
+							if event.key == pg.K_f:
+								acao = "fold"
+								print("click")
+								break
+								
+
+					print("pos botoes")
+
+
+					valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3])
+					print("pos ,,")
+
 					print(maiores_apostas)
-					print(lista_jogadores)
+					print(valores[3])
 					
 				elif i == Matilde:
-					valores, lista_jogadores = i.acaox(valores[0],valores[1],mesa,valores[2],lista_jogadores)
+					valores= i.acaox(valores[0],valores[1],mesa,valores[2],valores[3])
 					print(maiores_apostas)
-					print(lista_jogadores)
+					print(valores[3])
 					
 				try:
 					maiores_apostas.remove(-1)
-					if len(lista_jogadores) == 1:
-						print(lista_jogadores)
+					if len(valores[3]) == 1:
+						print(valores[3])
 						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 						break
 				except:
-					if len(lista_jogadores) == 1:
-						print(lista_jogadores)
+					if len(valores[3]) == 1:
+						print(valores[3])
 						print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 						break
 					continue
 				counter(jogador.fichas)
+			if len(valores[3]) == 1:
+				break
+		print(valores[3])
 
-		print(lista_jogadores)
-
-		if len(lista_jogadores) == 1:
+		if len(valores[3]) == 1:
 			break
 		maiores_apostas1=[-1]
 		valores[0]=0
@@ -355,29 +402,61 @@ while running:
 		screen.blit(flop[1][0].sprite, (flop1x, flop1y))
 		screen.blit(flop[1][1].sprite, (flop2x, flop2y))
 		screen.blit(flop[1][2].sprite, (flop3x, flop3y))
-		pg.display.flip()
+		pg.display.update()
 		while maiores_apostas1.count(max(maiores_apostas1)) != len(lista_jogadores):
+
+				print("while maiores 2")
+
 				for i in lista_jogadores:
 						print(maiores_apostas1)
 						if i != Matilde:
-							acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-							valores,lista_jogadores = i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)
+							while True:
+
+								print("dentro de outro while")
+								event = pg.event.wait()
+
+
+								if event.type == pg.QUIT:
+									running = False
+								if event.type == pg.KEYDOWN:
+
+									if event.key == pg.K_c and i.maior_aposta==0:
+										acao = "check"
+										print("click")
+										break
+										
+									if event.key == pg.K_j and i.maior_aposta==0:
+										acao = "call"
+										print("click")
+										break
+
+									if event.key == pg.K_r:
+										acao = "raise"
+										print("click")
+										break
+
+									if event.key == pg.K_f:
+										acao = "fold"
+										print("click")
+										break
+
+							valores = i.acao(valores[0], valores[1], acao, valores[2],valores[3])
 							print(maiores_apostas1)							
-							print(lista_jogadores)
+							print(valores[3])
 						
 
 						elif i == Matilde:
-							valores, lista_jogadores = i.acaox(valores[0],valores[1], flop[1], valores[2],lista_jogadores)
+							valores = i.acaox(valores[0],valores[1], flop[1], valores[2],valores[3])
 						
 							print(maiores_apostas1)
-							print(lista_jogadores)
+							print(valores[3])
 						try:
 							maiores_apostas1.remove(-1)
-							if len(lista_jogadores) == 1:
+							if len(valores[3]) == 1:
 								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 								break
 						except:
-							if len(lista_jogadores) == 1:
+							if len(valores[3]) == 1:
 								print("{} ganhou {} fichas!".format(lista_jogadores[0].nome, valores[1]))
 								break
 							continue
@@ -395,18 +474,51 @@ while running:
 			i.maior_aposta=0		
 		turn = (mesajogo.turn(flop[0], flop[1]))
 		screen.blit(turn[1][3].sprite, (turnx, turny))
-		pg.display.flip()
+		pg.display.update()
 		while maiores_apostas2.count(max(maiores_apostas2)) != len(lista_jogadores):
+
+
 				for i in lista_jogadores:
 						print(maiores_apostas2)
 						if i != Matilde:
-							acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-							valores, lista_jogadores=i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)
+							while True:
+
+								print("dentro de outro while")
+								event = pg.event.wait()
+
+								if event.type == pg.QUIT:
+									running = False
+								if event.type == pg.KEYDOWN:
+
+									if event.key == pg.K_c and i.maior_aposta==0:
+										acao = "check"
+										print("click")
+										break
+										
+									if event.key == pg.K_j and i.maior_aposta==0:
+										acao = "call"
+										print("click")
+										break
+
+									if event.key == pg.K_r:
+										acao = "raise"
+										print("click")
+										break
+
+									if event.key == pg.K_f:
+										acao = "fold"
+										print("click")
+										break
+
+
+							valores = i.acao(valores[0], valores[1], acao, valores[2],lista_jogadores)
+							lista_jogadores=valores[3]
 							
 							print(maiores_apostas2)
 							print(lista_jogadores)
+
 						elif i == Matilde:
-							valores, lista_jogadores=i.acaox(valores[0],valores[1], turn[1], valores[2],lista_jogadores)
+							valores=i.acaox(valores[0],valores[1], turn[1], valores[2],lista_jogadores)
 							
 							print(maiores_apostas2)
 							print(lista_jogadores)
@@ -434,17 +546,44 @@ while running:
 			i.maior_aposta=0		
 		river = (mesajogo.river(turn[0], turn[1]))
 		screen.blit(river[1][4].sprite, (riverx, rivery))
-		pg.display.flip()
+		pg.display.update()
 		while maiores_apostas3.count(max(maiores_apostas3)) != len(lista_jogadores):
 				for i in lista_jogadores:
 						print(maiores_apostas3)
 						if i != Matilde:
-							acao=input("Call(C), Raise(R), Fold(F)\n").lower()
-							valores, lista_jogadores = i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)						
+							while True:
+
+								print("dentro de outro while")
+								event = pg.event.wait()
+
+								if event.type == pg.QUIT:
+									running = Falsec
+								if event.type == pg.KEYDOWN:
+
+									if event.key == pg.K_c and i.maior_aposta==0:
+										acao = "check"
+										print("click")
+										break
+										
+									if event.key == pg.K_j and i.maior_aposta==0:
+										acao = "call"
+										print("click")
+										break
+
+									if event.key == pg.K_r:
+										acao = "raise"
+										print("click")
+										break
+
+									if event.key == pg.K_f:
+										acao = "fold"
+										print("click")
+										break
+							valores = i.acao(valores[0],valores[1],acao,valores[2],lista_jogadores)						
 							print(maiores_apostas3)
 							print(lista_jogadores)
 						elif i == Matilde:
-							valores, lista_jogadores = i.acaox(valores[0],valores[1], river[1], valores[2],lista_jogadores)
+							valores = i.acaox(valores[0],valores[1], river[1], valores[2],lista_jogadores)
 						
 							print(maiores_apostas3)
 							print(lista_jogadores)
@@ -480,12 +619,16 @@ while running:
 	
 
 	pg.display.update()
-	clock.tick(60)
+	clock.tick(15)
 
-	novarodada = input("Deseja começar uma nova rodada?")
-	if novarodada in sim:
-		continue
-	if novarodada in nao:
-		break
+	print("Deseja começar uma nova rodada?")
+	event = pg.event.wait()
+	if event.type == pg.KEYDOWN:
+		if event.key == pg.K_s:
+			print(sim)
+			continue		
+		if event.key == pg.K_n and i.maior_aposta==0:
+			print(nao)
+			break
 
 pg.quit()
