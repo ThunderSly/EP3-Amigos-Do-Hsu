@@ -4,6 +4,12 @@ import time
 import pickle
 import pygame as pg
 
+pg.init()
+
+black = (0, 0, 0)
+
+screen = pg.display.set_mode((1200, 800))
+
 class Cartas: # Cartas do baralho
 
 	def __init__(self, valor, naipe, sprite): # Define valor e naipe da carta
@@ -941,6 +947,7 @@ class Bot: # Jogador
 					if len(mesa) == 0: # Se estiver no pre-flop e ninguem apostou...
 						print("{} checa!".format(self.nome))
 						maiores_apostas.append(0)
+						message_display("Bot deu check", 400, 30, 20)
 						break
 							
 
@@ -950,11 +957,13 @@ class Bot: # Jogador
 						if a == 2:
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 						elif a == 0 and maximo >= 8:	
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+							message_display("Bot deu check", 400, 30, 20)
 							break
 							
 						elif a >= 3:
@@ -967,6 +976,7 @@ class Bot: # Jogador
 								maiores_apostas.append(aposta)
 								pot+=aposta
 								self.maior_aposta=aposta
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 							if aposta == self.fichas:
@@ -975,18 +985,24 @@ class Bot: # Jogador
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 						elif a == 0 and maximo < 8:
 							#check  
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 							
 					if len(mesa) == 4:
@@ -995,12 +1011,16 @@ class Bot: # Jogador
 							#check
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 						elif a == 2:
 							#check
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 						elif a == 3:
@@ -1013,6 +1033,8 @@ class Bot: # Jogador
 								maiores_apostas.append(aposta)
 								pot+=aposta
 								self.maior_aposta=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 							if aposta == self.fichas:
@@ -1021,12 +1043,15 @@ class Bot: # Jogador
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 
@@ -1040,6 +1065,8 @@ class Bot: # Jogador
 								maiores_apostas.append(aposta)
 								pot+=aposta
 								self.maior_aposta=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 							if aposta == self.fichas:
@@ -1048,11 +1075,15 @@ class Bot: # Jogador
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 
@@ -1060,6 +1091,8 @@ class Bot: # Jogador
 							#check
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 					if len(mesa) == 5:
@@ -1068,12 +1101,16 @@ class Bot: # Jogador
 							#check
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 						elif a == 2:
 							#check
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 						elif a == 3:
@@ -1086,6 +1123,8 @@ class Bot: # Jogador
 								maiores_apostas.append(aposta)
 								pot+=aposta
 								self.maior_aposta=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 							if aposta == self.fichas:
@@ -1094,11 +1133,15 @@ class Bot: # Jogador
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 						elif a >=4:
@@ -1111,6 +1154,8 @@ class Bot: # Jogador
 								maiores_apostas.append(aposta)
 								pot+=aposta
 								self.maior_aposta=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 							if aposta == self.fichas:
@@ -1119,12 +1164,16 @@ class Bot: # Jogador
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 							if aposta > self.fichas:
 								aposta = self.fichas
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 								
 
@@ -1132,6 +1181,8 @@ class Bot: # Jogador
 							#check
 							print("{} checa!".format(self.nome))
 							maiores_apostas.append(0)
+
+							message_display("Bot deu check", 400, 30, 20)
 							break
 
 
@@ -1146,11 +1197,15 @@ class Bot: # Jogador
 							maiores_apostas.append(maior_aposta)
 							pot+=(maior_aposta-self.maior_aposta)
 
+							message_display("Bot deu call", 400, 30, 20)
+
 						elif maior_aposta >= self.fichas:
 							pot+=self.fichas
 							self.fichas == 0
 							print("{} ESTA ALL IN!".format(self.nome))
 							maiores_apostas.append(maior_aposta)
+
+							message_display("Bot esta ALL IN", 400, 30, 20)
 						break	
 
 					if len(mesa) == 3:	#Se estiver no flop e apostaram...
@@ -1165,11 +1220,15 @@ class Bot: # Jogador
 									print("{} paga pra ver!".format(self.nome))
 									maiores_apostas.append(maior_aposta)
 									pot+=(maior_aposta-self.maior_aposta)
+
+									message_display("Bot deu call", 400, 30, 20)
 								elif maior_aposta >= self.fichas:
 									pot+=self.fichas
 									self.fichas == 0
 									print("{} ESTA ALL IN!".format(self.nome))
 									maiores_apostas.append(maior_aposta)
+
+									message_display("Bot esta ALL IN", 400, 30, 20)
 								break	
 
 							else:
@@ -1177,6 +1236,8 @@ class Bot: # Jogador
 								self.mao = []
 								print("{} sai da rodada!".format(self.nome))
 								lista_jogadores.remove(self)
+
+								message_display("Bot deu fold", 400, 30, 20)
 								break
 
 
@@ -1188,11 +1249,15 @@ class Bot: # Jogador
 									print("{} paga pra ver!".format(self.nome))
 									maiores_apostas.append(maior_aposta)
 									pot+=(maior_aposta-self.maior_aposta)
+
+									message_display("Bot deu call", 400, 30, 20)
 								elif maior_aposta >= self.fichas:
 									pot+=self.fichas
 									self.fichas == 0
 									print("{} ESTA ALL IN!".format(self.nome))
 									maiores_apostas.append(maior_aposta)
+
+									message_display("Bot esta ALL IN", 400, 30, 20)
 								break	
 
 							else:
@@ -1200,6 +1265,8 @@ class Bot: # Jogador
 								lista_jogadores.remove(self)
 								self.mao = []
 								print("{} sai da rodada!".format(self.nome))
+
+								message_display("Bot deu fold", 400, 30, 20)
 								break
 								
 
@@ -1214,6 +1281,8 @@ class Bot: # Jogador
 								self.maior_aposta=aposta
 								maiores_apostas.append(aposta)
 								maior_aposta = aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 							if aposta == self.fichas:
@@ -1223,12 +1292,16 @@ class Bot: # Jogador
 									maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 						if a == 0 and maximo < 8:
@@ -1236,6 +1309,8 @@ class Bot: # Jogador
 							lista_jogadores.remove(self)
 							self.mao = []
 							print("{} sai da rodada!".format(self.nome))
+
+							message_display("Bot deu fold", 400, 30, 20)
 							break
 							
 					if len(mesa) == 4:
@@ -1245,6 +1320,8 @@ class Bot: # Jogador
 							lista_jogadores.remove(self)
 							self.mao = []
 							print("{} sai da rodada!".format(self.nome))
+
+							message_display("Bot deu fold", 400, 30, 20)
 							break
 
 						if a == 2:
@@ -1255,11 +1332,15 @@ class Bot: # Jogador
 									print("{} paga pra ver!".format(self.nome))
 									maiores_apostas.append(maior_aposta)
 									pot+=(maior_aposta-self.maior_aposta)
+
+									message_display("Bot deu call", 400, 30, 20)
 								if maior_aposta >= self.fichas:
 									pot+=self.fichas
 									self.fichas == 0
 									print("{} ESTA ALL IN!".format(self.nome))
 									maiores_apostas.append(maior_aposta)
+
+									message_display("Bot esta ALL IN", 400, 30, 20)
 								break	
 
 							else:
@@ -1267,6 +1348,8 @@ class Bot: # Jogador
 								lista_jogadores.remove(self)
 								self.mao = []
 								print("{} sai da rodada!".format(self.nome))
+
+								message_display("Bot deu fold", 400, 30, 20)
 								break
 
 						if a == 3:
@@ -1280,6 +1363,8 @@ class Bot: # Jogador
 								self.maior_aposta=aposta
 								maiores_apostas.append(aposta)
 								maior_aposta = aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 							if aposta == self.fichas:
@@ -1289,12 +1374,16 @@ class Bot: # Jogador
 									maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 						if a >= 4:
@@ -1308,6 +1397,8 @@ class Bot: # Jogador
 								self.maior_aposta=aposta
 								maiores_apostas.append(aposta)
 								maior_aposta = aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 							if aposta == self.fichas:
@@ -1317,12 +1408,16 @@ class Bot: # Jogador
 									maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 						else:
@@ -1330,6 +1425,8 @@ class Bot: # Jogador
 							lista_jogadores.remove(self)
 							self.mao = []
 							print("{} sai da rodada!".format(self.nome))
+
+							message_display("Bot deu fold", 400, 30, 20)
 							break
 
 					if len(mesa) == 5:
@@ -1339,6 +1436,8 @@ class Bot: # Jogador
 							lista_jogadores.remove(self)
 							self.mao = []
 							print("{} sai da rodada!".format(self.nome))
+
+							message_display("Bot deu fold", 400, 30, 20)
 							break
 
 						if a == 2:
@@ -1353,6 +1452,8 @@ class Bot: # Jogador
 									self.maior_aposta=aposta
 									maiores_apostas.append(aposta)
 									maior_aposta = aposta
+
+									message_display("Bot deu raise", 400, 30, 20)
 									break
 								
 								if aposta == self.fichas:
@@ -1362,12 +1463,16 @@ class Bot: # Jogador
 										maior_aposta = aposta
 									maiores_apostas.append(aposta)
 									pot+=aposta
+
+									message_display("Bot esta ALL IN", 400, 30, 20)
 									break
 
 								if aposta > self.fichas:
 									maior_aposta = aposta
 									maiores_apostas.append(aposta)
 									pot+=aposta
+
+									message_display("Bot deu raise", 400, 30, 20)
 									break
 
 							else:
@@ -1375,6 +1480,8 @@ class Bot: # Jogador
 								lista_jogadores.remove(self)
 								self.mao = []
 								print("{} sai da rodada!".format(self.nome))
+
+								message_display("Bot deu fold", 400, 30, 20)
 								break
 
 						if a == 3:
@@ -1388,6 +1495,8 @@ class Bot: # Jogador
 								self.maior_aposta=aposta
 								maiores_apostas.append(aposta)
 								maior_aposta = aposta
+
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 							if aposta == self.fichas:
@@ -1397,12 +1506,15 @@ class Bot: # Jogador
 									maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 						if a >=4:
@@ -1416,6 +1528,7 @@ class Bot: # Jogador
 								self.maior_aposta=aposta
 								maiores_apostas.append(aposta)
 								maior_aposta = aposta
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 							
 							if aposta == self.fichas:
@@ -1425,12 +1538,14 @@ class Bot: # Jogador
 									maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+								message_display("Bot esta ALL IN", 400, 30, 20)
 								break
 
 							if aposta > self.fichas:
 								maior_aposta = aposta
 								maiores_apostas.append(aposta)
 								pot+=aposta
+								message_display("Bot deu raise", 400, 30, 20)
 								break
 
 
@@ -1728,6 +1843,23 @@ class Bot: # Jogador
 			valor_especifico=maior[4]
 
 		return valor_especifico
+
+
+def text_objects(text, font, color): # Funcao para criar texto
+
+	textSurface = font.render(text, True, color) # Cria um texto
+
+	return textSurface, textSurface.get_rect() # Retorna um texto
+
+def message_display(text, x, y, size): # Funcao que mostra um texto
+
+	largeText = pg.font.Font("freesansbold.ttf", size) # Fonte e tamanho da fonte
+	TextSurf, TextRect = text_objects(text, largeText, black) # Cria o texto chamando a funcao
+	TextRect.center = ((x), (y)) # Centraliza o texto
+
+	screen.blit(TextSurf, TextRect) # Mostra o texto na tela
+
+	pg.display.update() # Da update na tela para aparecer o texto
 
 
 

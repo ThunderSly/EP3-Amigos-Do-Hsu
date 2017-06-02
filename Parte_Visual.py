@@ -56,6 +56,23 @@ def counter(count):
 	text = font.render("Fichas: " + str(count), True, black)
 	screen.blit(text, (0, 750))
 
+
+def text_objects(text, font, color): # Funcao para criar texto
+
+	textSurface = font.render(text, True, color) # Cria um texto
+
+	return textSurface, textSurface.get_rect() # Retorna um texto
+
+def message_display(text, x, y, size): # Funcao que mostra um texto
+
+	largeText = pg.font.Font("freesansbold.ttf", size) # Fonte e tamanho da fonte
+	TextSurf, TextRect = text_objects(text, largeText, black) # Cria o texto chamando a funcao
+	TextRect.center = ((x), (y)) # Centraliza o texto
+
+	screen.blit(TextSurf, TextRect) # Mostra o texto na tela
+
+	pg.display.update() # Da update na tela para aparecer o texto
+
 #danielsc1@insper.edu.br
 
 black = (0, 0, 0)
@@ -295,6 +312,8 @@ while running:
 		screen.blit(botao_call.load(), (600, 700))
 		screen.blit(botao_raise.load(), (800, 700))
 		screen.blit(botao_fold.load(), (1000, 700))
+
+		counter(jogador.fichas)
 
 		pg.display.update()
 
