@@ -99,13 +99,13 @@ class Jogador: # Jogador
 				break
 			if maior_aposta == 0:
 				#acao=input("Check(C), Raise(R), Fold(F)\n").lower()
-				if acao == "check" or acao == "c": # Check: continua a rodada sem apostar
+				if acao == "check": # Check: continua a rodada sem apostar
 					print("{} checa!".format(self.nome))
 					maiores_apostas.append(0)
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
-					aposta=int(input("Quanto deseja apostar?\n"))
+					aposta=1000
 					if aposta<self.fichas and aposta>maior_aposta:
 						self.fichas -=aposta
 						print("{} aposta {} fichas!".format(self.nome,aposta))
@@ -150,7 +150,7 @@ class Jogador: # Jogador
 					break
 
 				if acao == "raise" or acao == "r": # Aposta: coloca uma aposta na mesa
-					aposta=int(input("Quanto deseja apostar?\n"))
+					aposta=1500
 
 					if aposta<self.fichas and aposta>maior_aposta:
 						self.fichas -=(aposta-self.maior_aposta)
