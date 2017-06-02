@@ -155,8 +155,9 @@ lista_jogadores =[]
 Matilde = Cd.Bot("Matilde",10000)
 jogador = Cd.Jogador("Você",10000)
 
-lista_jogadores.append(jogador)
 lista_jogadores.append(Matilde)
+lista_jogadores.append(jogador)
+
 
 acao = ""
 waiting = True
@@ -685,8 +686,7 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 		print(lista_jogadores)
 		comp = Cd.Compara_Maos.peneira(river[1],lista_jogadores) # Realiza a peneira e checa quem ganhou
 		comp.fichas += valores[1]
-		message_display("{} ganhou!".format(comp.nome), 400, 50, 20)
-
+		message_display("{} ganhou!".format(comp.nome), 600, 50, 20)
 		for i in range(0,len(lista_jogadores)):
 			lista_jogadores[i].reseta_mao() # Limpa a mão dos jogadores
 		for i in lista_jogadores:
@@ -703,7 +703,8 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 	pg.display.update()
 	clock.tick(15)
 	novarodada=False
-	message_display("Deseja começar uma nova rodada?", 400, 30, 20)  # Pergunta se deseja uma nova rodada
+
+	message_display("Deseja começar uma nova rodada?", 600, 30, 20)  # Pergunta se deseja uma nova rodada
 	while True:
 		event = pg.event.wait()
 		if event.type == pg.KEYDOWN:
@@ -715,6 +716,10 @@ while running: # Caracterização do fechamento de janelas e da tecla que liga e
 				print(nao)
 				novarodada=False
 				break
+		if event.type == pg.QUIT:
+			pg.quit()
+
+
 	if novarodada==True:
 		continue
 	elif novarodada==False:

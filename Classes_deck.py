@@ -933,7 +933,7 @@ class Bot: # Jogador
 		return valor_mao
 
 	def acaox(self,maior_aposta,pot, mesa, maiores_apostas,lista_jogadores): # Possibilidade de dar call, fold, apostar ou check
-		if maiores_apostas.count(max(maiores_apostas)) != len(lista_jogadores):
+
 
 			a = self.melhor_mao(mesa)
 			listav=[]
@@ -945,9 +945,9 @@ class Bot: # Jogador
 			aposta = 0
 			while True:
 
-
-
-				if maior_aposta == 0:
+				if maiores_apostas.count(max(maiores_apostas)) == len(lista_jogadores):
+					break
+				if maior_aposta == 0:	
 					
 
 					if len(mesa) == 0: # Se estiver no pre-flop e ninguem apostou...
@@ -1278,7 +1278,7 @@ class Bot: # Jogador
 
 						if a >= 3:
 							#raise maior_aposta*0.05
-							aposta = maior_aposta*0.05
+							aposta = maior_aposta+100
 
 							if aposta<self.fichas and aposta>maior_aposta:
 								self.fichas -=(aposta-self.maior_aposta)
@@ -1360,7 +1360,7 @@ class Bot: # Jogador
 
 						if a == 3:
 							#raise 5%
-							aposta == maior_aposta*0.05
+							aposta == maior_aposta+100
 
 							if aposta<self.fichas and aposta>maior_aposta:
 								self.fichas -=(aposta-self.maior_aposta)
@@ -1394,7 +1394,7 @@ class Bot: # Jogador
 
 						if a >= 4:
 							#raise 50%
-							aposta == maior_aposta*0.5
+							aposta == maior_aposta+500
 
 							if aposta<self.fichas and aposta>maior_aposta:
 								self.fichas -=(aposta-self.maior_aposta)
@@ -1492,7 +1492,7 @@ class Bot: # Jogador
 
 						if a == 3:
 							#raise maior_aposta*0.05
-							aposta == maior_aposta*0.05
+							aposta == maior_aposta+100
 
 							if aposta<self.fichas and aposta>maior_aposta:
 								self.fichas -=(aposta-self.maior_aposta)
@@ -1525,7 +1525,7 @@ class Bot: # Jogador
 
 						if a >=4:
 							#raise maior_aposta*0.2
-							aposta == maior_aposta*0.2
+							aposta == maior_aposta+200
 
 							if aposta<self.fichas and aposta>maior_aposta:
 								self.fichas -=(aposta-self.maior_aposta)
