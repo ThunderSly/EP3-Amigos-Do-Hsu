@@ -739,7 +739,7 @@ class Mesa: # Mesa
 
 		return tudo
 
-class Jogo:	
+class Jogo:	# Caracterizção do jogo
 
 	def inicio():
 		print("Bem vindo ao Hsu Poker! ") # Começo do jogo
