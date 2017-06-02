@@ -168,8 +168,9 @@ def tela_update(flop1,turn1,river1): # Update de display
 	grey = (200, 200, 200)
 	screen.fill(grey)
 	screen.blit(mesavisual,(0,-200))
-	screen.blit(jogador.mao[0].sprite, (cartax,cartay)) # Display das próprias cartas
-	screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
+	if jogador in lista_jogadores:
+		screen.blit(jogador.mao[0].sprite, (cartax,cartay)) # Display das próprias cartas
+		screen.blit(jogador.mao[1].sprite, (cartax2,cartay2))
 	screen.blit(carta_atras.imagem,(carta_oponente1x, carta_oponente1y))
 	screen.blit(carta_atras.imagem,(carta_oponente2x, carta_oponente2y))
 
